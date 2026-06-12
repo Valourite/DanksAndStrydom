@@ -72,7 +72,10 @@
 
         {{-- Bottom row --}}
         <div class="mt-8 flex flex-col items-center justify-between gap-3 text-xs text-pine-400 sm:flex-row">
-            <p>&copy; {{ now()->year }} {{ $practice['name'] }}. All rights reserved.</p>
+            <div>
+                <p>&copy; {{ now()->year }} {{ $practice['name'] }}. All rights reserved.</p>
+                <p>Developed by <a href="https://valourite.co.za" class="transition-colors hover:text-sea-300">Valourite</a></p>
+            </div>
             <p>General information only — not medical advice.</p>
         </div>
     </div>

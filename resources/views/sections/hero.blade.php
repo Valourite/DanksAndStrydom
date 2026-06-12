@@ -72,18 +72,25 @@
             <div data-parallax="0.07" class="absolute -right-6 top-10 hidden h-72 w-52 rounded-t-full bg-sand-200/80 sm:block lg:-right-10 lg:h-80 lg:w-60 will-change-transform" aria-hidden="true"></div>
 
             {{-- Main arch card --}}
-            <div data-parallax="0.04" class="grain relative overflow-hidden rounded-t-full rounded-b-[2.5rem] bg-linear-to-b from-pine-800 via-pine-900 to-pine-950 px-8 pb-10 pt-24 shadow-[0_40px_80px_-40px_rgba(10,31,27,0.7)] will-change-transform sm:px-10 sm:pt-28 lg:mr-8">
-                {{-- inner glow --}}
-                <div class="pointer-events-none absolute -top-20 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-sea-500/25 blur-3xl"></div>
+            <div data-parallax="0.04" class="grain relative overflow-hidden rounded-t-full rounded-b-[2.5rem] bg-pine-950 shadow-[0_40px_80px_-40px_rgba(10,31,27,0.7)] will-change-transform lg:mr-8">
+                <div class="relative h-72 overflow-hidden sm:h-80 lg:h-88">
+                    <img
+                        src="{{ asset('images/back_strapping.webp') }}"
+                        alt="Kinesiology tape being applied across a patient's shoulder and upper back"
+                        width="1200"
+                        height="900"
+                        fetchpriority="high"
+                        class="h-full w-full object-cover object-center"
+                    >
+                    <div class="absolute inset-0 bg-linear-to-t from-pine-950 via-pine-950/15 to-transparent"></div>
+                    <div class="absolute inset-x-0 bottom-5 flex justify-center">
+                        <span class="rounded-full border border-bone-50/20 bg-pine-950/55 px-4 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-bone-50 backdrop-blur-md">
+                            Focused, hands-on care
+                        </span>
+                    </div>
+                </div>
 
-                {{-- Flowing motion lines --}}
-                <svg class="pointer-events-none absolute inset-x-0 top-12 mx-auto h-40 w-4/5 text-sea-400/30" viewBox="0 0 300 120" fill="none" aria-hidden="true">
-                    <path d="M10 90 C 80 20, 150 140, 290 40" stroke="currentColor" stroke-width="1.5"/>
-                    <path d="M10 105 C 90 40, 160 150, 290 60" stroke="currentColor" stroke-width="1" opacity="0.6"/>
-                    <path d="M10 75 C 70 5, 140 120, 290 22" stroke="currentColor" stroke-width="0.8" opacity="0.4"/>
-                </svg>
-
-                <div class="relative">
+                <div class="relative px-8 pb-10 sm:px-10">
                     <p class="font-display text-2xl font-medium leading-snug text-bone-50 sm:text-[1.7rem]">
                         Recovery,<br>
                         <em class="text-sea-300">guided by hand.</em>

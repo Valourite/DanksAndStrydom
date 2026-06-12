@@ -38,6 +38,23 @@
                     <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
                 </span>
             </a>
+
+            <figure class="mt-10 overflow-hidden rounded-3xl border border-bone-50/10 bg-bone-50/5 shadow-[0_30px_60px_-40px_rgba(0,0,0,0.8)]">
+                <div class="relative aspect-4/3 overflow-hidden sm:aspect-16/10 lg:aspect-4/3">
+                    <img
+                        src="{{ asset('images/knee_strapping.webp') }}"
+                        alt="A physiotherapist assessing kinesiology tape applied around a patient's knee"
+                        width="1200"
+                        height="900"
+                        loading="lazy"
+                        class="h-full w-full object-cover object-[center_48%]"
+                    >
+                    <div class="absolute inset-0 bg-linear-to-t from-pine-950/65 via-transparent to-transparent"></div>
+                    <figcaption class="absolute inset-x-0 bottom-0 p-5 text-sm font-medium text-bone-50">
+                        Practical support for confident movement
+                    </figcaption>
+                </div>
+            </figure>
         </div>
 
         {{-- Numbered editorial rows --}}

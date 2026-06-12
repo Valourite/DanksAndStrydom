@@ -7,21 +7,33 @@
         {{-- Visual --}}
         <div class="reveal relative order-last mx-auto w-full max-w-md lg:order-first lg:max-w-none">
             {{-- Arch panel --}}
-            <div class="grain relative overflow-hidden rounded-t-full rounded-b-[2.5rem] bg-linear-to-b from-sea-700 via-pine-800 to-pine-950 px-8 pb-9 pt-28 sm:px-9">
-                <div class="pointer-events-none absolute -top-16 left-1/2 h-56 w-56 -translate-x-1/2 rounded-full bg-sea-400/25 blur-3xl"></div>
+            <div class="grain relative overflow-hidden rounded-t-full rounded-b-[2.5rem] bg-pine-950 shadow-[0_35px_70px_-42px_rgba(10,31,27,0.65)]">
+                <div class="relative h-72 overflow-hidden sm:h-80">
+                    <img
+                        src="{{ asset('images/valf_physio.webp') }}"
+                        alt="A physiotherapist providing focused hands-on treatment"
+                        width="1200"
+                        height="900"
+                        loading="lazy"
+                        class="h-full w-full object-cover object-center"
+                    >
+                    <div class="absolute inset-0 bg-linear-to-t from-pine-950 via-pine-950/5 to-transparent"></div>
+                </div>
 
-                <p class="relative text-center font-display text-[1.6rem] font-medium leading-snug text-bone-50">
-                    “We treat the <em class="text-sea-300">person</em>,<br>not just the problem.”
-                </p>
+                <div class="relative -mt-7 px-8 pb-9 sm:px-9">
+                    <p class="text-center font-display text-[1.6rem] font-medium leading-snug text-bone-50">
+                        “We treat the <em class="text-sea-300">person</em>,<br>not just the problem.”
+                    </p>
 
-                <div class="relative mt-9 grid grid-cols-2 gap-3">
-                    <div class="rounded-2xl border border-bone-50/10 bg-bone-50/5 p-4 text-center backdrop-blur-sm">
-                        <p class="font-display text-2xl font-medium text-bone-50">1:1</p>
-                        <p class="mt-1 text-[0.68rem] leading-snug text-pine-300">Unhurried, focused sessions</p>
-                    </div>
-                    <div class="rounded-2xl border border-bone-50/10 bg-bone-50/5 p-4 text-center backdrop-blur-sm">
-                        <p class="font-display text-2xl font-medium text-bone-50">100%</p>
-                        <p class="mt-1 text-[0.68rem] leading-snug text-pine-300">Evidence-informed care</p>
+                    <div class="mt-8 grid grid-cols-2 gap-3">
+                        <div class="rounded-2xl border border-bone-50/10 bg-bone-50/5 p-4 text-center backdrop-blur-sm">
+                            <p class="font-display text-2xl font-medium text-bone-50">1:1</p>
+                            <p class="mt-1 text-[0.68rem] leading-snug text-pine-300">Unhurried, focused sessions</p>
+                        </div>
+                        <div class="rounded-2xl border border-bone-50/10 bg-bone-50/5 p-4 text-center backdrop-blur-sm">
+                            <p class="font-display text-2xl font-medium text-bone-50">100%</p>
+                            <p class="mt-1 text-[0.68rem] leading-snug text-pine-300">Evidence-informed care</p>
+                        </div>
                     </div>
                 </div>
             </div>
