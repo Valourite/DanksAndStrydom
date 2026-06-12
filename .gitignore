@@ -2,6 +2,12 @@
 .env.backup
 .env.production
 
+#Do not ignore public/build as we need this on the main site
+#We do not have access to npm
+!/public/build/
+!/public/build/**
+
+/vendor
 /node_modules
 /public/hot
 /public/storage
