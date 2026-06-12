@@ -13,6 +13,12 @@ export default defineConfig({
             fonts: [
                 bunny('Instrument Sans', {
                     weights: [400, 500, 600],
+                    preload: [{ weight: 400 }, { weight: 600 }],
+                }),
+                bunny('Fraunces', {
+                    weights: [400, 500, 600],
+                    styles: ['normal', 'italic'],
+                    preload: [{ weight: 500 }, { weight: 400, style: 'italic' }],
                 }),
             ],
         }),

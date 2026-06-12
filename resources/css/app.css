@@ -5,4 +5,143 @@
 
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-display: 'Fraunces', ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+
+    /* ------------------------------------------------------------------
+       Danks & Strydom palette — editorial spa-clinical
+       ------------------------------------------------------------------ */
+
+    /* Bone — warm ivory surfaces */
+    --color-bone-50:  #fbfaf7;
+    --color-bone-100: #f6f3ec;
+    --color-bone-200: #ece7db;
+    --color-bone-300: #ddd5c2;
+
+    /* Pine — deep blue-green ink, dark sections */
+    --color-pine-50:  #f1f6f4;
+    --color-pine-100: #dce8e4;
+    --color-pine-200: #bad1ca;
+    --color-pine-300: #8fb3a9;
+    --color-pine-400: #659186;
+    --color-pine-500: #4b766c;
+    --color-pine-600: #3a5e56;
+    --color-pine-700: #314d47;
+    --color-pine-800: #25403a;
+    --color-pine-900: #16302b;
+    --color-pine-950: #0a1f1b;
+
+    /* Sea — soft sea-green accent */
+    --color-sea-50:  #effaf6;
+    --color-sea-100: #d8f2e7;
+    --color-sea-200: #b3e4d2;
+    --color-sea-300: #82cfb7;
+    --color-sea-400: #50b298;
+    --color-sea-500: #2f967e;
+    --color-sea-600: #217866;
+    --color-sea-700: #1c6054;
+    --color-sea-800: #194d44;
+    --color-sea-900: #16403a;
+
+    /* Sand — warm accent, used sparingly */
+    --color-sand-100: #f3ead8;
+    --color-sand-200: #e9dbbd;
+    --color-sand-300: #dcc69a;
+    --color-sand-400: #c9ab74;
+    --color-sand-500: #b18f53;
+
+    /* Custom animations */
+    --animate-drift: drift 11s ease-in-out infinite;
+    --animate-drift-slow: drift 16s ease-in-out infinite;
+    --animate-fade-up: fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes drift {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50%      { transform: translateY(-18px) rotate(1.2deg); }
+}
+
+@keyframes fade-up {
+    from { opacity: 0; transform: translateY(26px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---- Base ---- */
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--color-bone-50);
+    color: var(--color-pine-900);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+}
+
+/* Fraunces optical niceties */
+.font-display {
+    font-optical-sizing: auto;
+    letter-spacing: -0.015em;
+}
+
+/* ---- Scroll reveal (driven by app.js IntersectionObserver) ----
+   Hidden state only applies once JS has tagged <html class="js">,
+   so content stays visible if JavaScript never loads. */
+html.js .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+    will-change: opacity, transform;
+}
+html.js .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+}
+
+/* ---- Parallax fixed background (desktop only) ---- */
+.parallax-fixed {
+    background-attachment: scroll;
+    background-size: cover;
+    background-position: center;
+}
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+    .parallax-fixed {
+        background-attachment: fixed;
+    }
+}
+
+/* ---- Grain texture overlay for dark sections ---- */
+.grain::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.5;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Soft scrollbar (desktop) */
+@media (min-width: 768px) {
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: var(--color-bone-100); }
+    ::-webkit-scrollbar-thumb {
+        background: var(--color-pine-200);
+        border-radius: 9999px;
+        border: 2px solid var(--color-bone-100);
+    }
+    ::-webkit-scrollbar-thumb:hover { background: var(--color-pine-300); }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
+    html.js .reveal { opacity: 1; transform: none; }
 }
