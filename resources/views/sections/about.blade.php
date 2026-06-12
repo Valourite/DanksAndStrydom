@@ -1,5 +1,5 @@
 {{-- ============================ ABOUT ============================ --}}
-<section id="about" class="relative overflow-hidden py-24 sm:py-28 lg:py-36">
+<section id="about" class="relative overflow-hidden  sm:py-28 lg:pb-36">
     <div data-parallax="0.1" class="pointer-events-none absolute -right-40 top-16 -z-10 h-112 w-md rounded-full bg-sea-100/60 blur-3xl will-change-transform"></div>
 
     <div class="mx-auto grid max-w-6xl items-center gap-16 px-5 sm:px-8 lg:grid-cols-[0.92fr_1.08fr] lg:gap-20">
@@ -51,17 +51,17 @@
 
             <ul class="mt-9 grid gap-x-8 gap-y-3.5 sm:grid-cols-2">
                 @foreach ([
-                    'Personalised treatment plans',
-                    'Evidence-informed techniques',
-                    'A calm, supportive environment',
-                    'Focused on long-term recovery',
-                ] as $point)
-                    <li class="flex items-center gap-3 text-sm font-medium text-pine-800">
-                        <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-sea-100 text-sea-700">
-                            <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
-                        </span>
-                        {{ $point }}
-                    </li>
+                        'Personalised treatment plans',
+                        'Evidence-informed techniques',
+                        'A calm, supportive environment',
+                        'Focused on long-term recovery',
+                    ] as $point)
+                        <li class="flex items-center gap-3 text-sm font-medium text-pine-800">
+                            <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-sea-100 text-sea-700">
+                                <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                            </span>
+                            {{ $point }}
+                        </li>
                 @endforeach
             </ul>
 

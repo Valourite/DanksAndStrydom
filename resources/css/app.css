@@ -65,6 +65,11 @@
     to   { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes carousel-right {
+    from { transform: translateX(-50%); }
+    to   { transform: translateX(0); }
+}
+
 /* ---- Base ---- */
 
 html {
@@ -99,6 +104,21 @@ html.js .reveal {
 html.js .reveal.is-visible {
     opacity: 1;
     transform: none;
+}
+
+/* ---- Desktop image carousel ---- */
+.carousel-track {
+    animation: carousel-right 42s linear infinite;
+    will-change: transform;
+}
+
+.carousel-window:hover .carousel-track,
+.carousel-window:focus-within .carousel-track {
+    animation-play-state: paused;
+}
+
+[data-carousel-dialog]::backdrop {
+    backdrop-filter: blur(8px);
 }
 
 /* ---- Parallax fixed background (desktop only) ---- */

@@ -10,9 +10,19 @@
         ['icon' => 'shield',   'title' => 'Injury Prevention',                 'body' => 'Practical guidance and conditioning to help reduce injury risk and keep you doing what you love.'],
         ['icon' => 'program',  'title' => 'Rehabilitation Exercise Programmes', 'body' => 'Clear, achievable home exercise plans designed around your goals, with guidance at every step.'],
     ];
+
+    $galleryImages = [
+        ['src' => 'images/cheryl-horse-1.webp', 'alt' => 'Cheryl working with a horse'],
+        ['src' => 'images/cheryl-horse-2.webp', 'alt' => 'Cheryl providing equestrian physiotherapy'],
+        ['src' => 'images/elize-horse-1.webp', 'alt' => 'Elize working with a horse'],
+        ['src' => 'images/elize-messsage-1.webp', 'alt' => 'Elize providing massage treatment'],
+        ['src' => 'images/elize-physio-1.webp', 'alt' => 'Elize during a physiotherapy session'],
+        ['src' => 'images/elize-physio-2.webp', 'alt' => 'Elize providing physiotherapy treatment'],
+        ['src' => 'images/physios-massage-1.webp', 'alt' => 'Physiotherapists demonstrating massage treatment'],
+    ];
 @endphp
 
-<section id="services" class="relative py-24 sm:py-28 lg:py-36">
+<section id="services" class="relative py-24 sm:py-28 lg:pt-36">
     <div class="absolute inset-0 -z-10 bg-linear-to-b from-bone-50 via-white to-bone-50"></div>
 
     <div class="mx-auto max-w-6xl px-5 sm:px-8">
@@ -36,6 +46,69 @@
                     {{ $service['body'] }}
                 </x-site.service-card>
             @endforeach
+        </div>
+
+        <div class="mt-20 hidden md:block" data-image-carousel>
+            <div class="reveal flex items-end justify-between gap-8">
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-[0.22em] text-sea-700">A glimpse into our practice</p>
+                    <h3 class="mt-3 font-display text-3xl font-semibold text-pine-950">Care in motion</h3>
+                </div>
+            </div>
+
+            <div class="carousel-window reveal mt-8 overflow-hidden" style="--reveal-delay: 100ms">
+                <div class="carousel-track flex w-max">
+                    @foreach ([$galleryImages, $galleryImages] as $imageSet)
+                        <div class="flex shrink-0 gap-5 pr-5">
+                            @foreach ($imageSet as $image)
+                                <button
+                                    type="button"
+                                    class="group relative block w-80 shrink-0 cursor-zoom-in overflow-hidden rounded-3xl bg-pine-100 text-left shadow-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sea-600"
+                                    data-carousel-image
+                                    data-image-src="{{ asset($image['src']) }}"
+                                    data-image-alt="{{ $image['alt'] }}"
+                                    aria-label="Enlarge image: {{ $image['alt'] }}"
+                                >
+                                    <img
+                                        src="{{ asset($image['src']) }}"
+                                        alt="{{ $image['alt'] }}"
+                                        width="1200"
+                                        height="900"
+                                        loading="lazy"
+                                        class="aspect-4/3 w-full object-cover transition duration-500 group-hover:scale-105 group-focus-visible:scale-105"
+                                    >
+                                    <span class="absolute inset-0 bg-linear-to-t from-pine-950/25 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100"></span>
+                                </button>
+                            @endforeach
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <dialog
+                class="m-auto max-h-none max-w-none overflow-visible bg-transparent p-0 backdrop:bg-pine-950/85"
+                data-carousel-dialog
+                aria-label="Enlarged gallery image"
+            >
+                <div class="relative">
+                    <img
+                        src=""
+                        alt=""
+                        class="max-h-[75vh] max-w-[75vw] rounded-3xl object-contain shadow-2xl"
+                        data-carousel-dialog-image
+                    >
+                    <button
+                        type="button"
+                        class="absolute -right-4 -top-4 grid size-11 place-items-center rounded-full bg-bone-50 text-pine-950 shadow-lg transition hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sea-400"
+                        data-carousel-dialog-close
+                        aria-label="Close enlarged image"
+                    >
+                        <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                            <path d="M6 6l12 12M18 6 6 18"/>
+                        </svg>
+                    </button>
+                </div>
+            </dialog>
         </div>
     </div>
 </section>

@@ -6,6 +6,7 @@
  *  - accessible mobile menu (toggle, Escape, link close)
  *  - subtle parallax on [data-parallax] elements (desktop, motion-allowed)
  *  - scroll-reveal of [.reveal] elements via IntersectionObserver
+ *  - desktop image carousel lightbox
  */
 
 // Tag the document so CSS can gate "hidden until revealed" styles
@@ -112,12 +113,68 @@ function initReveal() {
 }
 
 /* ------------------------------------------------------------------ */
+/* Desktop image carousel lightbox                                    */
+/* ------------------------------------------------------------------ */
+function initImageCarousels() {
+    document.querySelectorAll('[data-image-carousel]').forEach((carousel) => {
+        if (carousel.dataset.initialized === 'true') return;
+
+        const dialog = carousel.querySelector('[data-carousel-dialog]');
+        const dialogImage = carousel.querySelector('[data-carousel-dialog-image]');
+        const closeButton = carousel.querySelector('[data-carousel-dialog-close]');
+
+        if (!dialog || !dialogImage || !closeButton) return;
+
+        carousel.dataset.initialized = 'true';
+        let previouslyFocusedElement = null;
+
+        const closeDialog = () => {
+            if (dialog.open) {
+                dialog.close();
+            }
+        };
+
+        carousel.querySelectorAll('[data-carousel-image]').forEach((button) => {
+            button.addEventListener('click', () => {
+                if (!window.matchMedia('(min-width: 768px)').matches) return;
+
+                previouslyFocusedElement = button;
+                dialogImage.src = button.dataset.imageSrc;
+                dialogImage.alt = button.dataset.imageAlt;
+                dialog.showModal();
+                document.body.classList.add('overflow-hidden');
+            });
+        });
+
+        closeButton.addEventListener('click', closeDialog);
+        dialog.addEventListener('click', (event) => {
+            if (event.target === dialog) {
+                closeDialog();
+            }
+        });
+        dialog.addEventListener('close', () => {
+            document.body.classList.remove('overflow-hidden');
+            dialogImage.src = '';
+            dialogImage.alt = '';
+            previouslyFocusedElement?.focus();
+        });
+
+        window.matchMedia('(max-width: 767px)').addEventListener('change', (event) => {
+            if (event.matches) {
+                closeDialog();
+            }
+        });
+    });
+}
+
+/* ------------------------------------------------------------------ */
 /* Boot                                                                */
 /* ------------------------------------------------------------------ */
 function boot() {
     initHeader();
     initParallax();
     initReveal();
+    initImageCarousels();
 }
 
 // Window-level listeners — register once, no DOM needed.

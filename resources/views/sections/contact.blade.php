@@ -14,17 +14,17 @@
 
             <ul class="mt-10 space-y-0 divide-y divide-pine-900/8 border-y border-pine-900/8">
                 @foreach ([
-                    ['No referral needed', 'You can book directly with us — no doctor’s referral required.'],
-                    ['Friendly, no-pressure advice', 'Unsure if physiotherapy is right for you? Just ask.'],
-                    ['Care designed around your goals', 'Every plan starts with a conversation about you.'],
-                ] as $i => $item)
-                    <li class="flex gap-5 py-5">
-                        <span class="mt-0.5 font-display text-sm italic text-sea-600">0{{ $i + 1 }}</span>
-                        <div>
-                            <p class="text-sm font-semibold text-pine-950">{{ $item[0] }}</p>
-                            <p class="mt-1 text-sm leading-relaxed text-pine-500">{{ $item[1] }}</p>
-                        </div>
-                    </li>
+                        ['No referral needed', 'You can book directly with us — no doctor’s referral required.'],
+                        ['Friendly, no-pressure advice', 'Unsure if physiotherapy is right for you? Just ask.'],
+                        ['Care designed around your goals', 'Every plan starts with a conversation about you.'],
+                    ] as $i => $item)
+                        <li class="flex gap-5 py-5">
+                            <span class="mt-0.5 font-display text-sm italic text-sea-600">0{{ $i + 1 }}</span>
+                            <div>
+                                <p class="text-sm font-semibold text-pine-950">{{ $item[0] }}</p>
+                                <p class="mt-1 text-sm leading-relaxed text-pine-500">{{ $item[1] }}</p>
+                            </div>
+                        </li>
                 @endforeach
             </ul>
 

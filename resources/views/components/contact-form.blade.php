@@ -84,7 +84,7 @@ new class extends Component
 
         @if ($sent)
             {{-- Success state --}}
-            <div class="flex flex-col items-center py-12 text-center" wire:key="contact-success">
+            <div class="flex flex-col items-center py-24 sm:py-28 lg:py-36 text-center" wire:key="contact-success">
                 <span class="flex h-16 w-16 items-center justify-center rounded-full bg-sea-100 text-sea-700">
                     <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
                 </span>
