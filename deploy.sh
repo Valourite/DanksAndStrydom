@@ -10,13 +10,29 @@ BRANCH="main"
 LOG_FILE="$APP_DIR/storage/logs/deploy.log"
 LOCK_FILE="/tmp/danksandstrydom-deploy.lock"
 
+# Required when running Composer from a web-triggered process.
+export HOME="/home/danks"
+export COMPOSER_HOME="/home/danks/.composer"
+export COMPOSER_CACHE_DIR="/home/danks/.composer/cache"
+
 mkdir -p "$APP_DIR/storage/logs"
+mkdir -p "$COMPOSER_HOME"
+mkdir -p "$COMPOSER_CACHE_DIR"
+
+bring_app_up() {
+    cd "$APP_DIR" || exit 1
+    echo "Bringing app back online..."
+    $PHP_BIN artisan up || true
+}
 
 (
     flock -n 9 || {
         echo "Another deployment is already running."
         exit 1
     }
+
+    # If anything fails after maintenance mode starts, this ensures the site is not left down.
+    trap bring_app_up EXIT
 
     echo ""
     echo "=================================================="
@@ -64,9 +80,6 @@ mkdir -p "$APP_DIR/storage/logs"
 
     echo "Rebuilding Laravel caches..."
     $PHP_BIN artisan optimize
-
-    echo "Bringing app back online..."
-    $PHP_BIN artisan up || true
 
     echo "Deployment completed: $(date)"
     echo "=================================================="
