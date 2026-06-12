@@ -52,6 +52,7 @@ new class extends Component
         }
 
         try {
+            //Do not run on a queue as no queue is available
             Mail::to($recipients)->send(new ContactFormSubmitted(
                 data: [
                     'name' => $validated['name'],
