@@ -63,10 +63,15 @@ bring_app_up() {
         cp -R "$APP_DIR/public/images" "$PUBLIC_DIR/images"
     fi
 
+    echo "Copying SEO discovery files..."
+    cp "$APP_DIR/public/robots.txt" "$PUBLIC_DIR/robots.txt"
+    cp "$APP_DIR/public/sitemap.xml" "$PUBLIC_DIR/sitemap.xml"
+
     echo "Fixing permissions..."
     chmod -R 775 "$APP_DIR/storage" || true
     chmod -R 775 "$APP_DIR/bootstrap/cache" || true
     chmod -R 755 "$PUBLIC_DIR/build" || true
+    chmod 644 "$PUBLIC_DIR/robots.txt" "$PUBLIC_DIR/sitemap.xml" || true
 
     if [ -d "$PUBLIC_DIR/images" ]; then
         chmod -R 755 "$PUBLIC_DIR/images" || true
