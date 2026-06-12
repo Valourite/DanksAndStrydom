@@ -1109,3 +1109,399 @@ php artisan optimize:clear
 php artisan migrate --force
 php artisan optimize
 ```
+
+---
+
+## Setting Up cPanel Mail for Laravel Contact Forms
+
+For contact forms and website enquiries, the Laravel application should send mail using an email account from the same domain as the website.
+
+For example, if the site is hosted on:
+
+```text
+https://danksandstrydom.co.za
+```
+
+use a sending mailbox such as:
+
+```text
+no-reply@danksandstrydom.co.za
+```
+
+Do not send website mail through an unrelated domain such as `mail.valourite.co.za` unless that domain is intentionally configured for this project. Using the same domain as the website helps avoid SPF, DKIM, DMARC, and authentication issues.
+
+### Step 1: Create the Email Account in cPanel
+
+In cPanel, go to:
+
+```text
+Email Accounts → Create
+```
+
+Create a mailbox such as:
+
+```text
+no-reply@PROJECT_DOMAIN
+```
+
+Example:
+
+```text
+no-reply@danksandstrydom.co.za
+```
+
+When creating the account, cPanel may ask for only the mailbox name and then let you select the domain separately.
+
+Use:
+
+```text
+no-reply
+```
+
+as the mailbox name, and select:
+
+```text
+danksandstrydom.co.za
+```
+
+as the domain.
+
+Do not accidentally create:
+
+```text
+no-reply@danksandstrydom.co.za.co.za
+```
+
+If Laravel shows an SMTP username like this:
+
+```text
+no-reply@danksandstrydom.co.za.co.za
+```
+
+then either the mailbox was created incorrectly or the `.env` value is wrong.
+
+### Step 2: Get the SMTP Settings from cPanel
+
+After creating the mailbox, go to:
+
+```text
+Email Accounts → Connect Devices
+```
+
+Open the mail client settings for the mailbox.
+
+The SMTP details will usually look like one of these options.
+
+#### Option A: SSL/TLS on Port 465
+
+```env
+MAIL_MAILER=smtp
+MAIL_HOST=mail.PROJECT_DOMAIN
+MAIL_PORT=465
+MAIL_USERNAME=no-reply@PROJECT_DOMAIN
+MAIL_PASSWORD="mailbox_password_here"
+MAIL_ENCRYPTION=ssl
+MAIL_FROM_ADDRESS=no-reply@PROJECT_DOMAIN
+MAIL_FROM_NAME="Project Name"
+```
+
+Example:
+
+```env
+MAIL_MAILER=smtp
+MAIL_HOST=mail.danksandstrydom.co.za
+MAIL_PORT=465
+MAIL_USERNAME=no-reply@danksandstrydom.co.za
+MAIL_PASSWORD="mailbox_password_here"
+MAIL_ENCRYPTION=ssl
+MAIL_FROM_ADDRESS=no-reply@danksandstrydom.co.za
+MAIL_FROM_NAME="Danks & Strydom Physiotherapy"
+```
+
+#### Option B: TLS on Port 587
+
+```env
+MAIL_MAILER=smtp
+MAIL_HOST=mail.PROJECT_DOMAIN
+MAIL_PORT=587
+MAIL_USERNAME=no-reply@PROJECT_DOMAIN
+MAIL_PASSWORD="mailbox_password_here"
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=no-reply@PROJECT_DOMAIN
+MAIL_FROM_NAME="Project Name"
+```
+
+Example:
+
+```env
+MAIL_MAILER=smtp
+MAIL_HOST=mail.danksandstrydom.co.za
+MAIL_PORT=587
+MAIL_USERNAME=no-reply@danksandstrydom.co.za
+MAIL_PASSWORD="mailbox_password_here"
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=no-reply@danksandstrydom.co.za
+MAIL_FROM_NAME="Danks & Strydom Physiotherapy"
+```
+
+Use the exact SMTP host, port, and encryption shown by cPanel.
+
+### Step 3: Add Contact Form Recipients
+
+If the application uses a contact form, add the recipient email address or addresses to `.env`:
+
+```env
+CONTACT_MAIL_TO=info@PROJECT_DOMAIN
+```
+
+Example:
+
+```env
+CONTACT_MAIL_TO=info@danksandstrydom.co.za
+```
+
+For multiple recipients, separate them with commas:
+
+```env
+CONTACT_MAIL_TO=info@danksandstrydom.co.za,admin@danksandstrydom.co.za
+```
+
+Do not expose these recipient addresses in the frontend.
+
+### Step 4: Quote Mail Passwords in `.env`
+
+If the mailbox password contains special characters such as:
+
+```text
+# $ % ! @ spaces
+```
+
+wrap it in quotes:
+
+```env
+MAIL_PASSWORD="abc#123!password"
+```
+
+This prevents Laravel from reading the password incorrectly.
+
+### Step 5: Clear and Rebuild Laravel Config
+
+After changing mail settings in `.env`, run:
+
+```bash
+cd /home/CPANEL_USER/repositories/PROJECT_NAME
+
+php artisan optimize:clear
+php artisan config:cache
+```
+
+Example:
+
+```bash
+cd /home/danks/repositories/DanksAndStrydom
+
+php artisan optimize:clear
+php artisan config:cache
+```
+
+If the application uses the `deploy.sh` script, it will also rebuild Laravel's cached config during deployment, but it is still useful to run these commands immediately after changing `.env`.
+
+### Step 6: Confirm Laravel Is Reading the Correct Mail Values
+
+Use Tinker:
+
+```bash
+php artisan tinker
+```
+
+Then check:
+
+```php
+config('mail.mailers.smtp.host');
+config('mail.mailers.smtp.port');
+config('mail.mailers.smtp.encryption');
+config('mail.mailers.smtp.username');
+config('mail.from.address');
+```
+
+The username should be the full mailbox address:
+
+```text
+no-reply@danksandstrydom.co.za
+```
+
+It should not be:
+
+```text
+no-reply@danksandstrydom.co.za.co.za
+```
+
+Exit Tinker:
+
+```php
+exit
+```
+
+### Step 7: Test Mail from Laravel
+
+In Tinker, run:
+
+```php
+use Illuminate\Support\Facades\Mail;
+
+Mail::raw('Test email from the Laravel website.', function ($message) {
+    $message->to('your-email@example.com')
+        ->subject('Laravel mail test');
+});
+```
+
+Replace:
+
+```text
+your-email@example.com
+```
+
+with a real email address you can check.
+
+If the message sends successfully, the SMTP configuration is working.
+
+### Step 8: Use `replyTo` for Contact Forms
+
+For contact forms, the email should be sent from the authenticated cPanel mailbox, not from the visitor's email address.
+
+Correct:
+
+```text
+From: Danks & Strydom Physiotherapy <no-reply@danksandstrydom.co.za>
+Reply-To: Website Visitor <visitor@example.com>
+To: info@danksandstrydom.co.za
+```
+
+Incorrect:
+
+```text
+From: Website Visitor <visitor@example.com>
+To: info@danksandstrydom.co.za
+```
+
+Using the visitor's email as the `from` address can cause SPF, DKIM, DMARC, and SMTP authentication failures.
+
+Example Laravel Mailable envelope:
+
+```php
+use Illuminate\Mail\Mailables\Address;
+use Illuminate\Mail\Mailables\Envelope;
+
+public function envelope(): Envelope
+{
+    return new Envelope(
+        from: new Address(
+            config('mail.from.address'),
+            config('mail.from.name')
+        ),
+        replyTo: [
+            new Address($this->email, $this->name),
+        ],
+        subject: 'New website enquiry from ' . $this->name,
+    );
+}
+```
+
+### Step 9: Check Email Deliverability in cPanel
+
+In cPanel, go to:
+
+```text
+Email Deliverability
+```
+
+Check the domain.
+
+Make sure these records are valid:
+
+```text
+SPF
+DKIM
+DMARC, if configured
+```
+
+If cPanel offers a **Repair** button, use it.
+
+Even if SMTP authentication works, missing SPF/DKIM records can cause emails to land in spam or be rejected by some mail providers.
+
+### Mail Troubleshooting
+
+#### Error: Incorrect Authentication Data
+
+Example:
+
+```text
+535 Incorrect authentication data
+```
+
+Check:
+
+```text
+MAIL_USERNAME
+MAIL_PASSWORD
+MAIL_HOST
+MAIL_PORT
+MAIL_ENCRYPTION
+```
+
+Make sure `MAIL_USERNAME` is the full email address:
+
+```env
+MAIL_USERNAME=no-reply@danksandstrydom.co.za
+```
+
+Make sure the password is the mailbox password created in cPanel.
+
+If the password contains special characters, wrap it in quotes.
+
+#### Error: Double Domain in Username
+
+If the error shows:
+
+```text
+no-reply@danksandstrydom.co.za.co.za
+```
+
+fix `.env` and/or recreate the cPanel email account correctly.
+
+The correct username is:
+
+```text
+no-reply@danksandstrydom.co.za
+```
+
+Then run:
+
+```bash
+php artisan optimize:clear
+php artisan config:cache
+```
+
+#### Mail Sends but Does Not Arrive
+
+Check:
+
+```text
+Spam/junk folder
+cPanel Email Deliverability
+SPF/DKIM records
+Recipient address in CONTACT_MAIL_TO
+Laravel logs
+```
+
+View Laravel logs:
+
+```bash
+tail -n 100 /home/CPANEL_USER/repositories/PROJECT_NAME/storage/logs/laravel.log
+```
+
+Example:
+
+```bash
+tail -n 100 /home/danks/repositories/DanksAndStrydom/storage/logs/laravel.log
+```
