@@ -36,38 +36,19 @@ function initHeader() {
 }
 
 /* ------------------------------------------------------------------ */
-/* Mobile menu                                                         */
+/* Mobile menu side-effects (state lives in the Livewire header)       */
 /* ------------------------------------------------------------------ */
 function initMobileMenu() {
-    const toggle = document.querySelector('[data-menu-toggle]');
-    const panel = document.querySelector('[data-menu-panel]');
-    if (!toggle || !panel) return;
-
-    const setOpen = (open) => {
-        toggle.setAttribute('aria-expanded', String(open));
-        panel.classList.toggle('hidden', !open);
-        // Lock body scroll while the overlay menu is open
-        document.body.classList.toggle('overflow-hidden', open);
-    };
-
-    toggle.addEventListener('click', () => {
-        const open = toggle.getAttribute('aria-expanded') === 'true';
-        setOpen(!open);
+    // Lock body scroll while the menu is open
+    window.addEventListener('mobile-menu-toggled', (e) => {
+        document.body.classList.toggle('overflow-hidden', Boolean(e.detail?.open));
     });
 
-    // Close when a nav link is tapped
-    panel.querySelectorAll('a').forEach((link) => {
-        link.addEventListener('click', () => setOpen(false));
-    });
-
-    // Close on Escape
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') setOpen(false);
-    });
-
-    // Reset when resizing up to desktop
+    // Close the menu when resizing up to desktop
     window.matchMedia('(min-width: 1024px)').addEventListener('change', (e) => {
-        if (e.matches) setOpen(false);
+        if (e.matches && window.Livewire) {
+            window.Livewire.dispatch('close-mobile-menu');
+        }
     });
 }
 
@@ -135,10 +116,12 @@ function initReveal() {
 /* ------------------------------------------------------------------ */
 function boot() {
     initHeader();
-    initMobileMenu();
     initParallax();
     initReveal();
 }
+
+// Window-level listeners — register once, no DOM needed.
+initMobileMenu();
 
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', boot);

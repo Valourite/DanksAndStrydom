@@ -24,7 +24,7 @@
         Skip to content
     </a>
 
-    <x-site.header />
+    <livewire:site.header />
 
     <main id="main">
         {{ $slot }}

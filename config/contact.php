@@ -34,8 +34,8 @@ return [
         'email' => env('CONTACT_EMAIL', 'hello@danksandstrydom.co.za'),
         'address' => env('CONTACT_ADDRESS', '123 Wellness Avenue, Suite 4, Cape Town, 8001'),
         'hours' => [
-            'Monday – Friday' => '08:00 – 17:00',
-            'Saturday' => '08:00 – 12:00',
+            'Monday - Friday' => '08:00 - 17:00',
+            'Saturday' => '08:00 - 12:00',
             'Sunday & Public Holidays' => 'Closed',
         ],
         // Replace with the real Google Maps embed URL when available.
