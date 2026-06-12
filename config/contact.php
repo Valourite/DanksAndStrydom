@@ -39,7 +39,7 @@ return [
             'Sunday & Public Holidays' => 'Closed',
         ],
         // Replace with the real Google Maps embed URL when available.
-        'map_embed_url' => env('CONTACT_MAP_EMBED_URL', ''),
+        'map_embed_url' => env('CONTACT_MAP_EMBED_URL', "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7167.225550505287!2d28.24767237619273!3d-26.078908558884297!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e9514d786f1b4bf%3A0x32e2cb459495985a!2s196%20Monument%20Rd%2C%20Glen%20marais%2C%20Johannesburg%2C%201619!5e0!3m2!1sen!2sza!4v1781261967043!5m2!1sen!2sza"),
     ],
 
 ];

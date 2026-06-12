@@ -177,7 +177,7 @@ new class extends Component
                     </button>
 
                     <p class="max-w-60 text-xs leading-relaxed text-pine-400">
-                        We respect your privacy and won’t share your details.
+                        We respect your privacy and won't share your details.
                     </p>
                 </div>
             </form>
