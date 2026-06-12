@@ -1,47 +1,23 @@
-<?php
-
-use Livewire\Attributes\On;
-use Livewire\Component;
-
-new class extends Component
-{
-    public bool $menuOpen = false;
-
-    /** @var list<array{label: string, href: string}> */
-    public array $nav = [
+@php
+    $nav = [
         ['label' => 'Home', 'href' => '#hero'],
         ['label' => 'Services', 'href' => '#services'],
         ['label' => 'About', 'href' => '#about'],
         ['label' => 'Testimonials', 'href' => '#testimonials'],
         ['label' => 'Contact', 'href' => '#contact'],
     ];
-
-    public function toggleMenu(): void
-    {
-        $this->menuOpen = ! $this->menuOpen;
-        $this->dispatch('mobile-menu-toggled', open: $this->menuOpen);
-    }
-
-    #[On('close-mobile-menu')]
-    public function closeMenu(): void
-    {
-        if ($this->menuOpen) {
-            $this->menuOpen = false;
-            $this->dispatch('mobile-menu-toggled', open: false);
-        }
-    }
-}; ?>
+@endphp
 
 <header
     data-site-header
-    wire:keydown.escape.window="closeMenu"
+    data-menu-open="false"
     class="group/header fixed inset-x-0 top-0 z-50 border-b border-transparent transition-all duration-500
            [&.is-scrolled]:border-pine-900/8 [&.is-scrolled]:bg-bone-50/80 [&.is-scrolled]:shadow-[0_1px_0_0_rgba(10,31,27,0.04),0_12px_32px_-20px_rgba(10,31,27,0.25)] [&.is-scrolled]:backdrop-blur-xl"
 >
     <nav class="mx-auto flex h-20 max-w-6xl items-center justify-between gap-4 px-5 sm:px-8 lg:h-24" aria-label="Primary">
 
         {{-- Wordmark --}}
-        <a href="#hero" wire:click="closeMenu" class="flex items-center gap-3.5" aria-label="Danks &amp; Strydom Physiotherapy — home">
+        <a href="#hero" data-mobile-menu-close class="flex items-center gap-3.5" aria-label="Danks &amp; Strydom Physiotherapy — home">
             <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-pine-900/15 bg-bone-50 font-display text-[0.95rem] font-semibold tracking-tight text-pine-900">
                 D<span class="text-sea-600">&amp;</span>S
             </span>
@@ -76,25 +52,16 @@ new class extends Component
         {{-- Mobile toggle --}}
         <button
             type="button"
-            wire:click="toggleMenu"
-            aria-expanded="{{ $menuOpen ? 'true' : 'false' }}"
+            data-mobile-menu-toggle
+            aria-expanded="false"
             aria-controls="mobile-menu"
-            aria-label="{{ $menuOpen ? 'Close menu' : 'Open menu' }}"
+            aria-label="Open menu"
             class="-mr-1 inline-flex h-12 w-12 items-center justify-center rounded-full text-pine-900 transition-colors hover:bg-pine-900/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sea-600 lg:hidden">
             {{-- Hamburger ↔ close, lines morph via CSS transforms --}}
             <span class="relative block h-4 w-6" aria-hidden="true">
-                <span @class([
-                    'absolute left-0 top-0 block h-px w-6 bg-current transition-all duration-300 ease-out',
-                    'translate-y-[7.5px] rotate-45' => $menuOpen,
-                ])></span>
-                <span @class([
-                    'absolute left-0 top-1/2 block h-px w-4 -translate-y-1/2 bg-current transition-all duration-300 ease-out',
-                    'w-6 opacity-0' => $menuOpen,
-                ])></span>
-                <span @class([
-                    'absolute bottom-0 left-0 block h-px w-6 bg-current transition-all duration-300 ease-out',
-                    '-translate-y-[7.5px] -rotate-45' => $menuOpen,
-                ])></span>
+                <span class="absolute left-0 top-0 block h-px w-6 bg-current transition-all duration-300 ease-out group-data-[menu-open=true]/header:translate-y-[7.5px] group-data-[menu-open=true]/header:rotate-45"></span>
+                <span class="absolute left-0 top-1/2 block h-px w-4 -translate-y-1/2 bg-current transition-all duration-300 ease-out group-data-[menu-open=true]/header:w-6 group-data-[menu-open=true]/header:opacity-0"></span>
+                <span class="absolute bottom-0 left-0 block h-px w-6 bg-current transition-all duration-300 ease-out group-data-[menu-open=true]/header:translate-y-[-7.5px] group-data-[menu-open=true]/header:-rotate-45"></span>
             </span>
         </button>
     </nav>
@@ -102,16 +69,16 @@ new class extends Component
     {{-- Mobile menu panel --}}
     <div
         id="mobile-menu"
-        wire:show="menuOpen"
-        wire:transition.opacity.duration.300ms
-        wire:cloak
-        class="lg:hidden">
+        data-mobile-menu
+        hidden
+        class="lg:hidden"
+    >
         <div class="border-t border-pine-900/8 bg-bone-50/95 px-5 pb-8 pt-4 shadow-2xl backdrop-blur-xl">
             <ul class="divide-y divide-pine-900/6">
                 @foreach ($nav as $i => $item)
                     <li>
                         <a href="{{ $item['href'] }}"
-                           wire:click="closeMenu"
+                           data-mobile-menu-close
                            class="flex items-center justify-between py-4 text-base font-medium text-pine-900 transition-colors hover:text-sea-700">
                             {{ $item['label'] }}
                             <span class="font-display text-xs italic text-pine-400">0{{ $i + 1 }}</span>
@@ -120,7 +87,7 @@ new class extends Component
                 @endforeach
             </ul>
             <a href="#contact"
-               wire:click="closeMenu"
+               data-mobile-menu-close
                class="mt-5 flex items-center justify-center gap-2 rounded-full bg-pine-900 px-6 py-4 text-sm font-semibold text-bone-50 transition-colors hover:bg-sea-700">
                 Book an appointment
                 <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>

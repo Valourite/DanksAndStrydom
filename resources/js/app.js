@@ -37,18 +37,47 @@ function initHeader() {
 }
 
 /* ------------------------------------------------------------------ */
-/* Mobile menu side-effects (state lives in the Livewire header)       */
+/* Mobile menu                                                         */
 /* ------------------------------------------------------------------ */
 function initMobileMenu() {
-    // Lock body scroll while the menu is open
-    window.addEventListener('mobile-menu-toggled', (e) => {
-        document.body.classList.toggle('overflow-hidden', Boolean(e.detail?.open));
+    const header = document.querySelector('[data-site-header]');
+    if (!header || header.dataset.mobileMenuInitialized === 'true') return;
+
+    const toggle = header.querySelector('[data-mobile-menu-toggle]');
+    const menu = header.querySelector('[data-mobile-menu]');
+
+    if (!toggle || !menu) return;
+
+    header.dataset.mobileMenuInitialized = 'true';
+
+    const setMenuOpen = (open) => {
+        header.dataset.menuOpen = String(open);
+        menu.hidden = !open;
+        toggle.setAttribute('aria-expanded', String(open));
+        toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        document.body.classList.toggle('overflow-hidden', open);
+    };
+
+    const isMenuOpen = () => toggle.getAttribute('aria-expanded') === 'true';
+
+    toggle.addEventListener('click', () => {
+        setMenuOpen(!isMenuOpen());
     });
 
-    // Close the menu when resizing up to desktop
-    window.matchMedia('(min-width: 1024px)').addEventListener('change', (e) => {
-        if (e.matches && window.Livewire) {
-            window.Livewire.dispatch('close-mobile-menu');
+    header.querySelectorAll('[data-mobile-menu-close]').forEach((link) => {
+        link.addEventListener('click', () => setMenuOpen(false));
+    });
+
+    header.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && isMenuOpen()) {
+            setMenuOpen(false);
+            toggle.focus();
+        }
+    });
+
+    window.matchMedia('(min-width: 1024px)').addEventListener('change', (event) => {
+        if (event.matches) {
+            setMenuOpen(false);
         }
     });
 }
@@ -172,13 +201,11 @@ function initImageCarousels() {
 /* ------------------------------------------------------------------ */
 function boot() {
     initHeader();
+    initMobileMenu();
     initParallax();
     initReveal();
     initImageCarousels();
 }
-
-// Window-level listeners — register once, no DOM needed.
-initMobileMenu();
 
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', boot);

@@ -21,6 +21,9 @@ Route::get('/deploy/{token}', function ($token) {
     Artisan::call('migrate', ['--force' => true]);
     Artisan::call('optimize:clear');
 
+    // 2. Cache the files again
+    Artisan::call('optimize');
+
     // 2. Fix Storage Link (The Custom Fix)
     // We point to the 'public_html' folder using $_SERVER['DOCUMENT_ROOT']
     $targetFolder = storage_path('app/public');
