@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 Route::view('/', 'home')->name('home');
 
 Route::get('/deploy/{token}', function ($token) {
-    if(!env('DEPLOY_TOKEN') || $token !== env('DEPLOY_TOKEN')) {
+    if(!config('auth.DEPLOY_TOKEN') || $token !== config('auth.DEPLOY_TOKEN')) {
         //Capture the deploy attempt in logs for awareness, but don't reveal the token or any details.
         \Log::warning('Unauthorized deploy attempt detected.', [
             'ip' => request()->ip(), 
