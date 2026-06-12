@@ -31,7 +31,7 @@
                     <tr>
                         <td style="padding:28px 32px 8px;">
                             <p style="margin:0 0 20px; font-size:15px; line-height:1.6; color:#4d6b7e;">
-                                You’ve received a new enquiry through the website contact form.
+                                You've received a new enquiry through the website contact form.
                             </p>
 
                             <table role="presentation" width="100%" cellpadding="0" cellspacing="0">

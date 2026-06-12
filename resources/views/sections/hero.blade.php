@@ -16,7 +16,7 @@
             </p>
 
             <h1 class="mt-7 text-balance font-display text-[2.7rem] font-medium leading-[1.06] tracking-tight text-pine-950 sm:text-6xl lg:text-[4.1rem]">
-                Personalized care for a body that
+                Personalised care for a body that
                 <em class="text-sea-600">moves freely</em>
             </h1>
 

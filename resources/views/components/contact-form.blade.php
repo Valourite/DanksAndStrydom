@@ -46,7 +46,7 @@ new class extends Component
 
         if (empty($recipients)) {
             Log::warning('Contact form submitted but no CONTACT_MAIL_TO recipients are configured.');
-            $this->addError('form', 'We’re unable to send messages right now. Please call us instead.');
+            $this->addError('form', 'We\'re unable to send messages right now. Please call us instead.');
 
             return;
         }
@@ -91,7 +91,7 @@ new class extends Component
                 </span>
                 <h3 class="mt-7 font-display text-2xl font-medium tracking-tight text-pine-950">Thank you — <em class="text-sea-600">message sent.</em></h3>
                 <p class="mt-3 max-w-sm text-sm leading-relaxed text-pine-500">
-                    We’ve received your enquiry and aim to get back to you within one business day. We look forward to helping you.
+                    We've received your enquiry and aim to get back to you within one business day. We look forward to helping you.
                 </p>
                 <button type="button" wire:click="sendAnother"
                         class="mt-9 inline-flex items-center gap-2 rounded-full border border-pine-900/15 px-6 py-3 text-sm font-semibold text-pine-900 transition-all duration-300 hover:border-pine-950 hover:bg-pine-950 hover:text-bone-50">

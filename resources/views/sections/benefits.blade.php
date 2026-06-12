@@ -6,7 +6,7 @@
         ['title' => 'Evidence-informed',    'body' => 'Treatment grounded in current best practice — care you can genuinely trust.'],
         ['title' => 'Clear guidance',       'body' => 'Simple, practical exercises and advice you can follow at home, with support along the way.'],
         ['title' => 'A calm environment',   'body' => 'A welcoming, unhurried space where you feel comfortable and genuinely cared for.'],
-        ['title' => 'Long-term results',    'body' => 'We focus on lasting improvement and prevention — not just easing today’s symptoms.'],
+        ['title' => 'Long-term results',    'body' => 'We focus on lasting improvement and prevention — not just easing today\'s symptoms.'],
     ];
 @endphp
 

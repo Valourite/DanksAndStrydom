@@ -13,7 +13,7 @@
                 <p class="text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-sea-400">Danks &amp; Strydom Physiotherapy</p>
                 <p class="mt-4 font-display text-3xl font-medium leading-snug tracking-tight text-bone-50 sm:text-4xl">
                     Ready when you are —
-                    <em class="text-sea-300">let’s get you moving.</em>
+                    <em class="text-sea-300">let's get you moving.</em>
                 </p>
             </div>
             <a href="#contact"

@@ -1,8 +1,16 @@
 # Laravel cPanel Deployment Guide
 
-This guide explains how to deploy a Laravel website on a shared cPanel hosting account where the application is stored inside the cPanel `repositories` folder and served through `public_html`.
+This guide explains how to deploy a Laravel website on a shared cPanel hosting account where the Laravel application is stored inside cPanel's `repositories` folder, while the live domain is served through `public_html`.
 
-This setup is useful when the hosting provider does not allow the domain document root to be changed directly to Laravel's `/public` folder.
+This setup was built for a shared hosting environment where:
+
+- The domain document root could not reliably be changed to Laravel's `/public` directory.
+- The entire `public_html` folder could not be symlinked to the repo's `/public` folder.
+- Symlinked asset folders were not reliable on LiteSpeed.
+- Composer was not available globally, so `composer.phar` was installed inside the cPanel home directory.
+- Vite/Tailwind build assets are built locally and committed to Git.
+- Deployment is handled by a reusable `deploy.sh` script.
+- Optional web-based deployment is available through a protected Laravel `/deploy` route.
 
 ## Final Hosting Structure
 
@@ -13,9 +21,8 @@ The final structure should look like this:
 ├── public_html/
 │   ├── index.php
 │   ├── .htaccess
-│   ├── build -> /home/CPANEL_USER/repositories/PROJECT_NAME/public/build
-│   └── images -> /home/CPANEL_USER/repositories/PROJECT_NAME/public/images
-│   └── any folder actually -> /home/CPANEL_USER/repositories/PROJECT_NAME/public/that folder to symlink...
+│   ├── build/              <- copied from repo public/build during deployment
+│   └── images/             <- copied from repo public/images during deployment
 │
 ├── repositories/
 │   └── PROJECT_NAME/
@@ -29,39 +36,42 @@ The final structure should look like this:
 │       ├── resources/
 │       ├── routes/
 │       ├── storage/
-│       ├── vendor/
-│       ├── .env
+│       ├── vendor/         <- installed on the server by Composer
+│       ├── .env            <- server-only file, never committed
 │       ├── artisan
 │       ├── composer.json
 │       ├── composer.lock
 │       ├── package.json
-│       └── vite.config.js
+│       ├── vite.config.js
+│       ├── deploy.sh
+│       └── .cpanel.yml     <- optional, for cPanel Deploy HEAD Commit
 │
 └── composer.phar
 ```
 
-Example for this project hosted on danksandstrydom.co.za:
+Example for Danks & Strydom:
 
 ```text
 /home/danks/
 ├── public_html/
+├── composer.phar
 └── repositories/
     └── DanksAndStrydom/
 ```
 
 ## Important Hosting Requirement
 
-Before setting up Laravel on cPanel, ask the hosting provider to enable **Terminal access** for the cPanel account (they should give you jailed terminal access for that cPanel account).
+Before setting up Laravel on cPanel, ask the hosting provider to enable **Terminal access** for the cPanel account.
 
 Example request:
 
 ```text
 Please enable Terminal or SSH access for this cPanel account.
 
-We need terminal access to run Laravel commands, Composer, Git commands, and manage symlinks for a Laravel application hosted from the cPanel repositories folder.
+We need terminal access to run Laravel commands, Composer, Git commands, and deployment scripts for a Laravel application hosted from the cPanel repositories folder.
 ```
 
-Without terminal access, Laravel deployment becomes much harder because you cannot run Composer, Artisan, Git, or symlink commands.
+Without terminal access, Laravel deployment becomes much harder because you cannot run Composer, Artisan, Git, or deployment commands.
 
 ## Why This Setup Is Needed
 
@@ -83,9 +93,9 @@ To work around this, we keep the Laravel app inside:
 
 and use a custom `public_html/index.php` to load the Laravel app from the repo.
 
-Public asset folders such as `build` and `images` are symlinked from `public_html` to the repo’s `public` folder.
+The public asset folders such as `build` and `images` are copied from the repo into `public_html` during deployment.
 
-This means when the repo is updated, the public assets update automatically.
+This is more reliable than symlinking on shared hosting because some LiteSpeed/cPanel environments do not serve symlinked public folders correctly.
 
 ## Step 1: Clone the Repo in cPanel
 
@@ -107,15 +117,17 @@ Example:
 /home/danks/repositories/DanksAndStrydom
 ```
 
+This creates a server-side clone of the GitHub repo.
+
 ## Step 2: Keep `public_html` as a Real Folder
 
-Do not symlink the whole `public_html` folder to Laravel’s `/public` folder.
+Do not symlink the whole `public_html` folder to Laravel's `/public` folder.
 
-On some shared hosts, Apache/cPanel does not serve `public_html` correctly when the entire folder is a symlink. This can result in a hosting-provider 404 page instead of a Laravel response.
+On some shared hosts, Apache/LiteSpeed/cPanel does not serve `public_html` correctly when the entire folder is a symlink. This can result in a hosting-provider 404 page instead of a Laravel response.
 
 Use a real `public_html` folder instead.
 
-## Step 3: Copy Laravel Public Files to `public_html`
+## Step 3: Copy Laravel Public Entry Files to `public_html`
 
 Copy the contents of:
 
@@ -141,6 +153,13 @@ robots.txt
 Do not copy the entire Laravel application into `public_html`.
 
 Only the public entry files belong there.
+
+The deploy script will later keep these asset folders updated:
+
+```text
+public_html/build
+public_html/images
+```
 
 ## Step 4: Update `public_html/index.php`
 
@@ -177,7 +196,7 @@ $app = require_once __DIR__.'/../repositories/PROJECT_NAME/bootstrap/app.php';
 $app->handleRequest(Request::capture());
 ```
 
-Example for this project:
+Example for Danks & Strydom:
 
 ```php
 <?php
@@ -199,13 +218,13 @@ $app = require_once __DIR__.'/../repositories/DanksAndStrydom/bootstrap/app.php'
 $app->handleRequest(Request::capture());
 ```
 
-The repo’s own file can remain unchanged:
+The repo's own file can remain unchanged:
 
 ```text
 /home/CPANEL_USER/repositories/PROJECT_NAME/public/index.php
 ```
 
-That file should stay as Laravel’s default `public/index.php`.
+That file should stay as Laravel's default `public/index.php`.
 
 ## Step 5: Update `public_html/.htaccess`
 
@@ -215,13 +234,11 @@ Edit:
 /home/CPANEL_USER/public_html/.htaccess
 ```
 
-Use Laravel’s rewrite rules:
+Use Laravel's rewrite rules:
 
 ```apache
 <IfModule mod_rewrite.c>
-    <IfModule mod_negotiation.c>
-        Options -MultiViews -Indexes
-    </IfModule>
+    Options -MultiViews -Indexes
 
     DirectoryIndex index.php
 
@@ -236,6 +253,14 @@ Use Laravel’s rewrite rules:
 </IfModule>
 ```
 
+If you test symlinks and need ownership-matched symlink support, you can use:
+
+```apache
+Options +SymLinksIfOwnerMatch -MultiViews -Indexes
+```
+
+However, if symlinked assets still return a PHP/Laravel 404, do not rely on symlinks. Use the copied asset folder approach in `deploy.sh`.
+
 Make sure there are no Node.js Passenger rules in this file.
 
 Remove anything like:
@@ -248,11 +273,13 @@ PassengerStartupFile
 PassengerAppType node
 ```
 
-Node.js must not serve the Laravel website, so do not run a nodejs application for this project via the cPanel nodejs application.
+Node.js must not serve the Laravel website.
 
-We let the build files comes with the git push so we can access them and serve them over the web, essentially cutting out the need for npm and node_modules folder
+Laravel must be served by PHP through:
 
-Laravel must be served by PHP through `public_html/index.php`.
+```text
+public_html/index.php
+```
 
 ## Step 6: Create the `.env` File
 
@@ -293,6 +320,8 @@ MAIL_PASSWORD=email_password
 MAIL_ENCRYPTION=ssl
 MAIL_FROM_ADDRESS=info@example.com
 MAIL_FROM_NAME="Project Name"
+
+DEPLOY_TOKEN=PASTE_A_LONG_RANDOM_TOKEN_HERE
 ```
 
 Generate the app key locally or on the server:
@@ -305,6 +334,18 @@ Then paste the generated value into:
 
 ```env
 APP_KEY=
+```
+
+Generate a deploy token locally or on a machine with OpenSSL:
+
+```bash
+openssl rand -hex 48
+```
+
+Paste that value into:
+
+```env
+DEPLOY_TOKEN=
 ```
 
 Do not commit `.env` to Git.
@@ -338,7 +379,7 @@ and you create a database called:
 website
 ```
 
-the real database name may be (danks_ prefixed):
+the real database name may be:
 
 ```text
 danks_website
@@ -390,7 +431,7 @@ Check Composer works:
 php /home/CPANEL_USER/composer.phar --version
 ```
 
-Example for this project:
+Example for Danks & Strydom:
 
 ```bash
 cd /home/danks
@@ -430,7 +471,7 @@ Because Composer now works on the server, `vendor` should not be committed to Gi
 
 ## Step 10: Git Ignore Rules
 
-Use a normal Laravel-style `.gitignore`.
+Use a mostly normal Laravel-style `.gitignore`.
 
 Make sure these are ignored:
 
@@ -453,11 +494,7 @@ Make sure these are ignored:
 .DS_Store
 ```
 
-For this shared-hosting setup, there is only one possible approach for Vite build files.
-
-### Build Locally and Commit `public/build`
-
-Use this if the server cannot run `npm run build` (which shared servers can't).
+For this shared-hosting setup, build Vite/Tailwind assets locally and commit `public/build`.
 
 Do not ignore:
 
@@ -465,9 +502,9 @@ Do not ignore:
 /public/build
 ```
 
-So inside the .gitignore file, make sure /public/build is not ignored
+If your default `.gitignore` contains `/public/build`, remove that line.
 
-Run locally:
+Then run locally:
 
 ```bash
 npm install
@@ -477,65 +514,53 @@ git commit -m "Build production assets"
 git push origin main
 ```
 
-## Step 11: Symlink Public Asset Folders
-
-Because the live site uses:
+The server does not need `node_modules` to serve the site. It only needs the compiled files in:
 
 ```text
-/home/CPANEL_USER/public_html
+public/build
 ```
 
-but the repo assets are inside:
+## Step 11: Do Not Rely on Symlinked Public Assets
+
+This setup originally tested symlinking:
 
 ```text
-/home/CPANEL_USER/repositories/PROJECT_NAME/public
+/home/CPANEL_USER/public_html/build
+→ /home/CPANEL_USER/repositories/PROJECT_NAME/public/build
 ```
 
-create symlinks for public asset folders.
+and:
 
-### Symlink `build`
+```text
+/home/CPANEL_USER/public_html/images
+→ /home/CPANEL_USER/repositories/PROJECT_NAME/public/images
+```
+
+However, on some LiteSpeed/shared hosting setups, the symlink can exist in the shell but still return a Laravel/PHP 404 in the browser.
+
+Example symptom:
+
+```bash
+ls -la /home/CPANEL_USER/public_html/build/manifest.json
+# file exists
+
+curl -I https://example.com/build/manifest.json
+# HTTP/2 404
+# x-powered-by: PHP/...
+```
+
+That means LiteSpeed is not treating the symlink target as a normal static file and Laravel is catching the request.
+
+For this reason, the recommended approach is to **copy** public asset folders during deployment instead of symlinking them.
+
+The deployment script handles this automatically:
 
 ```bash
 rm -rf /home/CPANEL_USER/public_html/build
+cp -R /home/CPANEL_USER/repositories/PROJECT_NAME/public/build /home/CPANEL_USER/public_html/build
 
-ln -s /home/CPANEL_USER/repositories/PROJECT_NAME/public/build /home/CPANEL_USER/public_html/build
-```
-
-Example:
-
-```bash
-rm -rf /home/danks/public_html/build
-
-ln -s /home/danks/repositories/DanksAndStrydom/public/build /home/danks/public_html/build
-```
-
-### Symlink `images`
-
-```bash
 rm -rf /home/CPANEL_USER/public_html/images
-
-ln -s /home/CPANEL_USER/repositories/PROJECT_NAME/public/images /home/CPANEL_USER/public_html/images
-```
-
-Example:
-
-```bash
-rm -rf /home/danks/public_html/images
-
-ln -s /home/danks/repositories/DanksAndStrydom/public/images /home/danks/public_html/images
-```
-
-Check symlinks:
-
-```bash
-ls -la /home/CPANEL_USER/public_html
-```
-
-You should see something like:
-
-```text
-build -> /home/CPANEL_USER/repositories/PROJECT_NAME/public/build
-images -> /home/CPANEL_USER/repositories/PROJECT_NAME/public/images
+cp -R /home/CPANEL_USER/repositories/PROJECT_NAME/public/images /home/CPANEL_USER/public_html/images
 ```
 
 ## Step 12: Set Permissions
@@ -563,32 +588,281 @@ chmod 644 /home/CPANEL_USER/public_html/index.php
 chmod 644 /home/CPANEL_USER/public_html/.htaccess
 ```
 
-## Step 13: Run Laravel Commands
+## Step 13: Add `deploy.sh`
 
-From the Laravel repo:
+Create:
 
-```bash
-cd /home/CPANEL_USER/repositories/PROJECT_NAME
+```text
+/home/CPANEL_USER/repositories/PROJECT_NAME/deploy.sh
 ```
 
-Clear and rebuild Laravel caches:
+Example:
 
 ```bash
-php artisan optimize:clear
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
+nano /home/CPANEL_USER/repositories/PROJECT_NAME/deploy.sh
 ```
 
-If the project uses migrations and the database is ready, run:
+Use this script:
 
 ```bash
-php artisan migrate --force
+#!/bin/bash
+set -euo pipefail
+
+APP_DIR="/home/CPANEL_USER/repositories/PROJECT_NAME"
+PUBLIC_DIR="/home/CPANEL_USER/public_html"
+PHP_BIN="/usr/local/bin/php"
+COMPOSER="/home/CPANEL_USER/composer.phar"
+BRANCH="main"
+
+LOG_FILE="$APP_DIR/storage/logs/deploy.log"
+LOCK_FILE="/tmp/project-deploy.lock"
+
+# Required when running Composer from a web-triggered process.
+export HOME="/home/CPANEL_USER"
+export COMPOSER_HOME="/home/CPANEL_USER/.composer"
+export COMPOSER_CACHE_DIR="/home/CPANEL_USER/.composer/cache"
+
+mkdir -p "$APP_DIR/storage/logs"
+mkdir -p "$COMPOSER_HOME"
+mkdir -p "$COMPOSER_CACHE_DIR"
+
+bring_app_up() {
+    cd "$APP_DIR" || exit 1
+    echo "Bringing app back online..."
+    $PHP_BIN artisan up || true
+}
+
+(
+    flock -n 9 || {
+        echo "Another deployment is already running."
+        exit 1
+    }
+
+    # If anything fails after maintenance mode starts, this ensures the site is not left down.
+    trap bring_app_up EXIT
+
+    echo ""
+    echo "=================================================="
+    echo "Deployment started: $(date)"
+    echo "=================================================="
+
+    cd "$APP_DIR"
+
+    echo "Putting app into maintenance mode..."
+    $PHP_BIN artisan down || true
+
+    echo "Fetching latest code..."
+    git fetch origin "$BRANCH"
+
+    echo "Resetting working tree to origin/$BRANCH..."
+    git reset --hard "origin/$BRANCH"
+
+    echo "Installing Composer dependencies..."
+    $PHP_BIN "$COMPOSER" install --no-dev --prefer-dist --optimize-autoloader --no-interaction
+
+    echo "Copying public build assets..."
+    rm -rf "$PUBLIC_DIR/build"
+    cp -R "$APP_DIR/public/build" "$PUBLIC_DIR/build"
+
+    if [ -d "$APP_DIR/public/images" ]; then
+        echo "Copying public images..."
+        rm -rf "$PUBLIC_DIR/images"
+        cp -R "$APP_DIR/public/images" "$PUBLIC_DIR/images"
+    fi
+
+    echo "Fixing permissions..."
+    chmod -R 775 "$APP_DIR/storage" || true
+    chmod -R 775 "$APP_DIR/bootstrap/cache" || true
+    chmod -R 755 "$PUBLIC_DIR/build" || true
+
+    if [ -d "$PUBLIC_DIR/images" ]; then
+        chmod -R 755 "$PUBLIC_DIR/images" || true
+    fi
+
+    echo "Clearing Laravel caches..."
+    $PHP_BIN artisan optimize:clear
+
+    echo "Running database migrations..."
+    $PHP_BIN artisan migrate --force
+
+    echo "Rebuilding Laravel caches..."
+    $PHP_BIN artisan optimize
+
+    echo "Deployment completed: $(date)"
+    echo "=================================================="
+
+) 9>"$LOCK_FILE" >> "$LOG_FILE" 2>&1
 ```
 
-For a simple marketing site/contact form, migrations may not be needed.
+For Danks & Strydom, the file should use:
 
-## Step 14: Deployment Workflow
+```bash
+APP_DIR="/home/danks/repositories/DanksAndStrydom"
+PUBLIC_DIR="/home/danks/public_html"
+PHP_BIN="/usr/local/bin/php"
+COMPOSER="/home/danks/composer.phar"
+LOCK_FILE="/tmp/danksandstrydom-deploy.lock"
+
+export HOME="/home/danks"
+export COMPOSER_HOME="/home/danks/.composer"
+export COMPOSER_CACHE_DIR="/home/danks/.composer/cache"
+```
+
+Make it executable:
+
+```bash
+chmod +x /home/CPANEL_USER/repositories/PROJECT_NAME/deploy.sh
+```
+
+Example:
+
+```bash
+chmod +x /home/danks/repositories/DanksAndStrydom/deploy.sh
+```
+
+Run it manually:
+
+```bash
+/home/CPANEL_USER/repositories/PROJECT_NAME/deploy.sh
+```
+
+Example:
+
+```bash
+/home/danks/repositories/DanksAndStrydom/deploy.sh
+```
+
+View the deployment log:
+
+```bash
+tail -n 120 /home/CPANEL_USER/repositories/PROJECT_NAME/storage/logs/deploy.log
+```
+
+Example:
+
+```bash
+tail -n 120 /home/danks/repositories/DanksAndStrydom/storage/logs/deploy.log
+```
+
+## Step 14: Optional `.cpanel.yml`
+
+If using cPanel's **Deploy HEAD Commit** button, create this file in the repo root:
+
+```text
+.cpanel.yml
+```
+
+Use:
+
+```yaml
+---
+deployment:
+  tasks:
+    - /bin/bash /home/CPANEL_USER/repositories/PROJECT_NAME/deploy.sh
+```
+
+Example:
+
+```yaml
+---
+deployment:
+  tasks:
+    - /bin/bash /home/danks/repositories/DanksAndStrydom/deploy.sh
+```
+
+This allows cPanel's deploy button to call the same `deploy.sh` file.
+
+## Step 15: Optional Protected Web Deployment Route
+
+This is optional.
+
+The safest deployment method is still terminal or cPanel deployment, because a Laravel route only works if Laravel can boot.
+
+However, for convenience, you can add a protected POST-only route that calls `deploy.sh`.
+
+### Add `DEPLOY_TOKEN` to `.env`
+
+```env
+DEPLOY_TOKEN=PASTE_A_LONG_RANDOM_TOKEN_HERE
+```
+
+### Add config to `config/services.php`
+
+```php
+'deploy' => [
+    'token' => env('DEPLOY_TOKEN'),
+],
+```
+
+### Add the route to `routes/web.php`
+
+```php
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Process;
+use Illuminate\Support\Facades\Route;
+
+Route::post('/deploy', function (Request $request) {
+    $configuredToken = (string) config('services.deploy.token');
+    $providedToken = (string) $request->bearerToken();
+
+    abort_if($configuredToken === '', 404);
+
+    abort_unless(
+        hash_equals($configuredToken, $providedToken),
+        404
+    );
+
+    $result = Process::timeout(600)->run(
+        '/bin/bash /home/CPANEL_USER/repositories/PROJECT_NAME/deploy.sh'
+    );
+
+    if ($result->failed()) {
+        return response()->json([
+            'status' => 'failed',
+            'message' => 'Deployment failed. Check storage/logs/deploy.log on the server.',
+            'error' => $result->errorOutput(),
+        ], 500);
+    }
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Deployment completed.',
+        'output' => $result->output(),
+    ]);
+});
+```
+
+Example for Danks & Strydom:
+
+```php
+$result = Process::timeout(600)->run(
+    '/bin/bash /home/danks/repositories/DanksAndStrydom/deploy.sh'
+);
+```
+
+Call it with:
+
+```bash
+curl -X POST https://example.com/deploy \
+  -H "Authorization: Bearer YOUR_DEPLOY_TOKEN"
+```
+
+Example:
+
+```bash
+curl -X POST https://danksandstrydom.co.za/deploy \
+  -H "Authorization: Bearer YOUR_DEPLOY_TOKEN"
+```
+
+Do not use:
+
+```text
+/deploy?token=...
+```
+
+because tokens in URLs can end up in browser history, access logs, analytics, and referrer headers.
+
+## Step 16: Deployment Workflow
 
 ### Local Development
 
@@ -608,50 +882,112 @@ git commit -m "Update site"
 git push origin main
 ```
 
-### cPanel Deployment
+### cPanel Deployment Through Terminal
 
-SSH/Terminal into cPanel:
+Run:
+
+```bash
+/home/CPANEL_USER/repositories/PROJECT_NAME/deploy.sh
+```
+
+Example:
+
+```bash
+/home/danks/repositories/DanksAndStrydom/deploy.sh
+```
+
+### cPanel Deployment Through Git Version Control
+
+In cPanel:
+
+```text
+Git Version Control
+→ Select the repo
+→ Update from Remote
+→ Deploy HEAD Commit
+```
+
+The `.cpanel.yml` file should call `deploy.sh`.
+
+### Web Deployment
+
+Call the protected route:
+
+```bash
+curl -X POST https://example.com/deploy \
+  -H "Authorization: Bearer YOUR_DEPLOY_TOKEN"
+```
+
+## Step 17: Troubleshooting
+
+### Site Stuck in Maintenance Mode
+
+Run:
 
 ```bash
 cd /home/CPANEL_USER/repositories/PROJECT_NAME
+php artisan up
 ```
 
-Pull the latest code:
+Example:
 
 ```bash
-git pull origin main
+cd /home/danks/repositories/DanksAndStrydom
+php artisan up
 ```
 
-*^^This can also be done by going to the Git Version Control, finding the repo and updating the branch*
+The improved `deploy.sh` includes a trap that runs `php artisan up` when the script exits, even if a deployment step fails.
 
-Install/update PHP dependencies:
+### Composer Error: `HOME or COMPOSER_HOME environment variable must be set`
+
+This can happen when `deploy.sh` is called through a web route because the web process does not have the same shell environment as the terminal.
+
+Fix by including these lines in `deploy.sh`:
 
 ```bash
-php /home/CPANEL_USER/composer.phar install --no-dev --prefer-dist --optimize-autoloader
+export HOME="/home/CPANEL_USER"
+export COMPOSER_HOME="/home/CPANEL_USER/.composer"
+export COMPOSER_CACHE_DIR="/home/CPANEL_USER/.composer/cache"
+
+mkdir -p "$COMPOSER_HOME"
+mkdir -p "$COMPOSER_CACHE_DIR"
 ```
 
-Clear/rebuild Laravel caches:
+Example:
 
 ```bash
-php artisan optimize:clear
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
+export HOME="/home/danks"
+export COMPOSER_HOME="/home/danks/.composer"
+export COMPOSER_CACHE_DIR="/home/danks/.composer/cache"
 ```
 
-Run migrations if needed:
+### Missing Styles
+
+If the site loads but has no styling, check:
 
 ```bash
-php artisan migrate --force
+ls -la /home/CPANEL_USER/public_html/build/manifest.json
+curl -I https://example.com/build/manifest.json
 ```
 
-Because `public_html/build` and `public_html/images` are symlinks, updated assets from the repo are available immediately after `git pull`.
+You want:
 
-## Step 15: Troubleshooting
+```text
+HTTP/2 200
+```
+
+If `public_html/build` is a symlink and the curl returns a PHP/Laravel 404, replace the symlink with a copied folder:
+
+```bash
+rm -rf /home/CPANEL_USER/public_html/build
+cp -R /home/CPANEL_USER/repositories/PROJECT_NAME/public/build /home/CPANEL_USER/public_html/build
+```
+
+The `deploy.sh` file should now handle this automatically.
 
 ### Host Provider 404 Page
 
-If you see a hosting-provider 404 page, Apache is probably not reaching Laravel.
+If you see a hosting-provider 404 page, Apache/LiteSpeed is probably not reaching Laravel.
 
 Check:
 
@@ -661,11 +997,9 @@ ls -la /home/CPANEL_USER/public_html
 
 Make sure `public_html` is a real folder, not a full symlink to the repo.
 
-This setup intentionally does not symlink the whole `public_html` folder because some shared hosts do not serve it correctly.
-
 ### Laravel 404 Page
 
-If you see a Laravel 404, Apache is reaching Laravel, but the route does not exist.
+If you see a Laravel 404, Apache/LiteSpeed is reaching Laravel, but the route does not exist.
 
 Check:
 
@@ -675,20 +1009,9 @@ routes/web.php
 
 Make sure `/` is defined.
 
-### Missing Styles
+### Node.js "It Works" Page
 
-If the site loads but has no styling, check:
-
-```bash
-ls -la /home/CPANEL_USER/public_html/build
-ls -la /home/CPANEL_USER/repositories/PROJECT_NAME/public/build
-```
-
-Make sure `public_html/build` points to the repo’s `public/build`.
-
-### Node.js “It Works” Page
-
-If the website shows a Node.js page saying “It works!” and displays a Node version, cPanel is serving a Node.js app instead of Laravel.
+If the website shows a Node.js page saying "It works!" and displays a Node version, cPanel is serving a Node.js app instead of Laravel.
 
 Fix:
 
@@ -749,31 +1072,40 @@ Keep public_html as the public web entry folder
 Customize public_html/index.php to load Laravel from the repo
 Use composer.phar in the cPanel home directory
 Ignore /vendor in Git
-Build Vite assets locally if server build fails
-Commit public/build if building locally
-Symlink public_html/build to repo public/build
-Symlink public_html/images to repo public/images
+Ignore /node_modules in Git
+Build Vite assets locally
+Commit public/build
+Keep public_html/build as a copied folder, not a symlink, if LiteSpeed blocks symlinks
+Keep public_html/images as a copied folder, not a symlink, if LiteSpeed blocks symlinks
 Keep .env only on the server
-Use terminal access for git pull, composer install, and artisan commands
+Use deploy.sh for repeatable deployment
+Use .cpanel.yml if using cPanel Deploy HEAD Commit
+Use a protected POST-only /deploy route only as a convenience
 ```
 
-## Example Commands for Danks & Strydom
+## Example Deployment Commands for Danks & Strydom
+
+```bash
+/home/danks/repositories/DanksAndStrydom/deploy.sh
+```
+
+Or manually:
 
 ```bash
 cd /home/danks/repositories/DanksAndStrydom
 
-git pull origin main
+git fetch origin main
+git reset --hard origin/main
 
-php /home/danks/composer.phar install --no-dev --prefer-dist --optimize-autoloader
+php /home/danks/composer.phar install --no-dev --prefer-dist --optimize-autoloader --no-interaction
+
+rm -rf /home/danks/public_html/build
+cp -R /home/danks/repositories/DanksAndStrydom/public/build /home/danks/public_html/build
+
+rm -rf /home/danks/public_html/images
+cp -R /home/danks/repositories/DanksAndStrydom/public/images /home/danks/public_html/images
 
 php artisan optimize:clear
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
-```
-
-If migrations are needed:
-
-```bash
 php artisan migrate --force
+php artisan optimize
 ```

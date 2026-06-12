@@ -9,12 +9,12 @@
         {{-- Intro --}}
         <div class="reveal lg:sticky lg:top-32">
             <x-site.section-heading eyebrow="Get in touch" align="left" title="Book an appointment or ask a question">
-                Tell us a little about what you need and we’ll get back to you — usually within one business day.
+                Tell us a little about what you need and we'll get back to you — usually within one business day.
             </x-site.section-heading>
 
             <ul class="mt-10 space-y-0 divide-y divide-pine-900/8 border-y border-pine-900/8">
                 @foreach ([
-                        ['No referral needed', 'You can book directly with us — no doctor’s referral required.'],
+                        ['No referral needed', 'You can book directly with us — no doctor\'s referral required.'],
                         ['Friendly, no-pressure advice', 'Unsure if physiotherapy is right for you? Just ask.'],
                         ['Care designed around your goals', 'Every plan starts with a conversation about you.'],
                     ] as $i => $item)

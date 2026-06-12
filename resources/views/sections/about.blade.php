@@ -57,7 +57,7 @@
                     At Danks &amp; Strydom Physiotherapy, every treatment plan is personalised. We take time to listen and assess carefully, then combine hands-on, evidence-informed techniques with clear, practical guidance you can use between sessions.
                 </p>
                 <p>
-                    Our focus is long-term: helping you recover mobility and strength, and supporting lasting wellbeing — not just easing today’s symptoms. And we do it all in a calm, supportive environment where you’ll feel comfortable from the moment you arrive.
+                    Our focus is long-term: helping you recover mobility and strength, and supporting lasting wellbeing — not just easing today's symptoms. And we do it all in a calm, supportive environment where you'll feel comfortable from the moment you arrive.
                 </p>
             </div>
 
