@@ -11,10 +11,10 @@
             </div>
         @endunless
         @if ($services !== [])
-            <div data-service-cards class="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <div data-service-cards class="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
                 @foreach ($services as $name => $service)
-                    <x-site.service-card :title="$service['heading']" :href="route($name)" :index="$loop->iteration" :icon="match ($name) { 'back-neck-pain' => 'spine', 'post-operative-rehabilitation' => 'recovery', default => 'pulse' }">
-                        {{ $service['intro'] }}
+                    <x-site.service-card :title="$service['card_title'] ?? $service['heading']" :href="route($name)" :index="$loop->iteration" :icon="$service['service_icon'] ?? 'pulse'">
+                        {{ $service['card_description'] ?? $service['intro'] }}
                     </x-site.service-card>
                 @endforeach
             </div>

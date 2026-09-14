@@ -2,6 +2,24 @@
 
 Prepared 14 September 2026 from the supplied Danks & Strydom SEO strategy. This is a review branch, not a deployed release. No Google account, directory, production server or live mailbox was changed.
 
+## Eight-service inventory update
+
+Five requested offerings now have distinct draft pages for Cheryl’s review:
+
+- `/services/joint-muscle-pain` — joint discomfort, muscular aches and movement difficulties.
+- `/services/mobility-movement-assessment` — limitations in movement and everyday activities.
+- `/services/chronic-pain-management` — persistent pain and everyday function, without a cure promise.
+- `/services/injury-prevention` — movement/activity demands and reducing risk, without guaranteed prevention.
+- `/services/rehabilitation-exercise-programmes` — individual exercise guidance, progression and review.
+
+All five remain `published=false`. Existing page URLs, copy and publication flags are preserved. Authenticated staging shows eight linked cards; public rendering exposes only published destinations. The existing empty-services action remains when nothing is published. Production sitemap entries follow publication flags; staging remains noindex with an empty sitemap.
+
+The supplied screenshot defines the card order/icons: sports/pulse, back-neck/spine, post-operative/recovery, joint/joint, mobility/mobility, chronic/chronic, prevention/shield, exercise/program. The restored card styles use four columns on desktop, two on tablet and one on mobile. Labels/icons live in the inventory; clinical wording was not copied blindly from screenshot captions. Existing typography, colour and image treatments are preserved.
+
+Each new page has distinct metadata/H1, assessment-first wording, one-hour first appointment and patient-information form, individual guidance, follow-up and an enquiry action. Shared fees/payment/cancellation policies stay on patient information. Each new page has only two relevant related services, filtered through the same publication/preview gate. Main navigation is unchanged.
+
+Validation: **87 PHP tests / 483 assertions**, **2 JavaScript tests**, Pint, PHPStan (512 MB), production build, shell syntax and diff checks passed. Tests cover every new route, public 404/preview exclusion, later publication and sitemap inclusion, canonical/meta output, unique eight-page titles/descriptions, ordered card destinations/icons and filtered related links. Browser checks at **390px and 1440px** followed all eight card destinations, verified the five new layouts, one H1 each, no overflow or broken loaded images, two related links per new page, and one/four hub columns respectively. The desktop card design was compared with the supplied screenshot. A temporary loopback QA transport mismatch was corrected before destination checks; application HTTPS authentication is unchanged. Frontend assets rebuilt. No merge, deployment or live enquiries.
+
 ## Original visual design restoration
 
 Backup branch: `backup/seo-before-layout-restoration-2026-09-14`, at `739e4dabc2f0a7ca891162ad3f867efb6fd1051c`. The active SEO branch remains `feature/local-seo-patient-journey` and this updates PR #4.

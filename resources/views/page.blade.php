@@ -73,6 +73,17 @@
             </div>
         </section>
     @endif
+    @php($relatedServices = array_intersect_key(\App\Support\Site::services(), array_flip($page['related_services'] ?? [])))
+    @if ($relatedServices !== [])
+        <nav aria-label="Related services" class="mx-auto max-w-6xl px-5 pb-16 sm:px-8">
+            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-sea-700">Related services</p>
+            <ul class="mt-5 flex flex-wrap gap-x-8 gap-y-4">
+                @foreach ($relatedServices as $name => $related)
+                    <li><a href="{{ route($name) }}" class="font-display text-xl text-pine-900 underline underline-offset-4">{{ $related['card_title'] ?? $related['heading'] }}</a></li>
+                @endforeach
+            </ul>
+        </nav>
+    @endif
     @if (request()->routeIs('contact', 'patient-information')) @include('sections.location') @endif
     @if (request()->routeIs('contact')) @include('sections.contact') @endif
 </x-layouts.app>

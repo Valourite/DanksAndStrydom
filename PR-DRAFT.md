@@ -2,6 +2,14 @@
 
 Adds linked pages, consistent metadata/MedicalClinic identity, safe indexing controls and a safer synchronous enquiry journey while preserving Laravel/Livewire and the design. Existing deployment preflight and mail/cache fixes remain intact.
 
+## Eight-service hub and five new drafts
+
+Adds `/services/joint-muscle-pain`, `/services/mobility-movement-assessment`, `/services/chronic-pain-management`, `/services/injury-prevention` and `/services/rehabilitation-exercise-programmes` with distinct patient-friendly assessment, guidance, follow-up and enquiry copy for Cheryl’s review. Existing URLs and publication statuses remain unchanged.
+
+Matches the supplied eight-card screenshot order and icons in the restored four-column desktop grid. All eight preview cards link to accessible draft pages; public links and sitemap entries include published pages only. Each new page has distinct metadata and at most two relevant, gated related services. Main navigation and shared booking/policy content remain concise.
+
+Latest validation: **87 PHP tests / 483 assertions**, **2 JS tests**, Pint, PHPStan, production build, shell syntax and diff checks pass. At 390px and 1440px, all eight card destinations and five new pages passed checks for headings, layout overflow, loaded images and relevant links. Assets rebuilt. All five new pages remain unpublished pending approval; no deployment.
+
 ## Original layout restoration
 
 Preserves the SEO branch and creates `backup/seo-before-layout-restoration-2026-09-14` at `739e4da`. Inspected pre-SEO commit `42880b2` and restored its hero/floating cards, arched About composition, dark numbered section, staggered cards, split map panel and contact layout. Original colours and typography are retained; no blue rebranding.
