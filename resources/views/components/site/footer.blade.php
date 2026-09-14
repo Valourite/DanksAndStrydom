@@ -2,24 +2,24 @@
     $practice = config('contact.practice');
 @endphp
 
-<footer class="grain relative overflow-hidden bg-pine-950 text-pine-200">
-    <div class="pointer-events-none absolute -top-40 left-1/2 h-80 w-2xl -translate-x-1/2 rounded-full bg-sea-700/15 blur-3xl"></div>
+<footer class="grain relative overflow-hidden bg-navy text-ink-200 [&_[data-contact-action]]:text-ink-200">
+    <div class="pointer-events-none absolute -top-40 left-1/2 h-80 w-2xl -translate-x-1/2 rounded-full bg-accent-700/15 blur-3xl"></div>
 
     <div class="relative mx-auto max-w-6xl px-5 pb-10 pt-20 sm:px-8 lg:pt-24">
 
         {{-- Top row: big invitation --}}
-        <div class="flex flex-col gap-10 border-b border-bone-50/10 pb-14 lg:flex-row lg:items-end lg:justify-between">
+        <div class="flex flex-col gap-10 border-b border-surface-50/10 pb-14 lg:flex-row lg:items-end lg:justify-between">
             <div class="max-w-xl">
-                <p class="text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-sea-400">Danks &amp; Strydom Physiotherapy</p>
-                <p class="mt-4 font-display text-3xl font-medium leading-snug tracking-tight text-bone-50 sm:text-4xl">
+                <p class="text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-accent-400">Danks &amp; Strydom Physiotherapy</p>
+                <p class="mt-4 font-display text-3xl font-medium leading-snug tracking-tight text-white sm:text-4xl">
                     Ready when you are —
-                    <em class="text-sea-300">let's get you moving.</em>
+                    <em class="text-accent-300">let's get you moving.</em>
                 </p>
             </div>
             <a href="{{ route('contact') }}#contact"
-               class="inline-flex w-fit items-center gap-3 rounded-full border border-bone-50/20 py-3 pl-6 pr-3 text-sm font-semibold text-bone-50 transition-all duration-300 hover:border-sea-400 hover:text-sea-300">
+               class="inline-flex w-fit items-center gap-3 rounded-full border border-surface-50/20 py-3 pl-6 pr-3 text-sm font-semibold text-white transition-all duration-300 hover:border-accent-400 hover:text-accent-300">
                 Request an appointment
-                <span class="flex h-8 w-8 items-center justify-center rounded-full bg-sea-500 text-pine-950">
+                <span class="flex h-8 w-8 items-center justify-center rounded-full bg-accent-500 text-ink-900">
                     <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
                 </span>
             </a>
@@ -28,40 +28,40 @@
         {{-- Middle: columns --}}
         <div class="grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
             <div>
-                <h3 class="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-pine-400">Visit</h3>
-                <p class="mt-4 text-sm leading-relaxed text-pine-200">{{ $practice['address'] ?: 'Glen Marais, Kempton Park' }}</p>
+                <h3 class="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-ink-400">Visit</h3>
+                <p class="mt-4 text-sm leading-relaxed text-ink-200">{{ $practice['address'] ?: 'Glen Marais, Kempton Park' }}</p>
             </div>
             <div>
-                <h3 class="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-pine-400">Contact</h3>
+                <h3 class="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-ink-400">Contact</h3>
                 <x-site.phone />
                 @if ($practice['email'])<p class="break-all"><a href="mailto:{{ $practice['email'] }}">{{ $practice['email'] }}</a></p>@endif
             </div>
             <div>
-                <h3 class="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-pine-400">Hours</h3>
+                <h3 class="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-ink-400">Hours</h3>
                 <ul class="mt-4 space-y-2 text-sm">
                     <li>{{ $practice['hours'] ?: 'Please contact the practice for availability.' }}</li>
                 </ul>
             </div>
             <div>
-                <h3 class="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-pine-400">Explore</h3>
+                <h3 class="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-ink-400">Explore</h3>
                 <ul class="mt-4 space-y-2 text-sm">
                     @foreach (array_intersect_key(\App\Support\Site::pages(), array_flip(['services', 'about', 'patient-information', 'contact'])) as $name => $page)
-                        <li><a href="{{ route($name) }}" class="transition-colors hover:text-sea-300">{{ $page['heading'] }}</a></li>
+                        <li><a href="{{ route($name) }}" class="transition-colors hover:text-accent-300">{{ $page['heading'] }}</a></li>
                     @endforeach
                 </ul>
             </div>
         </div>
 
         {{-- Giant wordmark --}}
-        <p aria-hidden="true" class="select-none border-t border-bone-50/10 pt-10 text-center font-display text-[11.5vw] font-medium leading-none tracking-tight text-bone-50/6 lg:text-[7.5rem]">
+        <p aria-hidden="true" class="select-none border-t border-surface-50/10 pt-10 text-center font-display text-[11.5vw] font-medium leading-none tracking-tight text-white/6 lg:text-[7.5rem]">
             Danks &amp; Strydom
         </p>
 
         {{-- Bottom row --}}
-        <div class="mt-8 flex flex-col items-center justify-between gap-3 text-xs text-pine-400 sm:flex-row">
+        <div class="mt-8 flex flex-col items-center justify-between gap-3 text-xs text-ink-400 sm:flex-row">
             <div>
                 <p>&copy; {{ now()->year }} {{ $practice['name'] }}. All rights reserved.</p>
-                <p>Developed by <a href="https://valourite.co.za" class="transition-colors hover:text-sea-300">Valourite</a></p>
+                <p>Developed by <a href="https://valourite.co.za" class="transition-colors hover:text-accent-300">Valourite</a></p>
             </div>
             <p>General information only — not medical advice.</p>
         </div>

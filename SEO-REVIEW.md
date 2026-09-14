@@ -1,5 +1,14 @@
 # Local SEO and enquiry implementation review
 
+
+## Blue colour theme
+
+Applies the requested blue palette through central Tailwind theme tokens: deep-blue buttons, navy sections/overlays, soft-white and pale-blue surfaces, readable blue-grey text, darker teal-blue links and decorative cyan. Preserves the existing wordmark, imagery, typography, layout, content, navigation, publication flags and all application/SEO behaviour. Updates shadow colours, gradients, selection, placeholders, hover and keyboard focus; semantic red errors and green success remain separate.
+
+Validation: **87 PHP tests / 483 assertions**, **2 JavaScript tests**, Pint, PHPStan, production asset build, shell syntax and diff checks passed. Built with the bundled supported Node runtime (the system Node 18 is too old for Vite 8). Desktop homepage geometry/fonts matched the pre-theme capture. Browser checks at **390px and 1440px** covered all eight service pages, About, patient information and Contact, with no overflow or broken loaded images. Screenshots inspected homepage, service grid/hover, internal page, dark sections/footer, mobile navigation and form validation/focus. Public service gating remains intact. Success was checked using synthetic input and local log-only mail; no live enquiries.
+
+Contrast ratios: white primary-button text **9.34:1** (hover **11.44:1**), light-background links **5.37:1**, secondary text **5.60:1**, light cyan on navy **8.96:1**, and muted footer text **6.13:1**. Keyboard focus has a dark outline on light surfaces and a white edge for navy surfaces. Existing content approval and release requirements remain unchanged. No merge or deployment.
+
 Prepared 14 September 2026 from the supplied Danks & Strydom SEO strategy. This is a review branch, not a deployed release. No Google account, directory, production server or live mailbox was changed.
 
 ## Eight-service inventory update

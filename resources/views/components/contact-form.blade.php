@@ -133,28 +133,28 @@ new class extends Component
 }; ?>
 
 <div class="relative">
-    <div class="overflow-hidden rounded-[2.5rem] border border-pine-900/8 bg-white p-7 shadow-[0_40px_90px_-50px_rgba(10,31,27,0.5)] sm:p-10">
+    <div class="overflow-hidden rounded-[2.5rem] border border-ink-900/8 bg-card p-7 shadow-[0_40px_90px_-50px_rgba(var(--shadow-ink),0.5)] sm:p-10">
 
         @if ($sent)
             {{-- Success state --}}
             <div class="flex flex-col items-center py-24 sm:py-28 lg:py-36 text-center" wire:key="contact-success" role="status" tabindex="-1" data-enquiry-success>
-                <span class="flex h-16 w-16 items-center justify-center rounded-full bg-sea-100 text-sea-700">
+                <span class="flex h-16 w-16 items-center justify-center rounded-full bg-success-surface text-success-ink">
                     <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
                 </span>
-                <h3 class="mt-7 font-display text-2xl font-medium tracking-tight text-pine-950">Thank you — <em class="text-sea-600">message sent.</em></h3>
-                <p class="mt-3 max-w-sm text-sm leading-relaxed text-pine-500">
+                <h3 class="mt-7 font-display text-2xl font-medium tracking-tight text-ink-900">Thank you — <em class="text-success-ink">message sent.</em></h3>
+                <p class="mt-3 max-w-sm text-sm leading-relaxed text-ink-500">
                     Your enquiry has been accepted for sending to the practice. Your appointment is not confirmed until the practice confirms it.
                 </p>
                 <button type="button" wire:click="sendAnother"
-                        class="mt-9 inline-flex items-center gap-2 rounded-full border border-pine-900/15 px-6 py-3 text-sm font-semibold text-pine-900 transition-all duration-300 hover:border-pine-950 hover:bg-pine-950 hover:text-bone-50">
+                        class="mt-9 inline-flex items-center gap-2 rounded-full border border-ink-900/15 px-6 py-3 text-sm font-semibold text-ink-900 transition-all duration-300 hover:border-navy hover:bg-navy hover:text-white">
                     Send another message
                 </button>
             </div>
         @else
             <form wire:submit="submit" novalidate class="space-y-6">
                 <div>
-                    <h3 class="font-display text-2xl font-medium tracking-tight text-pine-950">Send us a message</h3>
-                    <p class="mt-2 text-sm text-pine-500">Fields marked <span class="text-sea-600">*</span> are required.</p>
+                    <h3 class="font-display text-2xl font-medium tracking-tight text-ink-900">Send us a message</h3>
+                    <p class="mt-2 text-sm text-ink-500">Fields marked <span class="text-accent-600">*</span> are required.</p>
                 </div>
 
                 @error('form')
@@ -171,16 +171,16 @@ new class extends Component
                 {{-- Name + Phone --}}
                 <div class="grid gap-6 sm:grid-cols-2">
                     <div>
-                        <label for="cf-name" class="block text-xs font-semibold uppercase tracking-[0.14em] text-pine-700">Name <span class="text-sea-600">*</span></label>
+                        <label for="cf-name" class="block text-xs font-semibold uppercase tracking-[0.14em] text-ink-700">Name <span class="text-accent-600">*</span></label>
                         <input id="cf-name" type="text" wire:model="name" autocomplete="name" required aria-describedby="cf-name-error"
-                               class="mt-2 w-full rounded-xl border-0 bg-bone-100 px-4 py-3.5 text-[0.95rem] text-pine-950 ring-1 ring-inset @error('name') ring-red-300 @else ring-transparent @enderror transition duration-200 placeholder:text-pine-300 focus:bg-white focus:ring-2 focus:ring-sea-500 "
+                               class="mt-2 w-full rounded-xl border-0 bg-surface-100 px-4 py-3.5 text-[0.95rem] text-ink-900 ring-1 ring-inset @error('name') ring-red-300 @else ring-transparent @enderror transition duration-200 placeholder:text-ink-500 focus:bg-card focus:ring-2 focus:ring-link "
                                placeholder="Your full name">
                         @error('name') <p id="cf-name-error" role="alert" class="mt-2 text-xs text-red-600">{{ $message }}</p> @enderror
                     </div>
                     <div>
-                        <label for="cf-phone" class="block text-xs font-semibold uppercase tracking-[0.14em] text-pine-700">Phone</label>
+                        <label for="cf-phone" class="block text-xs font-semibold uppercase tracking-[0.14em] text-ink-700">Phone</label>
                         <input id="cf-phone" type="tel" wire:model="phone" autocomplete="tel"
-                               class="mt-2 w-full rounded-xl border-0 bg-bone-100 px-4 py-3.5 text-[0.95rem] text-pine-950 ring-1 ring-inset @error('phone') ring-red-300 @else ring-transparent @enderror transition duration-200 placeholder:text-pine-300 focus:bg-white focus:ring-2 focus:ring-sea-500 "
+                               class="mt-2 w-full rounded-xl border-0 bg-surface-100 px-4 py-3.5 text-[0.95rem] text-ink-900 ring-1 ring-inset @error('phone') ring-red-300 @else ring-transparent @enderror transition duration-200 placeholder:text-ink-500 focus:bg-card focus:ring-2 focus:ring-link "
                                placeholder="+27 00 000 0000">
                         @error('phone') <p class="mt-2 text-xs text-red-600">{{ $message }}</p> @enderror
                     </div>
@@ -188,29 +188,29 @@ new class extends Component
 
                 {{-- Email --}}
                 <div>
-                    <label for="cf-email" class="block text-xs font-semibold uppercase tracking-[0.14em] text-pine-700">Email <span class="text-sea-600">*</span></label>
+                    <label for="cf-email" class="block text-xs font-semibold uppercase tracking-[0.14em] text-ink-700">Email <span class="text-accent-600">*</span></label>
                     <input id="cf-email" type="email" wire:model="email" autocomplete="email" required aria-describedby="cf-email-error"
-                           class="mt-2 w-full rounded-xl border-0 bg-bone-100 px-4 py-3.5 text-[0.95rem] text-pine-950 ring-1 ring-inset @error('email') ring-red-300 @else ring-transparent @enderror transition duration-200 placeholder:text-pine-300 focus:bg-white focus:ring-2 focus:ring-sea-500 "
+                           class="mt-2 w-full rounded-xl border-0 bg-surface-100 px-4 py-3.5 text-[0.95rem] text-ink-900 ring-1 ring-inset @error('email') ring-red-300 @else ring-transparent @enderror transition duration-200 placeholder:text-ink-500 focus:bg-card focus:ring-2 focus:ring-link "
                            placeholder="you@example.com">
                     @error('email') <p id="cf-email-error" role="alert" class="mt-2 text-xs text-red-600">{{ $message }}</p> @enderror
                 </div>
 
                 {{-- Message --}}
                 <div>
-                    <label for="cf-message" class="block text-xs font-semibold uppercase tracking-[0.14em] text-pine-700">Message <span class="text-sea-600">*</span></label>
+                    <label for="cf-message" class="block text-xs font-semibold uppercase tracking-[0.14em] text-ink-700">Message <span class="text-accent-600">*</span></label>
                     <textarea id="cf-message" rows="5" wire:model="message" required aria-describedby="cf-message-error"
-                              class="mt-2 w-full resize-y rounded-xl border-0 bg-bone-100 px-4 py-3.5 text-[0.95rem] text-pine-950 ring-1 ring-inset @error('message') ring-red-300 @else ring-transparent @enderror transition duration-200 placeholder:text-pine-300 focus:bg-white focus:ring-2 focus:ring-sea-500 "
+                              class="mt-2 w-full resize-y rounded-xl border-0 bg-surface-100 px-4 py-3.5 text-[0.95rem] text-ink-900 ring-1 ring-inset @error('message') ring-red-300 @else ring-transparent @enderror transition duration-200 placeholder:text-ink-500 focus:bg-card focus:ring-2 focus:ring-link "
                               placeholder="Tell us a little about how we can help…"></textarea>
                     @error('message') <p id="cf-message-error" role="alert" class="mt-2 text-xs text-red-600">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="flex flex-col items-start gap-5 pt-1">
                     <button type="submit"
-                            class="inline-flex items-center justify-center gap-3 rounded-full bg-pine-900 py-3.5 pl-7 pr-3.5 text-sm font-semibold text-bone-50 shadow-[0_18px_40px_-18px_rgba(10,31,27,0.6)] transition-all duration-300 hover:bg-sea-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sea-600 disabled:cursor-not-allowed disabled:opacity-60"
+                            class="inline-flex items-center justify-center gap-3 rounded-full bg-brand py-3.5 pl-7 pr-3.5 text-sm font-semibold text-white shadow-[0_18px_40px_-18px_rgba(var(--shadow-ink),0.6)] transition-all duration-300 hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-600 disabled:cursor-not-allowed disabled:opacity-60"
                             wire:loading.attr="disabled" wire:target="submit">
                         <span wire:loading.remove wire:target="submit" class="inline-flex items-center gap-3">
                             Send message
-                            <span class="flex h-8 w-8 items-center justify-center rounded-full bg-bone-50/15">
+                            <span class="flex h-8 w-8 items-center justify-center rounded-full bg-surface-50/15">
                                 <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
                             </span>
                         </span>
@@ -220,7 +220,7 @@ new class extends Component
                         </span>
                     </button>
 
-                    <p class="max-w-sm text-xs leading-relaxed text-pine-400">
+                    <p class="max-w-sm text-xs leading-relaxed text-ink-500">
                         Your contact details and message are emailed to the practice to handle this enquiry. Please avoid including detailed clinical information.
                     </p>
                 </div>

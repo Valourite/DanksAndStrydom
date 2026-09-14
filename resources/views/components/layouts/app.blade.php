@@ -61,7 +61,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#fbfaf7">
+    <meta name="theme-color" content="#FAFCFE">
     <meta name="description" content="{{ $description }}">
     <meta name="robots" content="{{ $robots }}">
 
@@ -96,10 +96,10 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
-<body data-analytics-enabled="{{ config('site.analytics_enabled') ? 'true' : 'false' }}" class="min-h-screen bg-bone-50 font-sans text-pine-900 selection:bg-sea-200 selection:text-pine-950">
+<body data-analytics-enabled="{{ config('site.analytics_enabled') ? 'true' : 'false' }}" class="min-h-screen bg-surface-50 font-sans text-ink-900 selection:bg-accent-200 selection:text-ink-900">
 
     <a href="#main"
-       class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-100 focus:rounded-full focus:bg-pine-900 focus:px-5 focus:py-2 focus:text-sm focus:font-semibold focus:text-bone-50 focus:shadow-lg">
+       class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-100 focus:rounded-full focus:bg-brand focus:px-5 focus:py-2 focus:text-sm focus:font-semibold focus:text-white focus:shadow-lg focus:shadow-navy/25">
         Skip to content
     </a>
 
