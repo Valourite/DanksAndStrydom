@@ -45,8 +45,8 @@
             <div>
                 <h3 class="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-pine-400">Explore</h3>
                 <ul class="mt-4 space-y-2 text-sm">
-                    @foreach (['Services' => route('services'), 'About' => route('about'), 'Contact' => route('contact')] as $label => $href)
-                        <li><a href="{{ $href }}" class="transition-colors hover:text-sea-300">{{ $label }}</a></li>
+                    @foreach (\App\Support\Site::pages() as $name => $page)
+                        <li><a href="{{ route($name) }}" class="transition-colors hover:text-sea-300">{{ $page['heading'] }}</a></li>
                     @endforeach
                 </ul>
             </div>

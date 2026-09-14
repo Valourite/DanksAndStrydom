@@ -3,6 +3,9 @@
 use App\Support\Site;
 
 it('renders each published page with distinct initial HTML metadata', function () {
+    foreach (array_keys(config('site.pages')) as $name) {
+        config(["site.pages.$name.published" => true]);
+    }
     $titles = [];
     foreach (['/' => 'home', '/about' => 'about', '/contact' => 'contact', '/services' => 'services', '/services/back-neck-pain' => 'back-neck-pain', '/services/sports-injury-rehabilitation' => 'sports-injury-rehabilitation', '/services/post-operative-rehabilitation' => 'post-operative-rehabilitation', '/patient-information' => 'patient-information'] as $path => $name) {
         $html = $this->get($path)->assertSuccessful()->getContent();
@@ -29,7 +32,7 @@ it('publishes only approved canonical pages in the production sitemap', function
     $this->get('/services')->assertDontSee('href="'.route('back-neck-pain').'"', false);
     $xml = $this->get('/sitemap.xml')->assertSuccessful()->getContent();
     expect(simplexml_load_string($xml))->not->toBeFalse();
-    foreach (['/', '/about', '/services', '/contact'] as $path) {
+    foreach (['/', '/services', '/contact'] as $path) {
         expect($xml)->toContain('<loc>'.Site::url($path).'</loc>');
     }
     expect($xml)->not->toContain('back-neck-pain', 'patient-information', 'lastmod');
@@ -89,16 +92,18 @@ it('automatically shows only published services without an explore self-link', f
         ->assertDontSee('data-service-enquiry', false)->assertDontSee('Explore physiotherapy enquiries');
 });
 
-it('publishes confirmed services and preparation with clearly marked unfinished details', function () {
+it('renders complete review copy when its pages are explicitly approved', function () {
     app()->detectEnvironment(fn () => 'production');
     config(['site.indexable' => true]);
+    config(['site.pages.about.published' => true]);
     foreach (['back-neck-pain', 'sports-injury-rehabilitation', 'post-operative-rehabilitation', 'patient-information'] as $name) {
-        $this->get(route($name))->assertSuccessful()->assertSee('Elize Strydom')->assertSee('Cheryl Myburgh')
-            ->assertSee('Patients are not expected to bring anything')->assertSee('Placeholder — details to be confirmed');
+        config(["site.pages.$name.published" => true]);
+        $this->get(route($name))->assertSuccessful()
+            ->assertSee('Patients are not expected to bring anything')->assertDontSee('Placeholder');
         $this->get('/sitemap.xml')->assertSee(Site::url(config("site.pages.$name.path")));
     }
     $this->get('/about')->assertSee('Elize Strydom')->assertSee('Cheryl Myburgh')
-        ->assertSee('Degree in physiotherapy')->assertSee('Placeholder — profile to be completed');
+        ->assertSee('Physiotherapist')->assertDontSee('Placeholder');
 });
 
 it('shows the supplied contact address while keeping unverified maps and schema gated', function () {

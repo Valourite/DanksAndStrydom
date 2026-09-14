@@ -11,9 +11,10 @@
         </div>
     </section>
     @if (request()->routeIs('services')) @include('sections.services') @endif
-    @if ($page['sections'] !== [])
+    @php($sections = $page['sections'] + (\App\Support\Site::reviewing() ? ($page['review_sections'] ?? []) : []))
+    @if ($sections !== [])
     <div class="mx-auto grid max-w-6xl gap-8 px-5 pb-16 sm:px-8 md:grid-cols-2">
-        @foreach ($page['sections'] as $heading => $body)
+        @foreach ($sections as $heading => $body)
             <section class="rounded-3xl border border-pine-900/10 bg-white p-8">
                 <h2 class="font-display text-2xl">{{ $heading }}</h2>
                 <p class="mt-4 leading-relaxed text-pine-600">{{ $body }}</p>
@@ -26,24 +27,8 @@
             @foreach ($page['practitioners'] as $practitioner)
                 <section data-practitioner class="rounded-3xl border border-pine-900/10 bg-white p-8">
                     <h2 class="font-display text-2xl">{{ $practitioner['name'] }}</h2>
-                    <p class="mt-4 text-pine-600">{{ $practitioner['qualification'] }}</p>
-                    @if (! empty($practitioner['placeholder']))
-                    <div data-content-placeholder class="mt-6 rounded-2xl border-2 border-dashed border-sea-700 bg-bone-50 p-5">
-                        <p class="font-semibold text-pine-950">Placeholder — profile to be completed</p>
-                        <p class="mt-2 leading-relaxed text-pine-600">{{ $practitioner['placeholder'] }}</p>
-                    </div>
-                    @endif
-                </section>
-            @endforeach
-        </div>
-    @endif
-    @if (! empty($page['placeholders']))
-        <div class="mx-auto grid max-w-6xl gap-8 px-5 pb-16 sm:px-8 md:grid-cols-2">
-            @foreach ($page['placeholders'] as $heading => $body)
-                <section data-content-placeholder class="rounded-3xl border-2 border-dashed border-sea-700 bg-white p-8">
-                    <p class="text-sm font-semibold text-sea-700">Placeholder — details to be confirmed</p>
-                    <h2 class="mt-3 font-display text-2xl">{{ $heading }}</h2>
-                    <p class="mt-4 leading-relaxed text-pine-600">{{ $body }}</p>
+                    <p class="mt-4 font-semibold text-sea-700">{{ $practitioner['title'] }}</p>
+                    <p class="mt-4 leading-relaxed text-pine-600">{{ $practitioner['biography'] }}</p>
                 </section>
             @endforeach
         </div>
@@ -55,8 +40,10 @@
             @endif
         @endforeach
     </nav>
-    @if (request()->routeIs('contact'))
+    @if (request()->routeIs('contact', 'patient-information'))
         @include('sections.location')
+    @endif
+    @if (request()->routeIs('contact'))
         @include('sections.contact')
     @endif
 </x-layouts.app>

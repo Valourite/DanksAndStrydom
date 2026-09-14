@@ -19,6 +19,12 @@ class Site
         return app()->isProduction() && (bool) config('site.indexable');
     }
 
+    public static function reviewing(): bool
+    {
+        return app()->environment('staging') && config('site.review_preview') === true
+            && request()->attributes->get('site_review_authenticated') === true;
+    }
+
     /** @return array<string, array<string, mixed>> */
     public static function services(): array
     {
@@ -28,6 +34,6 @@ class Site
     /** @return array<string, array<string, mixed>> */
     public static function pages(): array
     {
-        return array_filter(config('site.pages'), fn (array $page): bool => $page['published']);
+        return array_filter(config('site.pages'), fn (array $page): bool => $page['published'] || self::reviewing());
     }
 }

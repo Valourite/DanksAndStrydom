@@ -14,7 +14,7 @@ it('renders search and social metadata for the homepage', function () {
 });
 
 it('uses a stable clinic identity and only confirmed structured location data', function () {
-    config(['contact.practice.location_verified' => true, 'contact.practice.street' => 'Approved street', 'contact.practice.locality' => 'Kempton Park', 'contact.practice.region' => 'Gauteng', 'contact.practice.postcode' => '1619']);
+    config(['site.pages.about.published' => true, 'contact.practice.location_verified' => true, 'contact.practice.street' => 'Approved street', 'contact.practice.locality' => 'Kempton Park', 'contact.practice.region' => 'Gauteng', 'contact.practice.postcode' => '1619']);
     foreach (['/', '/about'] as $path) {
         $html = $this->get($path)->getContent();
         preg_match('/<script type="application\/ld\+json">\s*(.*?)\s*<\/script>/s', $html, $matches);

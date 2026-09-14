@@ -2,9 +2,11 @@
     $nav = [
         ['label' => 'Home', 'href' => route('home')],
         ['label' => 'Services', 'href' => route('services')],
-        ['label' => 'About', 'href' => route('about')],
         ['label' => 'Contact', 'href' => route('contact')],
     ];
+    if (isset(\App\Support\Site::pages()['about'])) {
+        array_splice($nav, 2, 0, [['label' => 'About', 'href' => route('about')]]);
+    }
 @endphp
 
 <header
