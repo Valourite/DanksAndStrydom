@@ -1,10 +1,9 @@
 @php
     $nav = [
-        ['label' => 'Home', 'href' => '#hero'],
-        ['label' => 'Services', 'href' => '#services'],
-        ['label' => 'About', 'href' => '#about'],
-        ['label' => 'Testimonials', 'href' => '#testimonials'],
-        ['label' => 'Contact', 'href' => '#contact'],
+        ['label' => 'Home', 'href' => route('home')],
+        ['label' => 'Services', 'href' => route('services')],
+        ['label' => 'About', 'href' => route('about')],
+        ['label' => 'Contact', 'href' => route('contact')],
     ];
 @endphp
 
@@ -17,7 +16,7 @@
     <nav class="mx-auto flex h-20 max-w-6xl items-center justify-between gap-4 px-5 sm:px-8 lg:h-24" aria-label="Primary">
 
         {{-- Wordmark --}}
-        <a href="#hero" data-mobile-menu-close class="flex items-center gap-3.5" aria-label="Danks &amp; Strydom Physiotherapy — home">
+        <a href="{{ route('home') }}" data-mobile-menu-close class="flex items-center gap-3.5" aria-label="Danks &amp; Strydom Physiotherapy — home">
             <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-pine-900/15 bg-bone-50 font-display text-[0.95rem] font-semibold tracking-tight text-pine-900">
                 D<span class="text-sea-600">&amp;</span>S
             </span>
@@ -28,7 +27,7 @@
         </a>
 
         {{-- Desktop nav --}}
-        <ul class="absolute left-1/2 hidden -translate-x-1/2 items-center gap-7 lg:flex">
+        <ul class="hidden items-center gap-5 lg:flex">
             @foreach ($nav as $item)
                 <li>
                     <a href="{{ $item['href'] }}"
@@ -41,9 +40,9 @@
         </ul>
 
         {{-- Desktop CTA --}}
-        <a href="#contact"
+        <a href="{{ route('contact') }}#contact"
            class="hidden items-center gap-2.5 rounded-full bg-pine-900 py-2.5 pl-5 pr-2.5 text-[0.82rem] font-semibold text-bone-50 transition-all duration-300 hover:bg-sea-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sea-600 lg:inline-flex">
-            Book an appointment
+            Request an appointment
             <span class="flex h-7 w-7 items-center justify-center rounded-full bg-bone-50/15">
                 <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </span>
@@ -86,10 +85,10 @@
                     </li>
                 @endforeach
             </ul>
-            <a href="#contact"
+            <a href="{{ route('contact') }}#contact"
                data-mobile-menu-close
                class="mt-5 flex items-center justify-center gap-2 rounded-full bg-pine-900 px-6 py-4 text-sm font-semibold text-bone-50 transition-colors hover:bg-sea-700">
-                Book an appointment
+                Request an appointment
                 <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </a>
         </div>

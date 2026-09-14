@@ -215,3 +215,9 @@ if (document.readyState === 'loading') {
 
 // Re-run reveal after Livewire DOM updates (e.g. contact form success)
 document.addEventListener('livewire:navigated', boot);
+
+import { installTracking } from './analytics';
+installTracking();
+window.addEventListener('enquiry-accepted', () => {
+    requestAnimationFrame(() => document.querySelector('[data-enquiry-success]')?.focus());
+});

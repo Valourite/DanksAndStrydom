@@ -1,5 +1,6 @@
 @props([
     'title' => '',
+    'href' => '',
     'icon' => 'pulse',
     'index' => null,
 ])
@@ -45,8 +46,8 @@
         {{ $slot }}
     </p>
 
-    <span class="mt-6 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-sea-700 opacity-0 transition-all duration-500 group-hover:text-sea-300 group-hover:opacity-100">
-        Enquire
+    <a href="{{ $href }}" class="mt-6 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-sea-700 transition-all duration-500 group-hover:text-sea-300 group-hover:opacity-100">
+        Learn more about {{ $title }}
         <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-    </span>
+    </a>
 </article>

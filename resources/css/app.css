@@ -90,18 +90,8 @@ body {
     letter-spacing: -0.015em;
 }
 
-/* ---- Scroll reveal (driven by app.js IntersectionObserver) ----
-   Hidden state only applies once JS has tagged <html class="js">,
-   so content stays visible if JavaScript never loads. */
+/* Essential content stays visible even when an observer or animation is interrupted. */
 html.js .reveal {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
-    transition-delay: var(--reveal-delay, 0ms);
-    will-change: opacity, transform;
-}
-html.js .reveal.is-visible {
     opacity: 1;
     transform: none;
 }

@@ -4,6 +4,10 @@ use App\Mail\ContactFormSubmitted;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Livewire\Attributes\Validate;
+use Livewire\Attributes\Locked;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
 use Livewire\Component;
 
 new class extends Component
@@ -23,23 +27,31 @@ new class extends Component
     #[Validate('required|string|min:10|max:2500')]
     public string $message = '';
 
+    #[Locked]
     public bool $sent = false;
 
-    /** @var list<string> */
-    public array $services = [
-        'Sports injury rehabilitation',
-        'Back & neck pain treatment',
-        'Post-operative rehabilitation',
-        'Joint & muscle pain',
-        'Mobility & movement assessment',
-        'Chronic pain management',
-        'Injury prevention',
-        'Rehabilitation exercise programmes',
-        'Something else / not sure',
-    ];
+    public string $website = '';
+
+    #[Locked]
+    public string $submissionId = '';
+
+    public function mount(): void
+    {
+        $this->submissionId = (string) Str::uuid();
+    }
 
     public function submit(): void
     {
+        $this->resetErrorBag('form');
+        if ($this->sent || $this->website !== '') {
+            return;
+        }
+        $key = 'contact:'.hash('sha256', (string) request()->ip());
+        if (RateLimiter::tooManyAttempts($key, 5)) {
+            $this->addError('form', 'Too many attempts. Please try again later or call the practice.');
+            return;
+        }
+        RateLimiter::hit($key, 600);
         $validated = $this->validate();
 
         $recipients = config('contact.recipients', []);
@@ -51,8 +63,16 @@ new class extends Component
             return;
         }
 
+        $lock = Cache::lock('enquiry-lock:'.$this->submissionId, 120);
+        if (! $lock->get()) {
+            return;
+        }
         try {
-            //Do not run on a queue as no queue is available
+            if (Cache::has('enquiry-sent:'.$this->submissionId)) {
+                $this->sent = true;
+                return;
+            }
+            // The hosting environment has no queue worker; preserve synchronous mail.
             Mail::to($recipients)->send(new ContactFormSubmitted(
                 data: [
                     'name' => $validated['name'],
@@ -63,13 +83,17 @@ new class extends Component
                 ],
                 submittedAt: now(),
             ));
+            Cache::put('enquiry-sent:'.$this->submissionId, true, now()->addDay());
         } catch (\Throwable $e) {
-            Log::error('Contact form mail failed: '.$e->getMessage());
+            Log::error('Contact form mail failed.', ['exception_type' => $e::class]);
             $this->addError('form', 'Something went wrong sending your message. Please try again or call us.');
 
             return;
+        } finally {
+            $lock->release();
         }
 
+        $this->dispatch('enquiry-accepted', id: $this->submissionId);
         $this->reset(['name', 'email', 'phone', 'service', 'message']);
         $this->sent = true;
     }
@@ -77,6 +101,7 @@ new class extends Component
     public function sendAnother(): void
     {
         $this->sent = false;
+        $this->submissionId = (string) Str::uuid();
     }
 }; ?>
 
@@ -85,13 +110,13 @@ new class extends Component
 
         @if ($sent)
             {{-- Success state --}}
-            <div class="flex flex-col items-center py-24 sm:py-28 lg:py-36 text-center" wire:key="contact-success">
+            <div class="flex flex-col items-center py-24 sm:py-28 lg:py-36 text-center" wire:key="contact-success" role="status" tabindex="-1" data-enquiry-success>
                 <span class="flex h-16 w-16 items-center justify-center rounded-full bg-sea-100 text-sea-700">
                     <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
                 </span>
                 <h3 class="mt-7 font-display text-2xl font-medium tracking-tight text-pine-950">Thank you — <em class="text-sea-600">message sent.</em></h3>
                 <p class="mt-3 max-w-sm text-sm leading-relaxed text-pine-500">
-                    We've received your enquiry and aim to get back to you within one business day. We look forward to helping you.
+                    Your enquiry has been accepted for sending to the practice. Your appointment is not confirmed until the practice confirms it.
                 </p>
                 <button type="button" wire:click="sendAnother"
                         class="mt-9 inline-flex items-center gap-2 rounded-full border border-pine-900/15 px-6 py-3 text-sm font-semibold text-pine-900 transition-all duration-300 hover:border-pine-950 hover:bg-pine-950 hover:text-bone-50">
@@ -112,14 +137,18 @@ new class extends Component
                     </div>
                 @enderror
 
+                <div class="hidden" aria-hidden="true">
+                    <label for="cf-website">Leave this field empty</label>
+                    <input id="cf-website" type="text" wire:model="website" tabindex="-1" autocomplete="off">
+                </div>
                 {{-- Name + Phone --}}
                 <div class="grid gap-6 sm:grid-cols-2">
                     <div>
                         <label for="cf-name" class="block text-xs font-semibold uppercase tracking-[0.14em] text-pine-700">Name <span class="text-sea-600">*</span></label>
-                        <input id="cf-name" type="text" wire:model="name" autocomplete="name"
+                        <input id="cf-name" type="text" wire:model="name" autocomplete="name" required aria-describedby="cf-name-error"
                                class="mt-2 w-full rounded-xl border-0 bg-bone-100 px-4 py-3.5 text-[0.95rem] text-pine-950 ring-1 ring-inset @error('name') ring-red-300 @else ring-transparent @enderror transition duration-200 placeholder:text-pine-300 focus:bg-white focus:ring-2 focus:ring-sea-500 "
                                placeholder="Your full name">
-                        @error('name') <p class="mt-2 text-xs text-red-600">{{ $message }}</p> @enderror
+                        @error('name') <p id="cf-name-error" role="alert" class="mt-2 text-xs text-red-600">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <label for="cf-phone" class="block text-xs font-semibold uppercase tracking-[0.14em] text-pine-700">Phone</label>
@@ -133,35 +162,22 @@ new class extends Component
                 {{-- Email --}}
                 <div>
                     <label for="cf-email" class="block text-xs font-semibold uppercase tracking-[0.14em] text-pine-700">Email <span class="text-sea-600">*</span></label>
-                    <input id="cf-email" type="email" wire:model="email" autocomplete="email"
+                    <input id="cf-email" type="email" wire:model="email" autocomplete="email" required aria-describedby="cf-email-error"
                            class="mt-2 w-full rounded-xl border-0 bg-bone-100 px-4 py-3.5 text-[0.95rem] text-pine-950 ring-1 ring-inset @error('email') ring-red-300 @else ring-transparent @enderror transition duration-200 placeholder:text-pine-300 focus:bg-white focus:ring-2 focus:ring-sea-500 "
                            placeholder="you@example.com">
-                    @error('email') <p class="mt-2 text-xs text-red-600">{{ $message }}</p> @enderror
-                </div>
-
-                {{-- Service interest --}}
-                <div>
-                    <label for="cf-service" class="block text-xs font-semibold uppercase tracking-[0.14em] text-pine-700">Service interest</label>
-                    <select id="cf-service" wire:model="service"
-                            class="mt-2 w-full appearance-none rounded-xl border-0 bg-bone-100 bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20fill=%22none%22%20viewBox=%220%200%2024%2024%22%20stroke=%22%234b766c%22%20stroke-width=%222%22%3E%3Cpath%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20d=%22M6%209l6%206%206-6%22/%3E%3C/svg%3E')] bg-size-[1.1rem] bg-position-[right_1rem_center] bg-no-repeat px-4 py-3.5 pr-11 text-[0.95rem] text-pine-950 ring-1 ring-inset ring-transparent transition duration-200 focus:bg-white focus:ring-2 focus:ring-sea-500">
-                        <option value="">Select a service (optional)</option>
-                        @foreach ($services as $option)
-                            <option value="{{ $option }}">{{ $option }}</option>
-                        @endforeach
-                    </select>
-                    @error('service') <p class="mt-2 text-xs text-red-600">{{ $message }}</p> @enderror
+                    @error('email') <p id="cf-email-error" role="alert" class="mt-2 text-xs text-red-600">{{ $message }}</p> @enderror
                 </div>
 
                 {{-- Message --}}
                 <div>
                     <label for="cf-message" class="block text-xs font-semibold uppercase tracking-[0.14em] text-pine-700">Message <span class="text-sea-600">*</span></label>
-                    <textarea id="cf-message" rows="5" wire:model="message"
+                    <textarea id="cf-message" rows="5" wire:model="message" required aria-describedby="cf-message-error"
                               class="mt-2 w-full resize-y rounded-xl border-0 bg-bone-100 px-4 py-3.5 text-[0.95rem] text-pine-950 ring-1 ring-inset @error('message') ring-red-300 @else ring-transparent @enderror transition duration-200 placeholder:text-pine-300 focus:bg-white focus:ring-2 focus:ring-sea-500 "
                               placeholder="Tell us a little about how we can help…"></textarea>
-                    @error('message') <p class="mt-2 text-xs text-red-600">{{ $message }}</p> @enderror
+                    @error('message') <p id="cf-message-error" role="alert" class="mt-2 text-xs text-red-600">{{ $message }}</p> @enderror
                 </div>
 
-                <div class="flex flex-col gap-5 pt-1 sm:flex-row sm:items-center sm:justify-between">
+                <div class="flex flex-col items-start gap-5 pt-1">
                     <button type="submit"
                             class="inline-flex items-center justify-center gap-3 rounded-full bg-pine-900 py-3.5 pl-7 pr-3.5 text-sm font-semibold text-bone-50 shadow-[0_18px_40px_-18px_rgba(10,31,27,0.6)] transition-all duration-300 hover:bg-sea-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sea-600 disabled:cursor-not-allowed disabled:opacity-60"
                             wire:loading.attr="disabled" wire:target="submit">
@@ -177,8 +193,8 @@ new class extends Component
                         </span>
                     </button>
 
-                    <p class="max-w-60 text-xs leading-relaxed text-pine-400">
-                        We respect your privacy and won't share your details.
+                    <p class="max-w-sm text-xs leading-relaxed text-pine-400">
+                        Your contact details and message are emailed to the practice to handle this enquiry. Please avoid including detailed clinical information.
                     </p>
                 </div>
             </form>
