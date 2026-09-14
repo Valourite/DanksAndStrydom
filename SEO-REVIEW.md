@@ -8,29 +8,35 @@ Code fixes are complete; business confirmation and production/Google-account wor
 
 - Production deployment now archives one fetched commit into a private temporary candidate, installs independent locked dependencies with scripts/plugins disabled, and validates the effective fresh Laravel configuration using a private copy of the existing server `.env`. It runs before maintenance mode, active reset, active Composer or public-asset removal. Only failed configuration key names are reported; dotenv/runtime diagnostics are suppressed. The active cache and `.env` are not modified by preflight.
 - Candidate checks require production environment, debug off, the exact HTTPS non-www production origin, both indexing flags true, valid enquiry recipients/public phone/email, the location verification flag, display/split address fields and HTTPS map/directions URLs. Presence/syntax checks do not verify that the business facts or map pin are correct.
-- Empty services show a concise contact action, without an empty grid or an Explore self-link. Published service entries automatically become linked cards; the production publication flags remain false for all three service drafts and patient information.
-- Draft pages now separate scope, assessment enquiries, follow-up and preparation; patient information separates booking, fees/medical aid, referrals/preparation, changes and arrival. The wording is question-led and awaits clinician-approved answers, rather than asserting services or policies.
+- Empty services show a concise contact action, without an empty grid or an Explore self-link. Published service entries automatically become linked cards; the three services and patient information are now published following the subsequent practice confirmation below.
+- Service pages now identify the confirmed services and practitioners, explain that patients are not expected to bring anything, and visibly label assessment/follow-up details as placeholders. Patient information visibly labels unfinished appointment and policy information at the user’s explicit request.
 - Mail success is recorded and the generic acceptance event dispatched before cache bookkeeping. A failed accepted-ID write or lock release is logged generically and does not show a sending error. Actual transport failures still show the error state. Replay checks and normal browser event deduplication remain.
 
 ### Review follow-up validation
 
-- **73 PHP tests / 271 assertions passed**, including accepted/rejected preflight settings, stale-cache isolation and cached postflight checks, inherited environment overrides, secret-safe malformed dotenv rejection, deployment ordering/cleanup and retaining maintenance on postflight failure, successful mail plus cache-write exception, real mail-failure mocks, repeated submissions and both services states.
+- **75 PHP tests / 323 assertions passed**, including accepted/rejected preflight settings, stale-cache isolation and cached postflight checks, inherited environment overrides, secret-safe malformed dotenv rejection, deployment ordering/cleanup and retaining maintenance on postflight failure, successful mail plus cache-write exception, real mail-failure mocks, repeated submissions and both services states.
 - **2 JavaScript tests passed** for generic event payloads/deduplication and disabled analytics.
 - Pint, PHPStan (512 MB), production Vite build, `bash -n deploy.sh` and `git diff --check` passed. Rebuilt CSS/manifest are committed.
-- Local Chromium at **390px and 1440px** checked empty-services and three-published-service fixture states: correct card/action counts, no Explore self-link, no horizontal overflow, no uncaught JavaScript errors. Local screenshots are supplied with the task. The fixture enabled drafts only in an isolated loopback QA process; it did not change repository publication flags or deploy anything.
+- Local Chromium at **390px and 1440px** checked empty-services and the actual three-published-service state, plus about, patient information and all three service pages: correct card/action counts, no Explore self-link, no horizontal overflow, no uncaught JavaScript errors. Local screenshots are supplied with the task. The empty-state fixture disables services only in an isolated loopback QA process. About has two visible profile placeholders; patient information has four policy placeholders; each service has an expectations placeholder. No deployment occurred.
 - Mail tests used `Mail::fake()` or a mocked throwing transport. No live enquiries, production setting changes or Google-account work occurred. No new performance/ranking claims are made from this follow-up.
 
-### Release fact sheet still required from the practice
+### Confirmed facts and remaining practice input
 
-- [ ] Approved display address and matching street, locality, province, postcode and country fields; explicit resolution of **194 versus 196 Monument Road**.
-- [ ] Correct patient entrance, business pin, HTTPS map embed and directions URLs, plus any approved access/parking guidance.
-- [ ] Approved public telephone/email and internal enquiry recipients. Supply private recipient/configuration values securely to the deployment operator, not in a public PR.
-- [ ] Back/neck: which presentations are assessed, what assessment/follow-up actually involves, relevant clinician, preparation and when onward assessment is needed.
-- [ ] Sports: actual sports/patient groups, recent versus ongoing injury scope, assessment/progression and return-to-activity approach, clinician and preparation.
-- [ ] Post-operative: procedures supported, named clinician, surgeon instructions/referrals required, how timing/restrictions and follow-up are handled.
-- [ ] Patient policies: availability/confirmation process, fees/payment/medical-aid arrangements, referral rules, what to bring and change/cancellation process.
-- [ ] Current practitioner roles, approved biographies/photos, qualifications/registration and any McKenzie claims, plus clinical reviewer and review date for completed service copy.
-- [ ] Confirm the intended production hostname; the current code permits `https://danksandstrydom.co.za` with an optional root slash. Operator supplies `APP_ENV=production`, `APP_DEBUG=false`, `SITE_INDEXABLE=true`, `SITE_CANONICAL_REDIRECTS=true` and approved contact/location settings. Safe local/staging defaults remain false.
+The user supplied these facts on 14 September 2026 and explicitly requested visible, easily editable placeholders for incomplete profiles and policies. This supersedes the earlier decision to withhold all four pages.
+
+- [x] Display address: **Surgiklin Studios, Unit 12, Koorsboom Ave, Glen Marais, Kempton Park, 1619**. Normalised capitalisation and removed the duplicated “koorsboomave”; no street number was inferred. This replaces both old Monument Road candidates.
+- [x] Public phone **011 391 3126**, public email and intended enquiry inbox **admin@danksandstrydom.co.za**. Public defaults and `.env.example` are updated. Actual recipients still require explicit `CONTACT_MAIL_TO` configuration; the runtime default stays empty.
+- [x] Back/neck pain physiotherapy, sports injury rehabilitation and post-operative rehabilitation are offered by **Elize Strydom and Cheryl Myburgh**. Both hold degrees in physiotherapy. Patients are not expected to bring anything.
+- [ ] Confirm the patient entrance, actual Google pin, HTTPS map embed/directions URLs and any access/parking guidance. `CONTACT_LOCATION_VERIFIED` stays false; maps and structured address remain gated. The supplied display address is visible independently of that gate.
+- [ ] Check matching structured fields: street `Surgiklin Studios, Unit 12, Koorsboom Ave`, locality `Kempton Park`, postcode `1619`, country `ZA`; confirm the province/region (left unset) and suburb formatting with the deployment operator.
+- [ ] Replace visible profile placeholders with approved biographies, full degree details and photographs; any registration or specialist credential needs specific approval.
+- [ ] Replace service expectations placeholders with approved assessment/follow-up descriptions, supported presentations/procedures and any relevant restrictions. No clinical outcomes, treatment methods or timelines are invented.
+- [ ] Replace visible patient-information placeholders with appointment-confirmation arrangements, fees/payment/medical aid, referral rules and change/cancellation policy. “Nothing to bring” does not assert that referrals are never required.
+- [ ] Confirm the intended production hostname and indexing/canonical configuration through the deployment operator.
+
+All page text and placeholder entries are in `config/site.php`; remove an individual `placeholders` entry or the practitioner `placeholder` once approved replacement content is ready. The template supports absent practitioner placeholders. Publication remains controlled by `published`; disabled pages return 404 and disappear from navigation/sitemaps.
+
+Existing server `.env` values, including blank or stale `CONTACT_*` values, override new defaults. `.env.example` is guidance only. The operator must review those values and rebuild configuration during the separately authorised release. No server configuration is overwritten here.
 
 ### Preflight operation and limits
 
@@ -64,26 +70,26 @@ Paths follow the existing Apache convention without trailing slashes. No old con
 | Path | Intent | Status | Reviewer |
 |---|---|---|---|
 | `/` | Local physiotherapy enquiry | Implemented; release review required | Practice + technical |
-| `/about` | Practice identity and practitioner enquiries | Minimal factual introduction implemented; biographies pending | Cheryl/Elize |
+| `/about` | Practice identity and practitioner enquiries | Named practitioners and degree level published; visible profile placeholders | Cheryl/Elize |
 | `/contact` | Enquiry and directions | Implemented; contact/location configuration required | Reception/practice |
 | `/services` | Select next enquiry step | Implemented; approved service links appear automatically | Clinicians |
-| `/services/back-neck-pain` | Back/neck pain enquiries | Unpublished draft, returns 404 | Clinician required |
-| `/services/sports-injury-rehabilitation` | Sports rehabilitation enquiries | Unpublished draft, returns 404 | Clinician required |
-| `/services/post-operative-rehabilitation` | After-surgery enquiries | Unpublished draft, returns 404 | Clinician required |
-| `/patient-information` | First-visit policies | Unpublished question-led draft, returns 404 | Reception + clinician |
+| `/services/back-neck-pain` | Back/neck pain enquiries | Published confirmed service; expectations visibly pending | Clinician required |
+| `/services/sports-injury-rehabilitation` | Sports rehabilitation enquiries | Published confirmed service; expectations visibly pending | Clinician required |
+| `/services/post-operative-rehabilitation` | After-surgery enquiries | Published confirmed service; expectations visibly pending | Clinician required |
+| `/patient-information` | First-visit policies | Published preparation guidance; visible policy placeholders | Reception + clinician |
 | McKenzie / Serengeti | Conditional future offering/location | No public route or content claim | Confirmation required |
 
-`config/site.php` is the page inventory, including exact titles, descriptions, headings, draft copy and publication flags. Canonical is `APP_URL` plus the listed path. Content is rendered through one template. Publish a draft only in a reviewed code change after its copy is complete and approved; changing the flag alone is not clinical approval. New service cards, related links and sitemap entries then follow the same inventory. No HTTP preview bypass exists. Review draft source locally or render it on a genuinely access-controlled review environment. A public GitHub repository is not a place for confidential patient records or permissions evidence.
+`config/site.php` is the page inventory, including exact titles, descriptions, headings, visible placeholder entries and publication flags. Canonical is `APP_URL` plus the listed path. Content is rendered through one template. Publish a draft only in a reviewed code change after its copy is complete and approved; changing the flag alone is not clinical approval. New service cards, related links and sitemap entries then follow the same inventory. No HTTP preview bypass exists. Review draft source locally or render it on a genuinely access-controlled review environment. A public GitHub repository is not a place for confidential patient records or permissions evidence.
 
 ## Content verification required before release
 
 Keep approval records privately, recording fact, source, approving person and approval date. Do not add patient information or consent evidence to this public repository.
 
-1. **Location:** resolve 194 versus 196 Monument Road with the practice. Confirm street address, suburb/locality, municipality, province, postal code, entrance, actual map pin and directions URL. The repo's old map explicitly used 196; the PDF reports visible production text 194. Neither proves the entrance. New defaults are empty and map/address schema remain suppressed until `CONTACT_LOCATION_VERIFIED=true`. No guessed pin or coordinates were added.
-2. **Contact:** confirm public telephone/email and actual mail recipients. The old repository defaults were a dummy phone, Cape Town address and a malformed embed value in `.env.example`; do not copy these into production. Existing deployment environment values must be reviewed and retained where correct. Telephone links appear only for a configured number.
-3. **People:** confirm Cheryl Danks and Elize Strydom's current roles, qualifications, registration details suitable for publication, approved photographs and relevant experience. Obtain original bios. About page currently makes no individual credential claims.
-4. **Services:** confirm each priority service, clinician, presentations/procedures supported, assessment and follow-up approach, information to bring, limitations/referral considerations and genuine patient questions. Current drafts are enquiry-oriented review scaffolds; they do not substitute for substantive clinician input. No specific treatment advice or recovery timeline has been invented.
-5. **Patient policies:** obtain actual fees/payment/medical-aid, referral, cancellation, visit preparation and appointment-confirmation arrangements. No policy is inferred from the old website.
+1. **Location:** the supplied Surgiklin Studios address replaces the Monument Road discrepancy. Confirm remaining map/entrance and structured-field details in the current fact sheet above; maps and address schema stay gated.
+2. **Contact:** phone/email and the intended enquiry inbox are supplied above. Review existing deployment values; new defaults do not override them.
+3. **People:** Elize Strydom and Cheryl Myburgh, both with physiotherapy degrees, are now named. Full qualifications, biographies and approved photos remain visible placeholders.
+4. **Services:** all three priority services are confirmed and published. Detailed appointment expectations still need clinician input; no specific treatment or recovery timeline is invented.
+5. **Patient policies:** visible placeholders await actual appointment, fee/medical-aid, referral and cancellation details. Preparation guidance is confirmed.
 6. **Hours/arrival:** approve hours and holiday handling, parking and access facts. Hours have no invented default; no parking/access promise remains.
 7. **McKenzie:** confirm active individual credentials and services directly; update old clinician-directory details if necessary. No practice-wide certification is claimed.
 8. **Equine/Serengeti:** determine current human/equine scope and whether another patient-facing location genuinely operates. Withholding the gallery is a clarity/publication decision, not a finding that horse treatment was false.
@@ -97,10 +103,10 @@ Keep approval records privately, recording fact, source, approving person and ap
 | Retain Laravel/visual identity | Implemented; existing colours, typography, hero treatment image and components |
 | Reconcile public audit with code | Completed; differences below |
 | Broad local homepage + ordinary links | Implemented |
-| Three useful service pages | Routes/templates/draft copy prepared; substantive clinical content and publication await confirmation |
-| Practitioner biographies | About structure ready; facts/photos/bios await confirmation |
-| Contact/arrival | Form and directions structure implemented; address/pin/contact facts await confirmation |
-| Patient-information page | Unpublished draft pending actual policies |
+| Three useful service pages | Three confirmed services published; detailed expectations visibly pending |
+| Practitioner biographies | Confirmed names/degree level published; visible photo/bio/detail placeholders |
+| Contact/arrival | Supplied address/contact displayed; map pin and entrance await confirmation |
+| Patient-information page | Published with confirmed preparation and visibly labelled policy placeholders |
 | Canonical host/protocol | Application GET/HEAD redirect ready, production opt-in; static asset/Apache rule external setup |
 | Titles, descriptions, headings, initial HTML | Implemented; tested |
 | Correct schema/address fields | Implemented; unconfirmed location fields omitted |
@@ -114,7 +120,7 @@ Keep approval records privately, recording fact, source, approving person and ap
 
 ## Material differences from the public audit
 
-The repository contains configurable contact values rather than an authoritative business record. Its defaults are placeholders, and its example map environment line was malformed. The deployed values are not available here. The no-queue synchronous mail implementation already had validation, failure handling and success-state behaviour: these were preserved. Spam controls and analytics were absent in inspected source. The deploy script copied static discovery files into `public_html`; merely deleting repo files would have broken deployment and left stale hosting files, so the script now removes those two obsolete public files. Missing Request/Process imports in the existing deploy route were corrected; that endpoint was never invoked.
+The repository contains configurable contact values rather than an authoritative business record. Its original defaults were placeholders, and its original example map environment line was malformed. Confirmed contact defaults now replace them; maps remain unset. The deployed values are not available here. The no-queue synchronous mail implementation already had validation, failure handling and success-state behaviour: these were preserved. Spam controls and analytics were absent in inspected source. The deploy script copied static discovery files into `public_html`; merely deleting repo files would have broken deployment and left stale hosting files, so the script now removes those two obsolete public files. Missing Request/Process imports in the existing deploy route were corrected; that endpoint was never invoked.
 
 The old whole-address schema, Physiotherapy node type, relative-only menu, non-link service CTA, counters and unsupported policy claims matched the reported concerns. The old desktop carousel includes human and equine images. No historical URL rankings, selected Google canonical, exact Google rank, real mail delivery, consent records or practitioner verification can be inferred from code. The old testimonials anchor is intentionally no longer promoted because its section is withheld.
 
@@ -128,7 +134,7 @@ See the accompanying test results, browser-check JSON and screenshots. Tests use
 
 ## Hosting and release instructions (prepared, not applied)
 
-1. Obtain factual/clinical approval and complete the withheld pages where appropriate. Confirm the preferred hostname against available Search Console history before enabling consolidation.
+1. Replace visible placeholders with approved details before the final production content review. Confirm the preferred hostname against available Search Console history before enabling consolidation.
 2. Back up the current code revision, `public_html` (including `.htaccess`, index.php and discovery files), `.env`, database and any uploaded media. Record the old SHA and keep a restoration copy off the public document root. This branch has no database migrations.
 3. Review on a private staging origin with `APP_ENV=staging`, `APP_URL` set to that staging origin, `SITE_INDEXABLE=false`, `SITE_CANONICAL_REDIRECTS=false`, analytics disabled and safe mail. Use server authentication/network controls: robots/noindex are not confidentiality controls.
 4. Use the locked dependencies with PHP compatible with this Laravel 13 lockfile and Node supported by Vite 8 (local build used bundled Node). Run `composer install`, `npm ci`, `npm run build`, `vendor/bin/pint --dirty --format agent`, `vendor/bin/phpstan analyse --memory-limit=512M`, `php artisan test --compact`, `node --test tests/analytics.test.js` and `bash -n deploy.sh`. Confirm tracked `public/build` matches source.

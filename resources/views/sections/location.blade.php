@@ -3,8 +3,8 @@
     <div class="mx-auto max-w-6xl px-5 sm:px-8">
         <x-site.section-heading eyebrow="Visit" title="Glen Marais, Kempton Park">Contact the practice to confirm directions and the entrance before travelling.</x-site.section-heading>
         <div class="mt-10 rounded-3xl bg-pine-950 p-8 text-bone-50 sm:p-12">
+            @if ($practice['address'])<p class="mb-4">{{ $practice['address'] }}</p>@endif
             @if ($practice['location_verified'])
-                <p>{{ $practice['address'] }}</p>
                 @if ($practice['directions_url'])
                     <a data-contact-action="directions" href="{{ $practice['directions_url'] }}" rel="noopener noreferrer" target="_blank" class="mt-4 inline-flex underline">Open directions</a>
                 @endif

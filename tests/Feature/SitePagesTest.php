@@ -4,7 +4,7 @@ use App\Support\Site;
 
 it('renders each published page with distinct initial HTML metadata', function () {
     $titles = [];
-    foreach (['/' => 'home', '/about' => 'about', '/contact' => 'contact', '/services' => 'services'] as $path => $name) {
+    foreach (['/' => 'home', '/about' => 'about', '/contact' => 'contact', '/services' => 'services', '/services/back-neck-pain' => 'back-neck-pain', '/services/sports-injury-rehabilitation' => 'sports-injury-rehabilitation', '/services/post-operative-rehabilitation' => 'post-operative-rehabilitation', '/patient-information' => 'patient-information'] as $path => $name) {
         $html = $this->get($path)->assertSuccessful()->getContent();
         expect(substr_count($html, '<h1'))->toBe(1)
             ->and(substr_count($html, '<title>'))->toBe(1)
@@ -12,16 +12,21 @@ it('renders each published page with distinct initial HTML metadata', function (
         preg_match('/<title>(.*?)<\/title>/', $html, $match);
         $titles[] = $match[1];
     }
-    expect(array_unique($titles))->toHaveCount(4);
+    expect(array_unique($titles))->toHaveCount(8);
 });
 
 it('keeps drafts and unknown paths unavailable even with preview query strings', function (string $path) {
+    foreach (['back-neck-pain', 'sports-injury-rehabilitation', 'post-operative-rehabilitation', 'patient-information'] as $name) {
+        config(["site.pages.$name.published" => false]);
+    }
     $this->get($path.'?preview=true')->assertNotFound();
 })->with(['/services/back-neck-pain', '/services/sports-injury-rehabilitation', '/services/post-operative-rehabilitation', '/patient-information', '/services/mckenzie-assessment', '/serengeti', '/missing']);
 
 it('publishes only approved canonical pages in the production sitemap', function () {
     app()->detectEnvironment(fn () => 'production');
     config(['site.indexable' => true, 'app.url' => 'https://danksandstrydom.co.za']);
+    config(['site.pages.back-neck-pain.published' => false, 'site.pages.patient-information.published' => false]);
+    $this->get('/services')->assertDontSee('href="'.route('back-neck-pain').'"', false);
     $xml = $this->get('/sitemap.xml')->assertSuccessful()->getContent();
     expect(simplexml_load_string($xml))->not->toBeFalse();
     foreach (['/', '/about', '/services', '/contact'] as $path) {
@@ -65,6 +70,9 @@ it('publishes a service link and sitemap entry only after explicit approval', fu
 });
 
 it('provides a direct enquiry without an empty service grid or explore self-link', function () {
+    foreach (['back-neck-pain', 'sports-injury-rehabilitation', 'post-operative-rehabilitation'] as $name) {
+        config(["site.pages.$name.published" => false]);
+    }
     foreach (['/', '/services'] as $path) {
         $this->get($path)->assertSuccessful()->assertSee('data-service-enquiry', false)
             ->assertSee('href="'.route('contact').'#contact"', false)
@@ -73,10 +81,29 @@ it('provides a direct enquiry without an empty service grid or explore self-link
 });
 
 it('automatically shows only published services without an explore self-link', function () {
-    config(['site.pages.back-neck-pain.published' => true, 'site.pages.sports-injury-rehabilitation.published' => true]);
+    config(['site.pages.back-neck-pain.published' => true, 'site.pages.sports-injury-rehabilitation.published' => true, 'site.pages.post-operative-rehabilitation.published' => false]);
     $this->get('/services')->assertSuccessful()->assertSee('data-service-cards', false)
         ->assertSee('href="'.route('back-neck-pain').'"', false)
         ->assertSee('href="'.route('sports-injury-rehabilitation').'"', false)
         ->assertDontSee('href="'.route('post-operative-rehabilitation').'"', false)
         ->assertDontSee('data-service-enquiry', false)->assertDontSee('Explore physiotherapy enquiries');
+});
+
+it('publishes confirmed services and preparation with clearly marked unfinished details', function () {
+    app()->detectEnvironment(fn () => 'production');
+    config(['site.indexable' => true]);
+    foreach (['back-neck-pain', 'sports-injury-rehabilitation', 'post-operative-rehabilitation', 'patient-information'] as $name) {
+        $this->get(route($name))->assertSuccessful()->assertSee('Elize Strydom')->assertSee('Cheryl Myburgh')
+            ->assertSee('Patients are not expected to bring anything')->assertSee('Placeholder — details to be confirmed');
+        $this->get('/sitemap.xml')->assertSee(Site::url(config("site.pages.$name.path")));
+    }
+    $this->get('/about')->assertSee('Elize Strydom')->assertSee('Cheryl Myburgh')
+        ->assertSee('Degree in physiotherapy')->assertSee('Placeholder — profile to be completed');
+});
+
+it('shows the supplied contact address while keeping unverified maps and schema gated', function () {
+    config(['contact.practice.location_verified' => false, 'contact.practice.address' => 'Surgiklin Studios, Unit 12, Koorsboom Ave, Glen Marais, Kempton Park, 1619', 'contact.practice.phone' => '011 391 3126', 'contact.practice.email' => 'admin@danksandstrydom.co.za']);
+    $this->get('/contact')->assertSuccessful()->assertSee('Surgiklin Studios, Unit 12, Koorsboom Ave')
+        ->assertSee('011 391 3126')->assertSee('admin@danksandstrydom.co.za')
+        ->assertDontSee('Practice location map')->assertDontSee('streetAddress')->assertDontSee('Monument Road');
 });

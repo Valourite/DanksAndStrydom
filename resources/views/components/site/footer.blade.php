@@ -29,7 +29,7 @@
         <div class="grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
             <div>
                 <h3 class="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-pine-400">Visit</h3>
-                <p class="mt-4 text-sm leading-relaxed text-pine-200">{{ $practice['location_verified'] ? $practice['address'] : 'Glen Marais, Kempton Park' }}</p>
+                <p class="mt-4 text-sm leading-relaxed text-pine-200">{{ $practice['address'] ?: 'Glen Marais, Kempton Park' }}</p>
             </div>
             <div>
                 <h3 class="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-pine-400">Contact</h3>
