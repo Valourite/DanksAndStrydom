@@ -2,6 +2,22 @@
 
 Prepared 14 September 2026 from the supplied Danks & Strydom SEO strategy. This is a review branch, not a deployed release. No Google account, directory, production server or live mailbox was changed.
 
+## Original visual design restoration
+
+Backup branch: `backup/seo-before-layout-restoration-2026-09-14`, at `739e4dabc2f0a7ca891162ad3f867efb6fd1051c`. The active SEO branch remains `feature/local-seo-patient-journey` and this updates PR #4.
+
+Visual reference: pre-SEO commit `42880b2`. Its section diffs were inspected and its homepage rendered in an isolated local checkout. The supplied original screenshot files were not available among this session’s attachments; this pass compares against the Git-rendered reference, not those specific screenshots.
+
+- Restored the original hero architecture: Fraunces/Instrument Sans typography, original pine/sea/sand/bone colours, image crop, arch/backdrop, floating cards, chips and three-column fact strip. Confirmed appointment length/practitioner/service counts replace unsupported statistics.
+- Restored the arched About illustration, offset sand card, split copy, dark numbered section and photo composition. All replacement copy uses confirmed facts, with no old experience, technique, outcome or quality guarantees.
+- Reinstated the original seven-part homepage flow: hero → services → About → dark visit details → staggered practical cards → location → contact. The staggered composition replaces testimonials with practical facts; no reviews, stars or patient quotations are restored.
+- Services retain the original card styling and gradient section. Approved/review-visible services become cards automatically; public empty services keep a direct enquiry action. A desktop illustration strip replaces the withheld mixed human/equine gallery using existing treatment illustrations, not claimed practitioner portraits.
+- Restored the split dark-details/map location panel and the original contact-section washes, spacing and numbered introduction. Current configured address, verified directions/map gate, hours and enquiry component remain in use.
+- Internal pages extend the original arch imagery, split introductions, dark surfaces and numbered content layouts. Removed the unrelated repeated link list; kept only a relevant service-to-patient-information link and a concise gated footer navigation.
+- No colour rebranding was applied. Source colour/font definitions, JavaScript, routes, metadata/layout schema, canonical/discovery controls, authentication, enquiry mail/cache protections and deployment preflight were not replaced.
+
+Validation: **80 PHP tests / 378 assertions**, **2 JavaScript tests**, Pint, PHPStan (512 MB), production asset build, shell syntax and diff checks passed. Production assets rebuilt. Browser checks at 390px and 1440px covered the homepage and all seven internal pages in authenticated review: one H1 each, no horizontal overflow, no broken loaded images and no redundant related-link lists. Public services fallback and mobile menu open/Escape close were also checked. Original/restored hero compositions were visually compared at desktop/mobile widths; the internal service layout was inspected on mobile. Existing tests continue to verify production draft exclusion and location gating. No live mail, production changes, merge or deployment.
+
 ## Current content review — supersedes earlier placeholder versions
 
 The latest user-supplied answers replace earlier conflicting address and policy information. Complete service descriptions, biographies and patient policies are drafted for **Cheryl Myburgh’s final review**, not approved for production publication. Public approval badges and unfinished placeholders have been removed.

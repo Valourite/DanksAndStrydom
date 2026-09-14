@@ -1,6 +1,14 @@
-# Improve local SEO and prepare complete content for clinical review
+# Restore the original visual design with local SEO and reviewed content safeguards
 
 Adds linked pages, consistent metadata/MedicalClinic identity, safe indexing controls and a safer synchronous enquiry journey while preserving Laravel/Livewire and the design. Existing deployment preflight and mail/cache fixes remain intact.
+
+## Original layout restoration
+
+Preserves the SEO branch and creates `backup/seo-before-layout-restoration-2026-09-14` at `739e4da`. Inspected pre-SEO commit `42880b2` and restored its hero/floating cards, arched About composition, dark numbered section, staggered cards, split map panel and contact layout. Original colours and typography are retained; no blue rebranding.
+
+Confirmed facts replace unsupported counters and testimonials. The mixed human/equine gallery remains withheld; an existing illustration strip preserves its visual role. Internal pages now use matching arches, split introductions and numbered content layouts. Repetitive unrelated link lists are removed. Routes, metadata, canonical/schema/discovery logic, authentication, enquiry protections and deployment checks remain intact.
+
+Original screenshot attachments were unavailable; visual comparison used local renders of the Git reference. Browser checks at 390px/1440px covered the homepage and seven internal pages, including gated service cards, one H1, no overflow/broken loaded images, mobile menu and public services fallback. Existing 80 PHP tests / 378 assertions and 2 JS tests pass; formatting, static analysis, production build, shell syntax and diff checks pass. Rebuilt assets included.
 
 ## Latest content and review changes
 

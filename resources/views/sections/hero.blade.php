@@ -21,7 +21,7 @@
             </h1>
 
             <p class="mt-7 max-w-md text-pretty text-base leading-relaxed text-pine-600 sm:text-lg">
-                Contact Danks &amp; Strydom to discuss your physiotherapy needs and request an appointment.
+                Danks &amp; Strydom offers back and neck pain physiotherapy, sports injury rehabilitation and post-operative rehabilitation. Contact the practice to discuss your needs and request an appointment.
             </p>
 
             <div class="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
@@ -38,7 +38,31 @@
                     <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-y-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
                 </a>
             </div>
-            <x-site.phone />
+
+            {{-- Trust chips (mobile & tablet; desktop shows floating cards instead) --}}
+            <ul class="mt-10 flex flex-wrap gap-2.5 lg:hidden">
+                @foreach (['Back & neck pain', 'Sports rehabilitation', 'Post-operative rehabilitation'] as $chip)
+                    <li class="rounded-full border border-pine-900/10 bg-white/70 px-4 py-2 text-xs font-medium text-pine-800 backdrop-blur">
+                        {{ $chip }}
+                    </li>
+                @endforeach
+            </ul>
+
+            {{-- Stats --}}
+            <dl class="mt-12 grid max-w-md grid-cols-3 divide-x divide-pine-900/10 border-t border-pine-900/10 pt-8">
+                <div class="pr-5">
+                    <dt class="font-display text-2xl font-medium text-pine-950 sm:text-3xl">1<span class="text-sea-600"> hr</span></dt>
+                    <dd class="mt-1.5 text-[0.7rem] leading-snug text-pine-500">Appointment length</dd>
+                </div>
+                <div class="px-5">
+                    <dt class="font-display text-2xl font-medium text-pine-950 sm:text-3xl">2</dt>
+                    <dd class="mt-1.5 text-[0.7rem] leading-snug text-pine-500">Physiotherapists</dd>
+                </div>
+                <div class="pl-5">
+                    <dt class="font-display text-2xl font-medium text-pine-950 sm:text-3xl">3</dt>
+                    <dd class="mt-1.5 text-[0.7rem] leading-snug text-pine-500">Physiotherapy services</dd>
+                </div>
+            </dl>
         </div>
 
         {{-- Visual: arch composition --}}
@@ -61,21 +85,48 @@
                     <div class="absolute inset-0 bg-linear-to-t from-pine-950 via-pine-950/15 to-transparent"></div>
                     <div class="absolute inset-x-0 bottom-5 flex justify-center">
                         <span class="rounded-full border border-bone-50/20 bg-pine-950/55 px-4 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-bone-50 backdrop-blur-md">
-                            Focused, hands-on care
+                            Glen Marais, Kempton Park
                         </span>
                     </div>
                 </div>
 
                 <div class="relative px-8 pb-10 sm:px-10">
                     <p class="font-display text-2xl font-medium leading-snug text-bone-50 sm:text-[1.7rem]">
-                        Recovery,<br>
-                        <em class="text-sea-300">guided by hand.</em>
+                        Your visit,<br>
+                        <em class="text-sea-300">at a glance.</em>
                     </p>
 
-
+                    <ul class="mt-8 space-y-3">
+                        @foreach ([
+                            ['One-hour appointments', 'Time for your visit'],
+                            ['Patient-information form', 'Completed by new patients'],
+                            ['Assessment first', 'Before appropriate treatment'],
+                        ] as $i => $step)
+                            <li class="flex items-center gap-4 rounded-2xl border border-bone-50/10 bg-bone-50/5 px-4 py-3 backdrop-blur-sm">
+                                <span class="font-display text-sm italic text-sea-300">0{{ $i + 1 }}</span>
+                                <span class="min-w-0">
+                                    <span class="block truncate text-sm font-medium text-bone-50">{{ $step[0] }}</span>
+                                    <span class="block truncate text-xs text-pine-300">{{ $step[1] }}</span>
+                                </span>
+                            </li>
+                        @endforeach
+                    </ul>
                 </div>
             </div>
 
+            {{-- Floating trust cards (desktop) --}}
+            <div class="animate-drift absolute -left-14 top-44 hidden rounded-2xl border border-pine-900/8 bg-white/90 px-5 py-3.5 shadow-[0_20px_45px_-22px_rgba(10,31,27,0.4)] backdrop-blur lg:block">
+                <p class="text-xs font-semibold text-pine-950">Sports injuries</p>
+                <p class="mt-0.5 text-[0.68rem] text-pine-500">Rehabilitation enquiries</p>
+            </div>
+            <div class="animate-drift-slow absolute -bottom-6 left-8 hidden rounded-2xl border border-pine-900/8 bg-white/90 px-5 py-3.5 shadow-[0_20px_45px_-22px_rgba(10,31,27,0.4)] backdrop-blur lg:block">
+                <p class="text-xs font-semibold text-pine-950">Back &amp; neck pain</p>
+                <p class="mt-0.5 text-[0.68rem] text-pine-500">Physiotherapy enquiries</p>
+            </div>
+            <div class="animate-drift absolute -right-2 top-32 hidden rounded-full border border-pine-900/8 bg-white/90 px-5 py-2.5 shadow-[0_20px_45px_-22px_rgba(10,31,27,0.4)] backdrop-blur lg:flex lg:items-center lg:gap-2" style="animation-delay: -4s">
+                <span class="h-1.5 w-1.5 rounded-full bg-sea-500"></span>
+                <span class="text-xs font-semibold text-pine-900">Glen Marais</span>
+            </div>
         </div>
     </div>
 </section>

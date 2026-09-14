@@ -2,6 +2,8 @@
     @include('sections.hero')
     @include('sections.services')
     @include('sections.about')
+    @include('sections.benefits')
+    @include('sections.visit')
     @include('sections.location')
     @include('sections.contact')
 </x-layouts.app>

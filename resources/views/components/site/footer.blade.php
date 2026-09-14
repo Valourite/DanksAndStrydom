@@ -45,7 +45,7 @@
             <div>
                 <h3 class="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-pine-400">Explore</h3>
                 <ul class="mt-4 space-y-2 text-sm">
-                    @foreach (\App\Support\Site::pages() as $name => $page)
+                    @foreach (array_intersect_key(\App\Support\Site::pages(), array_flip(['services', 'about', 'patient-information', 'contact'])) as $name => $page)
                         <li><a href="{{ route($name) }}" class="transition-colors hover:text-sea-300">{{ $page['heading'] }}</a></li>
                     @endforeach
                 </ul>

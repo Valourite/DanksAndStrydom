@@ -1,12 +1,12 @@
 {{-- ============================ WHY CHOOSE US ============================ --}}
 @php
     $benefits = [
-        ['title' => 'Personalised to you',  'body' => 'No two bodies are the same. Your plan is shaped around your goals, lifestyle, and stage of recovery.'],
-        ['title' => 'Hands-on expertise',   'body' => 'Skilled manual therapy combined with movement-focused care, so you progress with confidence.'],
-        ['title' => 'Evidence-informed',    'body' => 'Treatment grounded in current best practice — care you can genuinely trust.'],
-        ['title' => 'Clear guidance',       'body' => 'Simple, practical exercises and advice you can follow at home, with support along the way.'],
-        ['title' => 'A calm environment',   'body' => 'A welcoming, unhurried space where you feel comfortable and genuinely cared for.'],
-        ['title' => 'Long-term results',    'body' => 'We focus on lasting improvement and prevention — not just easing today\'s symptoms.'],
+        ['title' => 'Two physiotherapists', 'body' => 'Elize Strydom and Cheryl Myburgh both hold degrees in physiotherapy.'],
+        ['title' => 'One-hour appointments', 'body' => 'Appointments are one hour. Contact the practice to discuss availability.'],
+        ['title' => 'Assessment first', 'body' => 'Your physiotherapist assesses you before providing appropriate treatment.'],
+        ['title' => 'A simple first step', 'body' => 'New patients complete a patient-information form. Patients are not expected to bring anything.'],
+        ['title' => 'Parking at the practice', 'body' => 'Parking and covered parking are available.'],
+        ['title' => 'Access to the rooms', 'body' => 'The building has ramp access and an elevator.'],
     ];
 @endphp
 
@@ -22,22 +22,10 @@
         <div class="reveal lg:sticky lg:top-32 lg:self-start">
             <p class="flex items-center gap-3 text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-sea-300">
                 <span class="h-px w-8 bg-sea-400/60"></span>
-                Why choose us
+                Your visit
             </p>
-            <h2 class="mt-6 text-balance font-display text-[2.1rem] font-medium leading-[1.12] tracking-tight text-bone-50 sm:text-[2.6rem] lg:text-5xl lg:leading-[1.08]">
-                Thoughtful care that puts your
-                <em class="text-sea-300">recovery first</em>
-            </h2>
-            <p class="mt-6 max-w-md text-pretty text-base leading-relaxed text-pine-200 sm:text-lg">
-                Everything we do is designed to help you move, recover, and feel better — supported by a team that genuinely cares.
-            </p>
-            <a href="#contact"
-               class="mt-9 inline-flex items-center gap-3 rounded-full bg-bone-50 py-3 pl-6 pr-3 text-sm font-semibold text-pine-950 transition-all duration-300 hover:bg-sea-300">
-                Book your first session
-                <span class="flex h-8 w-8 items-center justify-center rounded-full bg-pine-950 text-bone-50">
-                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-                </span>
-            </a>
+            <h2 class="mt-6 font-display text-4xl font-medium leading-tight tracking-tight sm:text-5xl">Your appointment,<br><em class="text-sea-300">step by step.</em></h2>
+            <p class="mt-6 max-w-sm text-base leading-relaxed text-pine-300">A few practical details to help you plan your visit to Danks &amp; Strydom.</p>
 
             <figure class="mt-10 overflow-hidden rounded-3xl border border-bone-50/10 bg-bone-50/5 shadow-[0_30px_60px_-40px_rgba(0,0,0,0.8)]">
                 <div class="relative aspect-4/3 overflow-hidden sm:aspect-16/10 lg:aspect-4/3">
@@ -51,7 +39,7 @@
                     >
                     <div class="absolute inset-0 bg-linear-to-t from-pine-950/65 via-transparent to-transparent"></div>
                     <figcaption class="absolute inset-x-0 bottom-0 p-5 text-sm font-medium text-bone-50">
-                        Practical support for confident movement
+                        Preparing for your appointment
                     </figcaption>
                 </div>
             </figure>
