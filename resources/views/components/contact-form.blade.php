@@ -63,39 +63,66 @@ new class extends Component
             return;
         }
 
-        $lock = Cache::lock('enquiry-lock:'.$this->submissionId, 120);
-        if (! $lock->get()) {
+        try {
+            $lock = Cache::lock('enquiry-lock:'.$this->submissionId, 120);
+            if (! $lock->get()) {
+                return;
+            }
+        } catch (\Throwable $e) {
+            Log::warning('Contact form replay protection unavailable.', ['exception_type' => $e::class]);
+            $this->addError('form', 'We are unable to send messages right now. Please try later or call the practice.');
             return;
         }
+
         try {
-            if (Cache::has('enquiry-sent:'.$this->submissionId)) {
+            try {
+                $alreadySent = Cache::has('enquiry-sent:'.$this->submissionId);
+            } catch (\Throwable $e) {
+                Log::warning('Contact form replay check failed.', ['exception_type' => $e::class]);
+                $this->addError('form', 'We are unable to send messages right now. Please try later or call the practice.');
+                return;
+            }
+            if ($alreadySent) {
                 $this->sent = true;
                 return;
             }
-            // The hosting environment has no queue worker; preserve synchronous mail.
-            Mail::to($recipients)->send(new ContactFormSubmitted(
-                data: [
-                    'name' => $validated['name'],
-                    'email' => $validated['email'],
-                    'phone' => $validated['phone'] ?? '',
-                    'service' => $validated['service'] ?? '',
-                    'message' => $validated['message'],
-                ],
-                submittedAt: now(),
-            ));
-            Cache::put('enquiry-sent:'.$this->submissionId, true, now()->addDay());
-        } catch (\Throwable $e) {
-            Log::error('Contact form mail failed.', ['exception_type' => $e::class]);
-            $this->addError('form', 'Something went wrong sending your message. Please try again or call us.');
 
-            return;
+            try {
+                // The hosting environment has no queue worker; preserve synchronous mail.
+                Mail::to($recipients)->send(new ContactFormSubmitted(
+                    data: [
+                        'name' => $validated['name'],
+                        'email' => $validated['email'],
+                        'phone' => $validated['phone'] ?? '',
+                        'service' => $validated['service'] ?? '',
+                        'message' => $validated['message'],
+                    ],
+                    submittedAt: now(),
+                ));
+            } catch (\Throwable $e) {
+                Log::error('Contact form mail failed.', ['exception_type' => $e::class]);
+                $this->addError('form', 'Something went wrong sending your message. Please try again or call us.');
+                return;
+            }
+
+            $this->sent = true;
+            $this->reset(['name', 'email', 'phone', 'service', 'message']);
+            $this->dispatch('enquiry-accepted', id: $this->submissionId);
+
+            try {
+                if (! Cache::put('enquiry-sent:'.$this->submissionId, true, now()->addDay())) {
+                    Log::warning('Contact form accepted-submission bookkeeping failed.');
+                }
+            } catch (\Throwable $e) {
+                Log::warning('Contact form accepted-submission bookkeeping failed.', ['exception_type' => $e::class]);
+            }
         } finally {
-            $lock->release();
+            try {
+                $lock->release();
+            } catch (\Throwable $e) {
+                Log::warning('Contact form submission lock release failed.', ['exception_type' => $e::class]);
+            }
         }
-
-        $this->dispatch('enquiry-accepted', id: $this->submissionId);
-        $this->reset(['name', 'email', 'phone', 'service', 'message']);
-        $this->sent = true;
     }
 
     public function sendAnother(): void

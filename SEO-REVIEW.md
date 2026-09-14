@@ -2,6 +2,50 @@
 
 Prepared 14 September 2026 from the supplied Danks & Strydom SEO strategy. This is a review branch, not a deployed release. No Google account, directory, production server or live mailbox was changed.
 
+## PR #4 review follow-up
+
+Code fixes are complete; business confirmation and production/Google-account work remain separate release requirements.
+
+- Production deployment now archives one fetched commit into a private temporary candidate, installs independent locked dependencies with scripts/plugins disabled, and validates the effective fresh Laravel configuration using a private copy of the existing server `.env`. It runs before maintenance mode, active reset, active Composer or public-asset removal. Only failed configuration key names are reported; dotenv/runtime diagnostics are suppressed. The active cache and `.env` are not modified by preflight.
+- Candidate checks require production environment, debug off, the exact HTTPS non-www production origin, both indexing flags true, valid enquiry recipients/public phone/email, the location verification flag, display/split address fields and HTTPS map/directions URLs. Presence/syntax checks do not verify that the business facts or map pin are correct.
+- Empty services show a concise contact action, without an empty grid or an Explore self-link. Published service entries automatically become linked cards; the production publication flags remain false for all three service drafts and patient information.
+- Draft pages now separate scope, assessment enquiries, follow-up and preparation; patient information separates booking, fees/medical aid, referrals/preparation, changes and arrival. The wording is question-led and awaits clinician-approved answers, rather than asserting services or policies.
+- Mail success is recorded and the generic acceptance event dispatched before cache bookkeeping. A failed accepted-ID write or lock release is logged generically and does not show a sending error. Actual transport failures still show the error state. Replay checks and normal browser event deduplication remain.
+
+### Review follow-up validation
+
+- **73 PHP tests / 271 assertions passed**, including accepted/rejected preflight settings, stale-cache isolation and cached postflight checks, inherited environment overrides, secret-safe malformed dotenv rejection, deployment ordering/cleanup and retaining maintenance on postflight failure, successful mail plus cache-write exception, real mail-failure mocks, repeated submissions and both services states.
+- **2 JavaScript tests passed** for generic event payloads/deduplication and disabled analytics.
+- Pint, PHPStan (512 MB), production Vite build, `bash -n deploy.sh` and `git diff --check` passed. Rebuilt CSS/manifest are committed.
+- Local Chromium at **390px and 1440px** checked empty-services and three-published-service fixture states: correct card/action counts, no Explore self-link, no horizontal overflow, no uncaught JavaScript errors. Local screenshots are supplied with the task. The fixture enabled drafts only in an isolated loopback QA process; it did not change repository publication flags or deploy anything.
+- Mail tests used `Mail::fake()` or a mocked throwing transport. No live enquiries, production setting changes or Google-account work occurred. No new performance/ranking claims are made from this follow-up.
+
+### Release fact sheet still required from the practice
+
+- [ ] Approved display address and matching street, locality, province, postcode and country fields; explicit resolution of **194 versus 196 Monument Road**.
+- [ ] Correct patient entrance, business pin, HTTPS map embed and directions URLs, plus any approved access/parking guidance.
+- [ ] Approved public telephone/email and internal enquiry recipients. Supply private recipient/configuration values securely to the deployment operator, not in a public PR.
+- [ ] Back/neck: which presentations are assessed, what assessment/follow-up actually involves, relevant clinician, preparation and when onward assessment is needed.
+- [ ] Sports: actual sports/patient groups, recent versus ongoing injury scope, assessment/progression and return-to-activity approach, clinician and preparation.
+- [ ] Post-operative: procedures supported, named clinician, surgeon instructions/referrals required, how timing/restrictions and follow-up are handled.
+- [ ] Patient policies: availability/confirmation process, fees/payment/medical-aid arrangements, referral rules, what to bring and change/cancellation process.
+- [ ] Current practitioner roles, approved biographies/photos, qualifications/registration and any McKenzie claims, plus clinical reviewer and review date for completed service copy.
+- [ ] Confirm the intended production hostname; the current code permits `https://danksandstrydom.co.za` with an optional root slash. Operator supplies `APP_ENV=production`, `APP_DEBUG=false`, `SITE_INDEXABLE=true`, `SITE_CANONICAL_REDIRECTS=true` and approved contact/location settings. Safe local/staging defaults remain false.
+
+### Preflight operation and limits
+
+`php preflight.php /absolute/path/to/.env` validates fresh candidate configuration without booting application providers or contacting mail/database services. Existing inherited process environment values retain Laravel precedence. The fresh mode deliberately bypasses even an inherited `APP_CONFIG_CACHE` path; a stale valid active cache cannot conceal invalid release settings, and a stale invalid cache cannot reject corrected fresh settings. An explicitly present `.env.production` causes the deployment script to stop for operator review, rather than silently validate one file and later load another. No configuration is overwritten automatically.
+
+The script checks that `.env` did not change during candidate validation, activates the exact validated SHA, then runs the established cache rebuild. `php preflight.php /absolute/path/to/.env --cached` checks the rebuilt effective configuration before bringing the site online. If anything after maintenance starts fails, maintenance remains enabled for operator recovery; the script no longer exposes a partially completed release via an unconditional `artisan up` trap. The deployment tests use temporary fixtures and stub external executables, not the production server.
+
+This remains an **in-place deployment**, not an atomic release switch. Code reset, active dependency installation, assets and migrations can still fail after preflight; there is no automatic code/data rollback. Keep backups and restore matching code/assets/configuration before manually bringing the site up. Preflight does not prove SMTP inbox delivery, database readiness, clinical approval, Google indexing or Apache configuration. The host must ensure CLI and PHP-FPM use the same environment/cache paths and avoid concurrent configuration edits. Hard process termination can leave a private candidate directory requiring cleanup; ordinary success/error/signal exits remove it.
+
+For the first upgrade, an operator must invoke the reviewed version of `deploy.sh` from a trusted separate path: the old script already on the server cannot acquire these safeguards until updated. Do not first reset the live checkout just to obtain the guard. Environment overrides prefixed `DANKS_DEPLOY_` exist for isolated tests/host paths; they do not bypass validation. Candidate preparation needs temporary disk space and Composer network/cache access. No production execution occurred in this task.
+
+### Cache-based enquiry limits
+
+Success means the synchronous mail transport returned successfully, not that the recipient read or even received the message. The component retains `sent=true` and clears personal fields even when bookkeeping fails. The normal accepted-ID cache lasts 24 hours and the lock 120 seconds; browser deduplication is per page lifetime. Cache loss/write failure, expired entries/locks, a process crash or lost response after transport acceptance, concurrent retries and a new component/session can still permit duplicate mail. This is not guaranteed exactly-once delivery. Do not encourage a patient to resubmit solely because the post-send cache write failed; monitor the generic bookkeeping warning separately from transport errors.
+
 ## What is ready
 
 Laravel 13.15.0, Livewire 4.3.1, Tailwind 4.3.0 and Vite 8.0.16 remain in place. Dependencies and architecture were retained. Production assets are committed because the current deployment copies built assets and does not run npm.
@@ -90,7 +134,7 @@ See the accompanying test results, browser-check JSON and screenshots. Tests use
 4. Use the locked dependencies with PHP compatible with this Laravel 13 lockfile and Node supported by Vite 8 (local build used bundled Node). Run `composer install`, `npm ci`, `npm run build`, `vendor/bin/pint --dirty --format agent`, `vendor/bin/phpstan analyse --memory-limit=512M`, `php artisan test --compact`, `node --test tests/analytics.test.js` and `bash -n deploy.sh`. Confirm tracked `public/build` matches source.
 5. Populate the approved `CONTACT_*` values in the environment. Supply full display address AND split fields from the same approved fact sheet. Set the verification flag only when the actual map/address agree. Map values must be URLs, never pasted iframe HTML. Confirm SMTP configuration/timeout, actual recipients, writable shared cache and sessions. Synchronous mail is intentionally retained because the host has no queue worker. Monitor generic mail failures and practice reception outcomes; acceptance does not prove inbox receipt.
 6. For approved production, set `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL=https://danksandstrydom.co.za` (if confirmed preferred), `SITE_INDEXABLE=true` and `SITE_CANONICAL_REDIRECTS=true`. **These indexing flags default to false: omitting this step will keep production noindex.** Leave analytics false until its provider and privacy handling are settled.
-7. The prepared `deploy.sh` still targets `main` and resets its checkout. Do not execute it from this feature branch expecting a preview. After separate merge/deployment authorisation, use the established release process. Its new removal of `public_html/robots.txt` and `public_html/sitemap.xml` allows the Laravel routes to answer through the existing front controller. Verify cPanel document-root/index.php paths; they are outside this checkout. The script does not automatically roll back code on failure.
+7. The prepared `deploy.sh` still targets `main` and resets its checkout. Do not execute it from this feature branch expecting a preview. After separate merge/deployment authorisation, use the established release process. Its new removal of `public_html/robots.txt` and `public_html/sitemap.xml` allows the Laravel routes to answer through the existing front controller. Verify cPanel document-root/index.php paths; they are outside this checkout. The script validates a private candidate first and does not automatically roll back code on failure; see the review follow-up above for the first-upgrade procedure.
 8. `APP_URL` drives SEO output. Application redirects cover known production aliases on GET/HEAD only; they do not redirect local/staging hosts or form POSTs. For direct Apache TLS termination, add the following **production virtual-host-only** rules before the existing Laravel rewrite rules to cover static files too. Keep staging in a different vhost. If TLS terminates at a proxy, have the host configure trusted proxy handling first; do not blindly trust arbitrary forwarded headers.
 
 ```apache
@@ -116,7 +160,7 @@ These rules preserve query strings implicitly. Test direct HTTPS, HTTP, www, nes
 
 ## Rollback
 
-Restore the recorded prior code SHA and matching built assets, public files and environment backup. Restore old discovery files if returning to the old static implementation. Clear/rebuild Laravel caches and confirm site availability, forms and canonical/robots behaviour. Do not run migration rollback blindly; this change adds no migrations. If the deployment fails, the existing shell trap only brings the app out of maintenance: it does not restore the previous release. Keep the previous deployment available until post-release checks pass.
+Restore the recorded prior code SHA and matching built assets, public files and environment backup. Restore old discovery files if returning to the old static implementation. Clear/rebuild Laravel caches and confirm site availability, forms and canonical/robots behaviour. Do not run migration rollback blindly; this change adds no migrations. If deployment fails after maintenance starts, the revised shell trap keeps maintenance enabled: it does not restore the previous release. Restore or complete the release and explicitly bring it up only after verification. Keep the previous deployment available until post-release checks pass.
 
 ## Separate Google and directory checklist
 
@@ -131,7 +175,7 @@ Restore the recorded prior code SHA and matching built assets, public files and 
 - [ ] Review comparable 28-day and rolling 90-day Search Console periods, non-brand queries, landing pages and device performance. Reception tracks qualified enquiries and confirmed appointments in its own system; report aggregates, not clinical data to analytics.
 - [ ] Obtain PageSpeed Insights/mobile/desktop and field data where available. Local synthetic timings are not real-user Core Web Vitals or ranking evidence.
 
-## Recorded local results
+## Original implementation results (before this review follow-up)
 
 - 36 PHP tests passed, 161 assertions; 2 JavaScript tests passed.
 - Pint passed; PHPStan passed with 512 MB limit; production Vite build passed; route/config cache and `bash -n deploy.sh` passed.

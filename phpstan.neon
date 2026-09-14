@@ -9,5 +9,6 @@ parameters:
         - config/
         - database/
         - routes/
+        - preflight.php
 
     level: 7

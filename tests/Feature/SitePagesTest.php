@@ -63,3 +63,20 @@ it('publishes a service link and sitemap entry only after explicit approval', fu
     $this->get('/')->assertSee('href="'.route('back-neck-pain').'"', false);
     $this->get('/sitemap.xml')->assertSee(Site::url('/services/back-neck-pain'));
 });
+
+it('provides a direct enquiry without an empty service grid or explore self-link', function () {
+    foreach (['/', '/services'] as $path) {
+        $this->get($path)->assertSuccessful()->assertSee('data-service-enquiry', false)
+            ->assertSee('href="'.route('contact').'#contact"', false)
+            ->assertDontSee('data-service-cards', false)->assertDontSee('Explore physiotherapy enquiries');
+    }
+});
+
+it('automatically shows only published services without an explore self-link', function () {
+    config(['site.pages.back-neck-pain.published' => true, 'site.pages.sports-injury-rehabilitation.published' => true]);
+    $this->get('/services')->assertSuccessful()->assertSee('data-service-cards', false)
+        ->assertSee('href="'.route('back-neck-pain').'"', false)
+        ->assertSee('href="'.route('sports-injury-rehabilitation').'"', false)
+        ->assertDontSee('href="'.route('post-operative-rehabilitation').'"', false)
+        ->assertDontSee('data-service-enquiry', false)->assertDontSee('Explore physiotherapy enquiries');
+});

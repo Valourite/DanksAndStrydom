@@ -20,6 +20,12 @@ class Site
     }
 
     /** @return array<string, array<string, mixed>> */
+    public static function services(): array
+    {
+        return array_filter(self::pages(), fn (array $page): bool => str_starts_with($page['path'], '/services/'));
+    }
+
+    /** @return array<string, array<string, mixed>> */
     public static function pages(): array
     {
         return array_filter(config('site.pages'), fn (array $page): bool => $page['published']);

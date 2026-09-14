@@ -1,5 +1,5 @@
 <x-layouts.app :title="$page['title']" :description="$page['description']" :canonical="\App\Support\Site::url($page['path'])">
-    <section class="pb-16 pt-36 sm:pt-44">
+    <section @class(['pt-36 sm:pt-44', 'pb-8' => request()->routeIs('services'), 'pb-16' => ! request()->routeIs('services')])>
         <div class="mx-auto max-w-6xl px-5 sm:px-8">
             <a href="{{ route('home') }}" class="text-sm text-sea-700 underline">Home</a>
             <h1 class="mt-8 max-w-3xl font-display text-4xl leading-tight text-pine-950 sm:text-6xl">{{ $page['heading'] }}</h1>
@@ -10,6 +10,8 @@
             </div>
         </div>
     </section>
+    @if (request()->routeIs('services')) @include('sections.services') @endif
+    @if ($page['sections'] !== [])
     <div class="mx-auto grid max-w-6xl gap-8 px-5 pb-16 sm:px-8 md:grid-cols-2">
         @foreach ($page['sections'] as $heading => $body)
             <section class="rounded-3xl border border-pine-900/10 bg-white p-8">
@@ -18,6 +20,7 @@
             </section>
         @endforeach
     </div>
+    @endif
     <nav aria-label="Related information" class="mx-auto flex max-w-6xl flex-wrap gap-6 px-5 pb-12 sm:px-8">
         @foreach (\App\Support\Site::pages() as $name => $related)
             @if (! request()->routeIs($name))
@@ -25,7 +28,6 @@
             @endif
         @endforeach
     </nav>
-    @if (request()->routeIs('services')) @include('sections.services') @endif
     @if (request()->routeIs('contact'))
         @include('sections.location')
         @include('sections.contact')

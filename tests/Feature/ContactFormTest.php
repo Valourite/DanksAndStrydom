@@ -107,3 +107,23 @@ it('does not resend an accepted request from an older component snapshot', funct
     $form->call('submit')->assertSet('sent', true)->assertNotDispatched('enquiry-accepted');
     Mail::assertNothingSent();
 });
+
+it('keeps success and deduplication when accepted-submission bookkeeping throws', function () {
+    Mail::fake();
+    Log::spy();
+    config(['contact.recipients' => ['qa@example.test']]);
+    $form = Livewire::test('contact-form')->set('name', 'Jane Doe')->set('email', 'jane@example.test')
+        ->set('message', 'Please contact me about an appointment.');
+    $cache = Mockery::mock(Cache::getFacadeRoot())->makePartial();
+    Cache::swap($cache);
+    $cache->shouldReceive('put')->with('enquiry-sent:'.$form->get('submissionId'), true, Mockery::any())
+        ->once()->andThrow(new RuntimeException('private@example.test clinical details'));
+
+    $form->call('submit')->assertHasNoErrors()->assertSet('sent', true)->assertSet('name', '')
+        ->assertSet('email', '')->assertSet('message', '')->assertDispatched('enquiry-accepted')
+        ->assertDontSee('Something went wrong sending your message');
+    $form->call('submit')->assertHasNoErrors()->assertNotDispatched('enquiry-accepted');
+    Mail::assertSentCount(1);
+    Log::shouldHaveReceived('warning')->once()->with('Contact form accepted-submission bookkeeping failed.', ['exception_type' => RuntimeException::class]);
+    Log::shouldNotHaveReceived('error');
+});
