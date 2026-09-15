@@ -10,9 +10,9 @@
 @endphp
 
 <section id="testimonials" class="relative overflow-hidden py-24 sm:py-28 lg:py-36">
-    <div class="absolute inset-0 -z-20 bg-linear-to-b from-bone-50 via-bone-100 to-bone-50"></div>
+    <div class="absolute inset-0 -z-20 bg-linear-to-b from-surface-50 via-surface-100 to-surface-50"></div>
     <div data-parallax="0.08"
-        class="pointer-events-none absolute -left-32 top-24 -z-10 h-96 w-96 rounded-full bg-sea-100/60 blur-3xl will-change-transform">
+        class="pointer-events-none absolute -left-32 top-24 -z-10 h-96 w-96 rounded-full bg-accent-100/60 blur-3xl will-change-transform">
     </div>
 
     <div class="mx-auto max-w-6xl px-5 sm:px-8">
@@ -52,7 +52,7 @@
                 </x-site.testimonial-card>
 
                 {{-- Closing CTA tile --}}
-                <div class="reveal grain relative flex flex-col overflow-hidden rounded-3xl bg-pine-950 text-bone-50 sm:flex-1 lg:flex-none hover:-translate-y-1 hover:shadow-[0_24px_50px_-26px_rgba(10,31,27,0.35)]"
+                <div class="reveal grain relative flex flex-col overflow-hidden rounded-3xl bg-navy text-white sm:flex-1 lg:flex-none hover:-translate-y-1 hover:shadow-[0_24px_50px_-26px_rgba(var(--shadow-ink),0.35)]"
                     style="--reveal-delay: 300ms">
                     <div class="relative h-44 overflow-hidden sm:h-48 lg:h-40">
                         <img
@@ -63,18 +63,18 @@
                             loading="lazy"
                             class="h-full w-full object-cover object-center"
                         >
-                        <div class="absolute inset-0 bg-linear-to-t from-pine-950 via-pine-950/15 to-transparent"></div>
+                        <div class="absolute inset-0 bg-linear-to-t from-navy via-navy/15 to-transparent"></div>
                     </div>
                     <div class="relative -mt-4 flex flex-1 flex-col justify-center p-8 pt-6">
-                        <div class="pointer-events-none absolute -right-12 top-0 h-40 w-40 rounded-full bg-sea-500/20 blur-2xl"></div>
+                        <div class="pointer-events-none absolute -right-12 top-0 h-40 w-40 rounded-full bg-accent-500/20 blur-2xl"></div>
                         <p class="relative font-display text-[1.45rem] font-medium leading-snug">
-                            Your story could be <em class="text-sea-300">next.</em>
+                            Your story could be <em class="text-accent-300">next.</em>
                         </p>
-                        <p class="relative mt-3 text-sm leading-relaxed text-pine-300">
+                        <p class="relative mt-3 text-sm leading-relaxed text-ink-300">
                             Patients consistently tell us they feel heard, supported, and confident in their recovery.
                         </p>
                         <a href="#contact"
-                            class="group relative mt-6 inline-flex w-fit items-center gap-2 text-sm font-semibold text-sea-300 transition-colors hover:text-bone-50">
+                            class="group relative mt-6 inline-flex w-fit items-center gap-2 text-sm font-semibold text-accent-300 transition-colors hover:text-white">
                             Book an appointment
                             <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"

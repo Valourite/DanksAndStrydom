@@ -7,47 +7,46 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
     --font-display: 'Fraunces', ui-serif, Georgia, Cambria, 'Times New Roman', serif;
 
-    /* ------------------------------------------------------------------
-       Danks & Strydom palette — editorial spa-clinical
-       ------------------------------------------------------------------ */
+    /* Danks & Strydom — blue brand, cool surfaces and readable ink. */
+    --color-brand: #174780;
+    --color-brand-hover: #123A69;
+    --color-navy: #102B4E;
+    --color-link: #006D88;
+    --color-accent: #009BC2;
+    --color-card: #FFFFFF;
 
-    /* Bone — warm ivory surfaces */
-    --color-bone-50:  #fbfaf7;
-    --color-bone-100: #f6f3ec;
-    --color-bone-200: #ece7db;
-    --color-bone-300: #ddd5c2;
+    --color-surface-50: #FAFCFE;
+    --color-surface-100: #EDF5FA;
+    --color-surface-200: #DCEBF5;
+    --color-surface-300: #C4D9E8;
 
-    /* Pine — deep blue-green ink, dark sections */
-    --color-pine-50:  #f1f6f4;
-    --color-pine-100: #dce8e4;
-    --color-pine-200: #bad1ca;
-    --color-pine-300: #8fb3a9;
-    --color-pine-400: #659186;
-    --color-pine-500: #4b766c;
-    --color-pine-600: #3a5e56;
-    --color-pine-700: #314d47;
-    --color-pine-800: #25403a;
-    --color-pine-900: #16302b;
-    --color-pine-950: #0a1f1b;
+    --color-ink-50: #F1F7FB;
+    --color-ink-100: #DFECF5;
+    --color-ink-200: #C3D8E8;
+    --color-ink-300: #A6C3D9;
+    --color-ink-400: #91AEC5;
+    --color-ink-500: #4C6478;
+    --color-ink-600: #4C6478;
+    --color-ink-700: #354F68;
+    --color-ink-800: #243E58;
+    --color-ink-900: #172C42;
 
-    /* Sea — soft sea-green accent */
-    --color-sea-50:  #effaf6;
-    --color-sea-100: #d8f2e7;
-    --color-sea-200: #b3e4d2;
-    --color-sea-300: #82cfb7;
-    --color-sea-400: #50b298;
-    --color-sea-500: #2f967e;
-    --color-sea-600: #217866;
-    --color-sea-700: #1c6054;
-    --color-sea-800: #194d44;
-    --color-sea-900: #16403a;
+    /* Light cyan for text on navy; darker shades for text on light surfaces. */
+    --color-accent-50: #EFFAFF;
+    --color-accent-100: #DCF3FA;
+    --color-accent-200: #B9E7F3;
+    --color-accent-300: #8BD9ED;
+    --color-accent-400: #5CCAE4;
+    --color-accent-500: #009BC2;
+    --color-accent-600: #006D88;
+    --color-accent-700: #006D88;
+    --color-accent-800: #075870;
+    --color-accent-900: #12385A;
 
-    /* Sand — warm accent, used sparingly */
-    --color-sand-100: #f3ead8;
-    --color-sand-200: #e9dbbd;
-    --color-sand-300: #dcc69a;
-    --color-sand-400: #c9ab74;
-    --color-sand-500: #b18f53;
+    /* Semantic confirmation colours remain independent of the brand. */
+    --color-success-surface: #D8F2E7;
+    --color-success-ink: #1C6054;
+    --shadow-ink: 16, 43, 78;
 
     /* Custom animations */
     --animate-drift: drift 11s ease-in-out infinite;
@@ -77,8 +76,8 @@ html {
 }
 
 body {
-    background-color: var(--color-bone-50);
-    color: var(--color-pine-900);
+    background-color: var(--color-surface-50);
+    color: var(--color-ink-900);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     overflow-x: hidden;
@@ -90,20 +89,19 @@ body {
     letter-spacing: -0.015em;
 }
 
-/* ---- Scroll reveal (driven by app.js IntersectionObserver) ----
-   Hidden state only applies once JS has tagged <html class="js">,
-   so content stays visible if JavaScript never loads. */
-html.js .reveal {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
-    transition-delay: var(--reveal-delay, 0ms);
-    will-change: opacity, transform;
+/* Original 30px / 850ms entrance, triggered only after intersection.
+   No hidden waiting state: failed or absent JS leaves all content readable.
+   No forwards fill: completed entrances do not override card hover transforms. */
+@keyframes reveal-enter {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
 }
-html.js .reveal.is-visible {
-    opacity: 1;
-    transform: none;
+@media (prefers-reduced-motion: no-preference) {
+    .reveal.is-visible {
+        animation: reveal-enter 0.85s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+        animation-delay: var(--reveal-delay, 0ms);
+    }
+    .reveal:focus-within { animation: none; }
 }
 
 /* ---- Desktop image carousel ---- */
@@ -146,13 +144,13 @@ html.js .reveal.is-visible {
 /* Soft scrollbar (desktop) */
 @media (min-width: 768px) {
     ::-webkit-scrollbar { width: 10px; }
-    ::-webkit-scrollbar-track { background: var(--color-bone-100); }
+    ::-webkit-scrollbar-track { background: var(--color-surface-100); }
     ::-webkit-scrollbar-thumb {
-        background: var(--color-pine-200);
+        background: var(--color-ink-200);
         border-radius: 9999px;
-        border: 2px solid var(--color-bone-100);
+        border: 2px solid var(--color-surface-100);
     }
-    ::-webkit-scrollbar-thumb:hover { background: var(--color-pine-300); }
+    ::-webkit-scrollbar-thumb:hover { background: var(--color-ink-300); }
 }
 
 /* Respect reduced motion */
@@ -164,4 +162,13 @@ html.js .reveal.is-visible {
         scroll-behavior: auto !important;
     }
     html.js .reveal { opacity: 1; transform: none; }
+}
+
+/* Two contrasting edges keep keyboard focus visible on light and navy surfaces. */
+@layer base {
+    :where(a, button, input, textarea, select, [tabindex]):focus-visible {
+        outline: 2px solid var(--color-link);
+        outline-offset: 2px;
+        box-shadow: 0 0 0 2px var(--color-card);
+    }
 }

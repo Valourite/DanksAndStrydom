@@ -1,5 +1,6 @@
 @props([
     'title' => '',
+    'href' => '',
     'icon' => 'pulse',
     'index' => null,
 ])
@@ -20,33 +21,33 @@
 @endphp
 
 <article {{ $attributes->class([
-        'reveal group relative flex h-full flex-col overflow-hidden rounded-3xl border border-pine-900/8 bg-white p-7 transition-all duration-500',
-        'hover:-translate-y-1 hover:border-pine-950 hover:bg-pine-950 hover:shadow-[0_28px_60px_-28px_rgba(10,31,27,0.55)]',
+        'reveal group relative flex h-full flex-col overflow-hidden rounded-3xl border border-ink-900/8 bg-card p-7 transition-all duration-500',
+        'hover:-translate-y-1 hover:border-navy hover:bg-navy hover:shadow-[0_28px_60px_-28px_rgba(var(--shadow-ink),0.55)]',
     ]) }}>
 
     <div class="flex items-start justify-between">
-        <span class="flex h-12 w-12 items-center justify-center rounded-full border border-pine-900/10 text-pine-800 transition-all duration-500 group-hover:border-sea-400/40 group-hover:text-sea-300">
+        <span class="flex h-12 w-12 items-center justify-center rounded-full border border-ink-900/10 text-accent transition-all duration-500 group-hover:border-accent-400/40 group-hover:text-accent-300">
             <svg class="h-5.5 w-5.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 {!! $path !!}
             </svg>
         </span>
         @if ($index !== null)
-            <span class="font-display text-sm italic text-pine-300 transition-colors duration-500 group-hover:text-sea-400/70">
+            <span class="font-display text-sm italic text-link transition-colors duration-500 group-hover:text-accent-400/70">
                 {{ str_pad($index, 2, '0', STR_PAD_LEFT) }}
             </span>
         @endif
     </div>
 
-    <h3 class="mt-7 font-display text-[1.15rem] font-medium leading-snug tracking-tight text-pine-950 transition-colors duration-500 group-hover:text-bone-50">
+    <h3 class="mt-7 font-display text-[1.15rem] font-medium leading-snug tracking-tight text-ink-900 transition-colors duration-500 group-hover:text-white">
         {{ $title }}
     </h3>
 
-    <p class="mt-2.5 flex-1 text-sm leading-relaxed text-pine-600 transition-colors duration-500 group-hover:text-pine-200">
+    <p class="mt-2.5 flex-1 text-sm leading-relaxed text-ink-600 transition-colors duration-500 group-hover:text-ink-200">
         {{ $slot }}
     </p>
 
-    <span class="mt-6 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-sea-700 opacity-0 transition-all duration-500 group-hover:text-sea-300 group-hover:opacity-100">
-        Enquire
+    <a href="{{ $href }}" class="mt-6 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-accent-700 transition-all duration-500 group-hover:text-accent-300 group-hover:opacity-100">
+        Learn more about {{ $title }}
         <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-    </span>
+    </a>
 </article>
