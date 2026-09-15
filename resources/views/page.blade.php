@@ -27,7 +27,7 @@
                     <x-site.phone />
                 </div>
             </div>
-            <div class="reveal relative mx-auto w-full max-w-sm lg:max-w-none">
+            <div class="reveal relative mx-auto w-full max-w-sm lg:max-w-none" style="--reveal-delay: 150ms">
                 <div class="absolute -right-6 top-10 hidden h-72 w-52 rounded-t-full bg-surface-200/80 sm:block" aria-hidden="true"></div>
                 <figure class="grain relative overflow-hidden rounded-t-full rounded-b-[2.5rem] bg-navy shadow-[0_40px_80px_-40px_rgba(var(--shadow-ink),0.7)]">
                     <div class="relative h-72 overflow-hidden sm:h-80 lg:h-88">
@@ -46,7 +46,7 @@
                 <p class="text-xs font-semibold uppercase tracking-[0.24em] text-accent-300">Your physiotherapists</p>
                 <div class="mt-10 grid gap-12 md:grid-cols-2 md:gap-20">
                     @foreach ($page['practitioners'] as $practitioner)
-                        <section data-practitioner class="border-t border-surface-50/20 pt-8">
+                        <section data-practitioner class="reveal border-t border-surface-50/20 pt-8">
                             <h2 class="font-display text-3xl font-medium sm:text-4xl">{{ $practitioner['name'] }}</h2>
                             <p class="mt-4 text-sm font-semibold text-accent-300">{{ $practitioner['title'] }}</p>
                             <p class="mt-6 max-w-md text-base leading-relaxed text-ink-200">{{ $practitioner['biography'] }}</p>
@@ -75,14 +75,14 @@
         <section class="relative py-20 sm:py-28">
             <div class="mx-auto grid max-w-6xl gap-12 px-5 sm:px-8 lg:grid-cols-[0.65fr_1.35fr] lg:gap-20">
                 <div class="lg:sticky lg:top-32 lg:self-start">
-                    <x-site.section-heading eyebrow="{{ $isService ? 'Your care' : 'Good to know' }}" align="left" title="{{ $isService ? 'Your appointment, step by step' : 'Information for your visit' }}" />
-                    @if ($isService && isset(\App\Support\Site::pages()['patient-information']))
+                    <x-site.section-heading eyebrow="{{ $isService ? 'Your care' : 'Good to know' }}" align="left" title="{{ $isService ? 'Care with your goals in mind' : 'Information for your visit' }}" />
+                    @if (($isService || request()->routeIs('contact')) && isset(\App\Support\Site::pages()['patient-information']))
                         <a href="{{ route('patient-information') }}" class="mt-8 inline-flex text-sm font-semibold text-accent-700 underline underline-offset-4">Fees, bookings and patient information</a>
                     @endif
                 </div>
                 <div class="divide-y divide-ink-900/10 border-y border-ink-900/10">
                     @foreach ($sections as $heading => $body)
-                        <section class="flex gap-5 py-8 sm:gap-8 sm:py-10">
+                        <section class="reveal flex gap-5 py-8 sm:gap-8 sm:py-10">
                             <span aria-hidden="true" class="mt-1 font-display text-sm italic text-accent-600">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
                             <div class="min-w-0">
                                 <h2 class="font-display text-2xl font-medium tracking-tight text-ink-900">{{ $heading }}</h2>

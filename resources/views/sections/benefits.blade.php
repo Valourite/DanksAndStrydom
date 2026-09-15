@@ -1,12 +1,12 @@
 {{-- ============================ WHY CHOOSE US ============================ --}}
 @php
     $benefits = [
-        ['title' => 'Two physiotherapists', 'body' => 'Elize Strydom and Cheryl Myburgh both hold degrees in physiotherapy.'],
-        ['title' => 'One-hour appointments', 'body' => 'Appointments are one hour. Contact the practice to discuss availability.'],
+        ['title' => 'Time for your first visit', 'body' => 'Appointments are one hour, with time to explain what has brought you in.'],
+        ['title' => 'A little background', 'body' => 'New patients complete a patient-information form before the assessment.'],
+        ['title' => 'Your priorities', 'body' => 'Tell your physiotherapist which movements or activities you want help with.'],
         ['title' => 'Assessment first', 'body' => 'Your physiotherapist assesses you before providing appropriate treatment.'],
-        ['title' => 'A simple first step', 'body' => 'New patients complete a patient-information form. Patients are not expected to bring anything.'],
-        ['title' => 'Parking at the practice', 'body' => 'Parking and covered parking are available.'],
-        ['title' => 'Access to the rooms', 'body' => 'The building has ramp access and an elevator.'],
+        ['title' => 'Understanding the next step', 'body' => 'Ask questions about the findings and the care proposed for you.'],
+        ['title' => 'Planning any follow-up', 'body' => 'Your physiotherapist will explain whether another appointment is needed and when to return.'],
     ];
 @endphp
 
@@ -25,7 +25,7 @@
                 Your visit
             </p>
             <h2 class="mt-6 font-display text-4xl font-medium leading-tight tracking-tight sm:text-5xl">Your appointment,<br><em class="text-accent-300">step by step.</em></h2>
-            <p class="mt-6 max-w-sm text-base leading-relaxed text-ink-300">A few practical details to help you plan your visit to Danks &amp; Strydom.</p>
+            <p class="mt-6 max-w-sm text-base leading-relaxed text-ink-300">A first visit is a chance to understand the problem and begin care. Booking, payment and preparation details are collected on our patient-information page.</p>
 
             <figure class="mt-10 overflow-hidden rounded-3xl border border-surface-50/10 bg-surface-50/5 shadow-[0_30px_60px_-40px_rgba(var(--shadow-ink),0.8)]">
                 <div class="relative aspect-4/3 overflow-hidden sm:aspect-16/10 lg:aspect-4/3">

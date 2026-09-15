@@ -1,4 +1,4 @@
-<x-layouts.app title="Physiotherapist in Kempton Park" description="Contact Danks &amp; Strydom Physiotherapy in Glen Marais, Kempton Park to discuss your needs and request an appointment.">
+<x-layouts.app title="Physiotherapist in Kempton Park" description="Physiotherapy for pain, movement and rehabilitation in Glen Marais, Kempton Park. Meet Danks &amp; Strydom and explore eight services.">
     @include('sections.hero')
     @include('sections.services')
     @include('sections.about')

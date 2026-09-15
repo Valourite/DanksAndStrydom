@@ -2,6 +2,12 @@
 
 Adds an eight-service patient journey with consistent metadata, canonical URLs, clinic structured data, sitemap/indexing controls and protected synchronous enquiry delivery. Preserves the restored original layouts, typography, image compositions and current blue palette.
 
+## Animation and content refinement
+
+Verified reference `42880b2` and compared its JS/CSS/Blade. Restored disconnected 30px/850ms scroll entrances and 0/90/180/270ms service-card staggers; applied consistent entrances to internal content. Content stays visible before observation or if JavaScript fails. Existing hover, drift, header and mobile-navigation interactions remain; parallax now responds to reduced-motion and mobile changes. The approved static illustration strip remains unchanged instead of restoring the removed carousel.
+
+Rewrote all eight services around distinct patient questions, assessment focus, care and follow-up. Removed repeated service-page administration in favour of Patient Information, added relevant related links to the original three services, and separated homepage practitioner/first-visit/location/appointment content. Clinical background uses NHS/CSP sources; references and their limits are recorded in SEO-REVIEW.md. Practice-specific facts remain those supplied by the user.
+
 ## Public content and optional information
 
 - All eight service pages, About and Patient Information are published in configuration; Contact’s booking information is now normal public content. Home and the hub expose eight ordered crawlable cards, and indexable production discovery contains all 13 URLs.
@@ -18,7 +24,9 @@ The original design was restored from Git reference `42880b2`; backup branch `ba
 
 ## Validation
 
-95 PHP tests / 950 assertions and 2 JavaScript tests pass. Pint, PHPStan (serial debug mode), production asset build, shell syntax and diff checks pass. Tests cover anonymous HTTP/HTTPS local/staging access across every page, noindex/robots/empty sitemap even with indexing enabled, production metadata/sitemap/card destinations, unpublished-page gating, optional-content omission/escaping and deployment-token rejection. Existing synchronous-mail failure, successful-send/cache-failure, replay and preflight tests pass using fake/mocked mail. Browser verification opened staging anonymously and inspected About profiles at 390px and 1440px, plus mobile Patient Information: no overflow or missing-information notices. Design and colours are unchanged; production assets rebuilt. No merge or deployment.
+95 PHP tests / 953 assertions and 4 JavaScript tests pass, plus Pint, PHPStan, production asset build, shell syntax and diff checks. Browser scrolled all 13 pages at 390px and 1440px: no overflow, one H1 each, eligible reveals triggered. Verified card hover/lift, header/parallax, service navigation and mobile toggle/Escape/focus/link-close. With scripts blocked in the temporary loopback QA transport, all pages remained readable at both widths. Assets rebuilt; fake/mocked mail only.
+
+Reduced-motion and missing/throwing observer paths have automated coverage, with reduced-motion CSS retained. The browser tool cannot emulate OS motion preference, so an actual reduced-motion browser session remains a manual verification limitation. The Livewire form still requires JavaScript; no-JS checks cover content and links. No hosted staging/production testing, merge or deployment.
 
 ## Remaining release work
 

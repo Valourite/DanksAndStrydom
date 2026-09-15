@@ -1,3 +1,5 @@
+import { initReveal } from './motion';
+
 /**
  * Danks & Strydom Physiotherapy — front-end interactions.
  *
@@ -9,13 +11,8 @@
  *  - desktop image carousel lightbox
  */
 
-// Tag the document so CSS can gate "hidden until revealed" styles
-// behind JS actually being available (no-JS users see everything).
+// Mark JavaScript availability without making content visibility depend on it.
 document.documentElement.classList.add('js');
-
-const prefersReducedMotion = window.matchMedia(
-    '(prefers-reduced-motion: reduce)'
-).matches;
 
 /* ------------------------------------------------------------------ */
 /* Sticky header state                                                 */
@@ -86,8 +83,8 @@ function initMobileMenu() {
 /* Parallax — translate decorative layers a fraction of scroll         */
 /* ------------------------------------------------------------------ */
 function initParallax() {
-    if (prefersReducedMotion) return;
-    if (!window.matchMedia('(min-width: 768px)').matches) return;
+    const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const desktop = window.matchMedia('(min-width: 768px)');
 
     const layers = Array.from(document.querySelectorAll('[data-parallax]'));
     if (layers.length === 0) return;
@@ -97,6 +94,10 @@ function initParallax() {
     const update = () => {
         const scrollY = window.scrollY;
         for (const el of layers) {
+            if (motion.matches || !desktop.matches) {
+                el.style.transform = '';
+                continue;
+            }
             const speed = parseFloat(el.dataset.parallax) || 0.15;
             el.style.transform = `translate3d(0, ${scrollY * speed}px, 0)`;
         }
@@ -111,34 +112,9 @@ function initParallax() {
     };
 
     update();
+    motion.addEventListener('change', update);
+    desktop.addEventListener('change', update);
     window.addEventListener('scroll', onScroll, { passive: true });
-}
-
-/* ------------------------------------------------------------------ */
-/* Scroll reveal                                                       */
-/* ------------------------------------------------------------------ */
-function initReveal() {
-    const items = document.querySelectorAll('.reveal');
-    if (items.length === 0) return;
-
-    if (prefersReducedMotion || !('IntersectionObserver' in window)) {
-        items.forEach((el) => el.classList.add('is-visible'));
-        return;
-    }
-
-    const observer = new IntersectionObserver(
-        (entries, obs) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('is-visible');
-                    obs.unobserve(entry.target);
-                }
-            });
-        },
-        { rootMargin: '0px 0px -10% 0px', threshold: 0.12 }
-    );
-
-    items.forEach((el) => observer.observe(el));
 }
 
 /* ------------------------------------------------------------------ */

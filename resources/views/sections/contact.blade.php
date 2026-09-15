@@ -14,7 +14,7 @@
 
             <ul class="mt-10 space-y-0 divide-y divide-ink-900/8 border-y border-ink-900/8">
                 @foreach ([
-                        ['Appointment enquiries', 'Contact the practice to discuss your needs and availability.'],
+                        ['Find a time', 'Let reception know you would like an appointment.'],
                         ['Practice information', 'Ask reception about fees, referral requirements or medical aid.'],
                         ['Your privacy', 'Please avoid including detailed clinical information in your enquiry.'],
                     ] as $i => $item)

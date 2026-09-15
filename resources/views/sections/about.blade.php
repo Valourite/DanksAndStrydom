@@ -27,8 +27,8 @@
 
                     <div class="mt-8 grid grid-cols-2 gap-3">
                         <div class="rounded-2xl border border-surface-50/10 bg-surface-50/5 p-4 text-center backdrop-blur-sm">
-                            <p class="font-display text-2xl font-medium text-white">1 hour</p>
-                            <p class="mt-1 text-[0.68rem] leading-snug text-ink-300">Appointment length</p>
+                            <p class="font-display text-2xl font-medium text-white">Care</p>
+                            <p class="mt-1 text-[0.68rem] leading-snug text-ink-300">For everyday movement</p>
                         </div>
                         <div class="rounded-2xl border border-surface-50/10 bg-surface-50/5 p-4 text-center backdrop-blur-sm">
                             <p class="font-display text-2xl font-medium text-white">2</p>
@@ -47,20 +47,20 @@
 
         {{-- Copy --}}
         <div class="reveal">
-            <x-site.section-heading eyebrow="About the practice" align="left" title="Meet your local physiotherapy practice" />
+            <x-site.section-heading eyebrow="About the practice" align="left" title="Meet the people behind your care" />
 
             <div class="mt-7 space-y-5 text-base leading-relaxed text-ink-600">
-                <p class="border-l-2 border-accent-500/50 pl-5 font-display text-lg italic leading-relaxed text-ink-800">Elize Strydom and Cheryl Myburgh both hold degrees in physiotherapy.</p>
-                <p>Both physiotherapists provide back and neck pain physiotherapy, sports injury rehabilitation and post-operative rehabilitation.</p>
-                <p>Find Danks &amp; Strydom at Surgiklin Studios in Glen Eagle Office Park, Glen Marais, Kempton Park. Contact the practice to discuss your needs and arrange an assessment.</p>
+                <p class="border-l-2 border-accent-500/50 pl-5 font-display text-lg italic leading-relaxed text-ink-800">Two physiotherapists, with a focus on human physiotherapy.</p>
+                <p>{{ config('site.pages.about.practitioners.0.biography') }}</p>
+                <p>{{ config('site.pages.about.practitioners.1.biography') }}</p>
             </div>
 
             <ul class="mt-9 grid gap-x-8 gap-y-3.5 sm:grid-cols-2">
                 @foreach ([
-                        'One-hour appointments',
+                        'Human physiotherapy',
                         'Assessment before treatment',
-                        'Nothing to bring',
-                        'Glen Marais, Kempton Park',
+                        'Individual rehabilitation',
+                        'Movement and daily function',
                     ] as $point)
                         <li class="flex items-center gap-3 text-sm font-medium text-ink-800">
                             <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-accent-100 text-accent-700">

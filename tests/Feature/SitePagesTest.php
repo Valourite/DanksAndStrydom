@@ -99,7 +99,12 @@ it('renders confirmed copy on published pages', function () {
     foreach (['back-neck-pain', 'sports-injury-rehabilitation', 'post-operative-rehabilitation', 'patient-information'] as $name) {
         config(["site.pages.$name.published" => true]);
         $this->get(route($name))->assertSuccessful()
-            ->assertSee('Patients are not expected to bring anything')->assertDontSee('Placeholder');
+            ->assertDontSee('Placeholder');
+        if ($name !== 'patient-information') {
+            $this->get(route($name))->assertSee('Fees, bookings and patient information')->assertDontSee('Appointments are one hour');
+        } else {
+            $this->get(route($name))->assertSee('Patients are not expected to bring anything');
+        }
         $this->get('/sitemap.xml')->assertSee(Site::url(config("site.pages.$name.path")));
     }
     $this->get('/about')->assertSee('Elize Strydom')->assertSee('Cheryl Myburgh')

@@ -4,8 +4,8 @@
     <div class="mx-auto max-w-6xl px-5 sm:px-8">
         @unless (request()->routeIs('services'))
             <div class="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-                <x-site.section-heading eyebrow="What we do" align="left" title="Physiotherapy in Glen Marais">
-                    Back and neck pain physiotherapy, sports injury rehabilitation and post-operative rehabilitation with Elize Strydom and Cheryl Myburgh.
+                <x-site.section-heading eyebrow="What we do" align="left" title="Support for the way you move">
+                    From a painful joint to rehabilitation after surgery, each service has a different focus. Explore all eight to find out how physiotherapy can support your next step.
                 </x-site.section-heading>
                 <a href="{{ route('services') }}" class="reveal inline-flex w-fit shrink-0 items-center gap-2 text-sm font-semibold text-link underline underline-offset-4">Explore our services</a>
             </div>
@@ -13,7 +13,7 @@
         @if ($services !== [])
             <div data-service-cards class="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
                 @foreach ($services as $name => $service)
-                    <x-site.service-card :title="$service['card_title'] ?? $service['heading']" :href="route($name)" :index="$loop->iteration" :icon="$service['service_icon'] ?? 'pulse'">
+                    <x-site.service-card :title="$service['card_title'] ?? $service['heading']" :href="route($name)" :index="$loop->iteration" :icon="$service['service_icon'] ?? 'pulse'" style="--reveal-delay: {{ ($loop->index % 4) * 90 }}ms">
                         {{ $service['card_description'] ?? $service['intro'] }}
                     </x-site.service-card>
                 @endforeach

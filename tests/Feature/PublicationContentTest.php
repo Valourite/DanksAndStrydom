@@ -26,7 +26,7 @@ it('publishes the complete inventory to unauthenticated production visitors and 
             expect($links->item($index)->getAttribute('href'))->toBe(route($name));
         }
     }
-    $this->get('/contact')->assertSee('Walk-ins can be accommodated only')->assertSee('Arranging an appointment');
+    $this->get('/contact')->assertSee('Reception will confirm a date and time with you')->assertSee('Arranging an appointment');
 });
 
 it('hides unknown optional fields and incomplete photos without hiding confirmed practitioner information', function () {

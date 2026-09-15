@@ -1,6 +1,45 @@
 # Local SEO and enquiry implementation review
 
 
+## Animation and content refinement — 15 September 2026
+
+Verified `42880b2` exists as a commit before comparing its JavaScript, CSS and Blade together. The approved blue palette, fonts, page compositions, image assets and seven-section homepage order remain intact.
+
+### Animation findings and changes
+
+- Original reveal CSS used a 30px rise, opacity transition, 850ms duration and the existing easing curve. Current JavaScript still observed `.reveal`, but the SEO CSS forced opacity 1/transform none, disconnecting the effect. Restored the entrance with a finite CSS animation triggered on intersection. Unlike the original hidden waiting state, unobserved content stays visible if JavaScript or IntersectionObserver fails. No forwards fill interferes with completed card hover transforms; keyboard focus cancels an entrance on interactive content.
+- Original services markup supplied 0/90/180/270ms delays per four-card row. Those attributes had been lost; restored them on the eight-card grid. Existing hero and benefits delays remain. Extended the same entrance to internal content rows and practitioner profiles, with the original 150ms image offset on page headers.
+- Original card lift/colour/shadow, link underlines, button interactions, floating drift, parallax and scroll-header/hamburger transitions were still connected and are retained. Parallax now clears when reduced motion is requested or the viewport becomes mobile, including preference changes after load.
+- The original mobile panel used `hidden` toggling, not a sliding panel animation. No invented slide transition added. Navigation keeps the published routes rather than reverting to homepage anchors or testimonials.
+- Original desktop carousel/lightbox markup was intentionally replaced during the approved layout restoration by three static illustrations. It remains static to preserve the approved composition; withheld images/testimonials are not restored. Existing unused carousel support is unchanged. No animation library added.
+
+### Editorial changes
+
+Home now introduces who the practice helps, the eight services, the two practitioners, a first-visit overview, practical questions, the location/map and appointment request. Full address/entrance/parking information is removed from the earlier practical cards and retained in the location section (and standard footer). Practitioner facts come from the editable biographies. Each service has a distinct introduction, four focused sections and a short card description; the three original services now also have two relevant related links. Sports activity demands, spinal discomfort, surgical restrictions, local joint/muscle symptoms, everyday mobility, persistent-pain function, preparation for activity and exercise progression each have a different purpose.
+
+Service pages no longer duplicate appointment duration, forms, fees, referrals or cancellation rules. Their existing Patient Information link provides those details, while appointment actions remain in the header and footer. Contact keeps availability/confirmation information concise and links to Patient Information. No degree titles, equipment, named treatment techniques, outcomes, affiliations or practice policies were invented. No placeholder or approval workflow added.
+
+### Clinical reference notes
+
+Consulted 15 September 2026. These sources inform general explanations of physiotherapy, assessment and rehabilitation; they are **not evidence that this practice offers a particular technique, specialist programme or NHS service**. The eight offerings, practitioner background and practice arrangements come from the user's confirmed information. Copy uses conditional examples of assessment/exercise guidance, not prescriptions or promised outcomes. No UK registration, referral, funding or service-delivery rules are imported.
+
+- [NHS: Physiotherapy](https://www.nhs.uk/tests-and-treatments/physiotherapy/) — symptom/history assessment, relevant movement/strength/balance checks and individual exercise guidance.
+- [CSP: Rehabilitation](https://www.csp.org.uk/conditions/rehabilitation) — goals based on meaningful activity and assessing functional difficulties (search-retrieved text; direct page subsequently returned 403).
+- [NHS: Sprains and strains](https://www.nhs.uk/conditions/sprains-and-strains/) — injury-related movement difficulties and variable recovery; no timelines or self-treatment protocols copied.
+- [NHS: Running injuries](https://www.nhs.uk/live-well/exercise/knee-pain-and-other-running-injuries/) — activity demands and gradual build-up; general context only, no running plan prescribed. Page's listed review date is older, so no numerical recommendations are adopted.
+- [CSP: Treatment for neck pain](https://www.csp.org.uk/conditions/neck-pain/treatment-neck-pain) — activity and exercise in ongoing neck symptoms; no specific manual techniques claimed.
+- [Guy's and St Thomas': Back pain physiotherapy](https://www.guysandstthomas.nhs.uk/health-information/low-back-pain/physiotherapy-and-exercises) — individual activity guidance for back pain.
+- [NHS: Getting back to normal after surgery](https://www.nhs.uk/tests-and-treatments/having-surgery/recovery/) — recovery depends on the operation and surgical instructions.
+- [CSP: Chronic pain](https://www.csp.org.uk/conditions/chronic-pain) — activity, function and individual goals. No specialist multidisciplinary pain programme is represented as available here.
+
+### Actual verification and limits
+
+95 PHP tests / 953 assertions and 4 JavaScript tests pass. Pint, PHPStan (serial debug mode), production build, shell syntax and diff checks pass. Production assets rebuilt. Existing SEO/publication, contact mail/replay/cache-failure and deployment preflight/protection checks remain green. Mail tests use fakes/mocks; no live submissions.
+
+Browser scrolled all 13 public pages at 1440px and 390px: one H1 each and no horizontal overflow. All eligible reveals triggered (mobile deliberately hides the three desktop illustrations). Observed header scroll state, changing parallax transforms and restored grid delays; card hover retained navy colour and -4px lift after the entrance. Checked linked service navigation and mobile open/Escape/focus restoration/link-close. Inspected homepage, service grid and service content layouts. With scripts blocked by a temporary loopback-only CSP response, every page remained readable at both widths, with no opacity-hidden reveals or overflow. That QA transport is outside the repository and adds no public route or setting.
+
+Reduced-motion observer bypass and unavailable/throwing observer fallback are covered by JavaScript tests; CSS disables reveal entrances under reduced motion, and existing global reduced-motion rules remain. **The available browser exposes viewport controls but no motion-preference emulation, so an actual OS/browser reduced-motion session and preference-toggle interaction were not verified.** No-JS verification covers readable content and ordinary links; the existing Livewire enquiry form still needs JavaScript. Hosted staging and production were not accessed. No merge or deployment.
+
 ## Current website access and content — 15 September 2026
 
 All eight service pages, About, Patient Information and Contact are public in every environment. The website Basic Auth middleware, request-attribute bypass and review credentials/configuration have been removed. Deployment-token authentication is unchanged. Local/staging responses remain noindex/nofollow, robots disallows crawling and the sitemap is empty even when indexing flags are accidentally enabled. Staging is accessible to anyone with its URL: noindex is not access protection.
