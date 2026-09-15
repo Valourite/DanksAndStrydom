@@ -8,11 +8,11 @@ dataset('new service pages', [
     'injury-prevention', 'rehabilitation-exercise-programmes',
 ]);
 
-it('keeps each new service private until published and then includes its canonical sitemap entry', function (string $name) {
+it('can unpublish a service without exposing it through preview queries or the sitemap', function (string $name) {
     app()->detectEnvironment(fn () => 'production');
     config(['site.indexable' => true, 'app.url' => 'https://danksandstrydom.co.za', 'site.review_preview' => true]);
     $path = '/services/'.$name;
-    expect(config("site.pages.$name.published"))->toBeFalse();
+    config(["site.pages.$name.published" => false]);
     $this->get($path.'?preview=true')->assertNotFound();
     $this->get('/services')->assertDontSee('href="'.route($name).'"', false);
     $this->get('/sitemap.xml')->assertDontSee('<loc>'.Site::url($path).'</loc>', false);
@@ -56,7 +56,7 @@ it('offers eight ordered crawlable preview cards with matching icons and unique 
 });
 
 it('limits related services to relevant published destinations', function () {
-    config(['site.pages.joint-muscle-pain.published' => true]);
+    config(['site.pages.joint-muscle-pain.published' => true, 'site.pages.mobility-movement-assessment.published' => false, 'site.pages.back-neck-pain.published' => false]);
     $this->get('/services/joint-muscle-pain')->assertOk()->assertDontSee('aria-label="Related services"', false);
     config(['site.pages.mobility-movement-assessment.published' => true]);
     $this->get('/services/joint-muscle-pain')->assertSee('href="'.route('mobility-movement-assessment').'"', false)

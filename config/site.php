@@ -11,7 +11,7 @@ return [
     'pages' => [
         'about' => [
             'path' => '/about',
-            'published' => false,
+            'published' => true,
             'title' => 'About Danks & Strydom',
             'description' => 'Meet Elize Strydom and Cheryl Myburgh at Danks & Strydom Physiotherapy in Glen Marais, Kempton Park.',
             'heading' => 'About Danks & Strydom',
@@ -24,11 +24,31 @@ return [
                     'name' => 'Cheryl Myburgh',
                     'title' => 'Physiotherapist',
                     'biography' => 'Cheryl Myburgh has extensive experience in human and equine physiotherapy. At Danks & Strydom, she provides physiotherapy care for patients attending the practice.',
+                    // Supply exact degree/qualification titles and awarding universities as lists.
+                    // Both physiotherapy degrees and the short biography above are already confirmed.
+                    'qualifications' => [],
+                    'universities' => [],
+                    // Optional longer factual biography; do not replace confirmed wording with filler.
+                    'expanded_biography' => null,
+                    // Supply the languages this practitioner offers consultations in.
+                    'languages' => [],
+                    // Supply an approved portrait's public-relative asset path and descriptive alt text together.
+                    'photo' => ['path' => null, 'alt' => null],
                 ],
                 [
                     'name' => 'Elize Strydom',
                     'title' => 'Physiotherapist',
                     'biography' => 'Elize Strydom practises human physiotherapy at Danks & Strydom, assessing patients and providing treatment based on their individual needs.',
+                    // Supply exact degree/qualification titles and awarding universities as lists.
+                    // Both physiotherapy degrees and the short biography above are already confirmed.
+                    'qualifications' => [],
+                    'universities' => [],
+                    // Optional longer factual biography; do not replace confirmed wording with filler.
+                    'expanded_biography' => null,
+                    // Supply the languages this practitioner offers consultations in.
+                    'languages' => [],
+                    // Supply an approved portrait's public-relative asset path and descriptive alt text together.
+                    'photo' => ['path' => null, 'alt' => null],
                 ],
             ],
         ],
@@ -40,8 +60,6 @@ return [
             'heading' => 'Contact and directions',
             'intro' => 'Request an appointment or ask the practice a question. An enquiry does not confirm an appointment.',
             'sections' => [
-            ],
-            'review_sections' => [
                 'Arranging an appointment' => 'Please arrange an appointment before visiting. Call the practice during opening hours to check availability, including appointments for the same day. You can also request an appointment by email or through our website.',
                 'When your booking is confirmed' => 'Walk-ins can be accommodated only when an appointment slot is available; please speak to reception on arrival. Website and email enquiries are appointment requests. Your appointment is confirmed once the practice agrees a date and time with you.',
             ],
@@ -60,7 +78,7 @@ return [
         ],
         'sports-injury-rehabilitation' => [
             'path' => '/services/sports-injury-rehabilitation',
-            'published' => false,
+            'published' => true,
             'title' => 'Sports Physio in Kempton Park',
             'description' => 'Ask Danks & Strydom in Glen Marais about sports injury rehabilitation and arranging a physiotherapy appointment.',
             'heading' => 'Sports injury rehabilitation',
@@ -76,7 +94,7 @@ return [
         ],
         'back-neck-pain' => [
             'path' => '/services/back-neck-pain',
-            'published' => false,
+            'published' => true,
             'title' => 'Back & Neck Pain Physio in Kempton Park',
             'description' => 'Ask Danks & Strydom in Glen Marais about physiotherapy for back and neck pain and arranging an assessment.',
             'heading' => 'Back and neck pain',
@@ -92,7 +110,7 @@ return [
         ],
         'post-operative-rehabilitation' => [
             'path' => '/services/post-operative-rehabilitation',
-            'published' => false,
+            'published' => true,
             'title' => 'Post-Operative Physio in Kempton Park',
             'description' => 'Enquire about physiotherapy after surgery at Danks & Strydom in Glen Marais, Kempton Park.',
             'heading' => 'Rehabilitation after surgery',
@@ -108,7 +126,7 @@ return [
         ],
         'joint-muscle-pain' => [
             'path' => '/services/joint-muscle-pain',
-            'published' => false,
+            'published' => true,
             'title' => 'Joint & Muscle Pain Physio in Kempton Park',
             'description' => 'Discuss joint discomfort, muscular aches and movement difficulties with Danks & Strydom in Glen Marais, Kempton Park.',
             'heading' => 'Joint & Muscle Pain',
@@ -129,7 +147,7 @@ return [
         ],
         'mobility-movement-assessment' => [
             'path' => '/services/mobility-movement-assessment',
-            'published' => false,
+            'published' => true,
             'title' => 'Movement Assessment in Glen Marais, Kempton Park',
             'description' => 'Enquire about movement limitations and their effect on daily activities at Danks & Strydom Physiotherapy in Glen Marais.',
             'heading' => 'Mobility & Movement Assessment',
@@ -150,7 +168,7 @@ return [
         ],
         'chronic-pain-management' => [
             'path' => '/services/chronic-pain-management',
-            'published' => false,
+            'published' => true,
             'title' => 'Persistent Pain Support in Kempton Park',
             'description' => 'Discuss persistent pain and everyday function with Danks & Strydom in Glen Marais. Enquire about an individual physiotherapy assessment.',
             'heading' => 'Chronic Pain Management',
@@ -171,7 +189,7 @@ return [
         ],
         'injury-prevention' => [
             'path' => '/services/injury-prevention',
-            'published' => false,
+            'published' => true,
             'title' => 'Injury Risk & Movement Assessment in Kempton Park',
             'description' => 'Ask Danks & Strydom in Glen Marais about movement, activity demands and guidance to help reduce injury risk. Prevention is not guaranteed.',
             'heading' => 'Injury Prevention',
@@ -192,7 +210,7 @@ return [
         ],
         'rehabilitation-exercise-programmes' => [
             'path' => '/services/rehabilitation-exercise-programmes',
-            'published' => false,
+            'published' => true,
             'title' => 'Rehabilitation Exercise Guidance in Kempton Park',
             'description' => 'Enquire about individually guided rehabilitation exercise, progression and follow-up at Danks & Strydom in Glen Marais, Kempton Park.',
             'heading' => 'Rehabilitation Exercise Programmes',
@@ -213,11 +231,24 @@ return [
         ],
         'patient-information' => [
             'path' => '/patient-information',
-            'published' => false,
+            'published' => true,
             'title' => 'Patient Information',
             'description' => 'Prepare for your visit to Danks & Strydom Physiotherapy in Glen Marais, Kempton Park. Contact the practice for appointment and payment details.',
             'heading' => 'Before your first appointment',
             'intro' => 'Practical information to help you arrange your appointment and prepare for your visit.',
+            // Optional additions: null bodies stay hidden publicly; preview labels identify missing facts.
+            'optional_sections' => [
+                // Supply current consultation fees and currency, only if amounts should be displayed.
+                'consultation_fees' => ['heading' => 'Current consultation fees', 'body' => null],
+                // Supply when payment is due; cash/card acceptance is already confirmed.
+                'payment_timing' => ['heading' => 'When payment is due', 'body' => null],
+                // Supply who submits claims and whether patients pay first; do not infer scheme coverage.
+                'medical_aid_claims' => ['heading' => 'Submitting medical-aid claims', 'body' => null],
+                // Supply responsibility and next steps if a medical-aid claim is declined.
+                'declined_claims' => ['heading' => 'Declined medical-aid claims', 'body' => null],
+                // Supply a separate missed-appointment policy, if applicable. The 24-hour cancellation policy is confirmed.
+                'missed_appointments' => ['heading' => 'Missed appointments', 'body' => null],
+            ],
             'sections' => [
                 'Arranging an appointment' => 'Please arrange an appointment before visiting. Call the practice during opening hours to check availability, including appointments for the same day. You can also request an appointment by email or through our website.',
                 'When your booking is confirmed' => 'Walk-ins can be accommodated only when an appointment slot is available; please speak to reception on arrival. Website and email enquiries are appointment requests. Your appointment is confirmed once the practice agrees a date and time with you.',

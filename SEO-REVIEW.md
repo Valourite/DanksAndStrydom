@@ -1,19 +1,29 @@
 # Local SEO and enquiry implementation review
 
 
+## Current publication status — 15 September 2026
+
+The user authorised all eight service pages, About and Patient Information for public release and waived Cheryl’s approval step. Contact’s former preview sections are normal public content. The unchanged indexable production sitemap now lists 13 URLs (home plus the 12-page inventory), with eight crawlable service cards on home and the hub. The homepage service count follows the published inventory.
+
+`CONTENT-TODO.md` records exact file/configuration keys, inputs and display destinations for optional practitioner and policy details. Confirmed short biographies remain public. Unknown qualifications, universities, languages, expanded biographies, portraits and policy additions use null/empty values, with explanatory configuration comments. Public views omit incomplete optional content and photos; missing-information labels appear only in authenticated staging body content and never in metadata or structured data. There is no additional content approval gate.
+
+Validation: **91 PHP tests / 657 assertions**, **2 JavaScript tests**, Pint, PHPStan (serial debug mode because the restricted runner could not start its normal worker), production asset build, shell syntax and diff checks passed. Tests verify the default public inventory and ordered card destinations without authentication, production sitemap inclusion and metadata, later unpublication gating, optional-content escaping/omission, incomplete portrait omission, preview-only labels, staging authentication and staging noindex/empty sitemap. Browser checks at 390px and 1440px covered the full public inventory: one H1, no horizontal overflow, eight linked cards on home/services, and no public placeholder labels. Public About profiles were visually checked without portraits; staging rejected unauthenticated browser access. Authenticated placeholder rendering is covered by the feature tests. No merge, deployment, live enquiry or Google-account change.
+
+
+
 ## Blue colour theme
 
 Applies the requested blue palette through central Tailwind theme tokens: deep-blue buttons, navy sections/overlays, soft-white and pale-blue surfaces, readable blue-grey text, darker teal-blue links and decorative cyan. Preserves the existing wordmark, imagery, typography, layout, content, navigation, publication flags and all application/SEO behaviour. Updates shadow colours, gradients, selection, placeholders, hover and keyboard focus; semantic red errors and green success remain separate.
 
 Validation: **87 PHP tests / 483 assertions**, **2 JavaScript tests**, Pint, PHPStan, production asset build, shell syntax and diff checks passed. Built with the bundled supported Node runtime (the system Node 18 is too old for Vite 8). Desktop homepage geometry/fonts matched the pre-theme capture. Browser checks at **390px and 1440px** covered all eight service pages, About, patient information and Contact, with no overflow or broken loaded images. Screenshots inspected homepage, service grid/hover, internal page, dark sections/footer, mobile navigation and form validation/focus. Public service gating remains intact. Success was checked using synthetic input and local log-only mail; no live enquiries.
 
-Contrast ratios: white primary-button text **9.34:1** (hover **11.44:1**), light-background links **5.37:1**, secondary text **5.60:1**, light cyan on navy **8.96:1**, and muted footer text **6.13:1**. Keyboard focus has a dark outline on light surfaces and a white edge for navy surfaces. Existing content approval and release requirements remain unchanged. No merge or deployment.
+Contrast ratios: white primary-button text **9.34:1** (hover **11.44:1**), light-background links **5.37:1**, secondary text **5.60:1**, light cyan on navy **8.96:1**, and muted footer text **6.13:1**. Keyboard focus has a dark outline on light surfaces and a white edge for navy surfaces. Content approval was subsequently waived; operational release requirements remain unchanged. No merge or deployment.
 
 Prepared 14 September 2026 from the supplied Danks & Strydom SEO strategy. This is a review branch, not a deployed release. No Google account, directory, production server or live mailbox was changed.
 
 ## Eight-service inventory update
 
-Five requested offerings now have distinct draft pages for Cheryl’s review:
+Five requested offerings were added as distinct pages:
 
 - `/services/joint-muscle-pain` — joint discomfort, muscular aches and movement difficulties.
 - `/services/mobility-movement-assessment` — limitations in movement and everyday activities.
@@ -21,7 +31,7 @@ Five requested offerings now have distinct draft pages for Cheryl’s review:
 - `/services/injury-prevention` — movement/activity demands and reducing risk, without guaranteed prevention.
 - `/services/rehabilitation-exercise-programmes` — individual exercise guidance, progression and review.
 
-All five remain `published=false`. Existing page URLs, copy and publication flags are preserved. Authenticated staging shows eight linked cards; public rendering exposes only published destinations. The existing empty-services action remains when nothing is published. Production sitemap entries follow publication flags; staging remains noindex with an empty sitemap.
+All eight service pages are now `published=true` following the user’s publication instruction. Public and authenticated preview hubs show eight linked cards. The empty-services fallback remains available if all services are later unpublished. Sitemap entries continue to follow publication flags; staging remains noindex with an empty sitemap.
 
 The supplied screenshot defines the card order/icons: sports/pulse, back-neck/spine, post-operative/recovery, joint/joint, mobility/mobility, chronic/chronic, prevention/shield, exercise/program. The restored card styles use four columns on desktop, two on tablet and one on mobile. Labels/icons live in the inventory; clinical wording was not copied blindly from screenshot captions. Existing typography, colour and image treatments are preserved.
 
@@ -47,7 +57,7 @@ Validation: **80 PHP tests / 378 assertions**, **2 JavaScript tests**, Pint, PHP
 
 ## Current content review — supersedes earlier placeholder versions
 
-The latest user-supplied answers replace earlier conflicting address and policy information. Complete service descriptions, biographies and patient policies are drafted for **Cheryl Myburgh’s final review**, not approved for production publication. Public approval badges and unfinished placeholders have been removed.
+The latest user-supplied answers replace earlier conflicting address and policy information. The user has waived Cheryl’s review and authorised publication of the completed service descriptions, short biographies and patient policies. Optional missing facts remain empty and hidden publicly; there are no public approval badges.
 
 ### Implemented content
 
@@ -67,17 +77,17 @@ The location verification gate remains available and now defaults true for the s
 
 ### Publication and private preview
 
-- `/`, `/services` and `/contact` remain public with confirmed factual content. The services empty state remains useful while detailed pages await approval.
-- `/about`, all three detailed service pages and `/patient-information` are unpublished: production returns 404 and omits their navigation/card/sitemap links. Contact’s proposed booking-policy sections are held in `review_sections` and rendered only for authenticated staging review.
+- `/`, `/services`, `/contact`, `/about`, all eight service pages and `/patient-information` are enabled for public production visitors. The indexable production sitemap contains all 13 URLs.
+- Contact’s booking-policy information is now in normal `sections`. Unknown optional practitioner and policy fields show missing-information labels only in authenticated staging; neither the labels nor optional profile fields enter metadata/schema.
 - Staging review requires `APP_ENV=staging`, `SITE_REVIEW_PREVIEW=true`, a nonempty `SITE_REVIEW_USERNAME` and `SITE_REVIEW_PASSWORD_HASH` (PHP `password_hash` output), and HTTPS. Configure credentials privately; quote the hash in dotenv to preserve its dollar signs. Do not place credentials in query strings or share URLs.
 - Every Laravel request in enabled staging review requires Basic authentication, including Livewire updates. Missing settings or insecure transport fail closed; invalid credentials are rejected and rate-limited. Responses are private/no-store and noindex. Production ignores preview credentials/flags and cannot reveal drafts through them.
 - `Site::pages()` requires both staging configuration and a middleware-authenticated request attribute before including drafts. There is no query-string bypass. Keep staging indexing/canonical flags false and mail on a safe local/log transport.
 - Valourite must provision the actual HTTPS staging host and pass Authorization headers through correctly. Protect static files/server paths too, exclude caches/CDNs from review responses, and never serve repository/configuration files. Only loopback staging-mode QA was run here; no hosted preview was deployed. Its temporary router simulated TLS solely for loopback layout QA; production code still requires HTTPS.
-- After Cheryl approves exact copy, publish the approved pages in a reviewed code change and move approved Contact `review_sections` into `sections`. Approval status stays in internal release records, not patient-facing badges.
+- Cheryl’s approval step is waived by the user. Missing optional content does not block publication; see `CONTENT-TODO.md` for exact keys and public destinations.
 
 ### Genuinely unresolved items
 
-1. **Cheryl Myburgh’s final approval** of clinical descriptions, biographies, booking and cancellation policies. Drafts are complete for review.
+1. **Optional profile and policy details:** exact qualifications, universities, languages, longer biographies, portraits and further payment/medical-aid details are tracked in `CONTENT-TODO.md`. No Cheryl approval is required.
 2. **Exact qualifications:** degree titles/universities remain unknown and are cleanly omitted. Do not infer registrations or McKenzie credentials.
 3. **Medical-aid claim handling:** confirm direct submission and responsibility for rejected claims privately; the website currently directs patients to reception and their scheme.
 4. **Photographs, when available:** obtain approved practitioner photos; the finished text layout works without them.
@@ -116,7 +126,7 @@ Laravel 13.15.0, Livewire 4.3.1, Tailwind 4.3.0 and Vite 8.0.16 remain in place.
 
 - Homepage local metadata/H1, navigation to about/contact/services, existing hero/services/about/benefits/location/contact anchors, reusable page and service-card templates.
 - Per-page metadata, canonical and social URL consistency based on this environment's `APP_URL`. Stable MedicalClinic entity with Physiotherapy as its medical specialty; no reviews, FAQ markup, guessed coordinates or fixed opening hours.
-- Environment-aware robots and sitemap endpoints. Only approved pages appear in production discovery; development/staging are noindex. Unknown and unpublished paths return 404, including with `?preview=true`.
+- Environment-aware robots and sitemap endpoints. Only published pages appear in production discovery; development/staging are noindex. Unknown and unpublished paths return 404, including with `?preview=true`.
 - Synchronous form delivery retained, with validation, honeypot, five attempts per IP per ten minutes, a short-lived atomic submission lock and a 24-hour accepted-ID cache to prevent replay. Error logs omit transport exception messages that could contain patient data. UI distinguishes requests from confirmed appointments.
 - Disabled-by-default analytics adapter emits only generic accepted-enquiry, phone-click and directions-click events. No vendor, tracking ID, page URL, referrer, patient details or clinical selections are transmitted. Acceptance IDs remain in the local adapter for deduplication and are not passed to a provider.
 - Unsupported testimonials, experience/quality counters, referral promises, response-time promises and ambiguous mixed human/equine gallery are omitted. Gallery image assets are retained.
@@ -127,7 +137,7 @@ Laravel 13.15.0, Livewire 4.3.1, Tailwind 4.3.0 and Vite 8.0.16 remain in place.
 
 Before release, Valourite should:
 
-- Record Cheryl’s approval privately and publish only approved copy; keep unapproved pages gated.
+- Confirm the intended published inventory and complete operational release checks. Optional content and Cheryl approval do not block publication.
 - Review effective display/split address, verified map/entrance, phone/email and explicit enquiry recipient configuration against the supplied facts.
 - Verify the existing server environment/cache has `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL=https://danksandstrydom.co.za`, `SITE_INDEXABLE=true`, `SITE_CANONICAL_REDIRECTS=true`, and review preview disabled. Safe staging/local indexing defaults stay false.
 - Use the candidate preflight and cached postflight, backups and host checks described below. No deployment is authorised by this PR update.
@@ -149,7 +159,7 @@ See the accompanying test results, browser-check JSON and screenshots. Tests use
 
 ## Hosting and release instructions (prepared, not applied)
 
-1. Obtain Cheryl’s final content approval and update publication flags in a reviewed change. The preferred non-www HTTPS hostname is confirmed.
+1. The user has authorised the current published inventory and waived Cheryl’s approval. Obtain separate merge/deployment authorisation; the preferred non-www HTTPS hostname is confirmed.
 2. Back up the current code revision, `public_html` (including `.htaccess`, index.php and discovery files), `.env`, database and any uploaded media. Record the old SHA and keep a restoration copy off the public document root. This branch has no database migrations.
 3. Review on a private staging origin with `APP_ENV=staging`, `APP_URL` set to that staging origin, `SITE_INDEXABLE=false`, `SITE_CANONICAL_REDIRECTS=false`, analytics disabled and safe mail. Use server authentication/network controls: robots/noindex are not confidentiality controls.
 4. Use the locked dependencies with PHP compatible with this Laravel 13 lockfile and Node supported by Vite 8 (local build used bundled Node). Run `composer install`, `npm ci`, `npm run build`, `vendor/bin/pint --dirty --format agent`, `vendor/bin/phpstan analyse --memory-limit=512M`, `php artisan test --compact`, `node --test tests/analytics.test.js` and `bash -n deploy.sh`. Confirm tracked `public/build` matches source.
@@ -176,7 +186,7 @@ RewriteRule ^ https://danksandstrydom.co.za%{REQUEST_URI} [R=301,L,NE]
 
 These rules preserve query strings implicitly. Test direct HTTPS, HTTP, www, nested paths, trailing slashes, encoded paths and query strings with `curl -I` and verify one-hop destinations/no loops. Server-specific virtual-host placement should be verified by the host; application tests do not execute Apache.
 
-9. Clear/rebuild config, routes and views after environment changes. Test homepage/about/contact/services, approved draft URLs, robots, sitemap, nonexistent URL 404, map/address agreement, phone link and mobile menu. Check Schema.org Validator and Google's applicable structured-data tools. Perform one explicitly authorised live delivery test and verify reception receipt. No such test was performed here.
+9. Clear/rebuild config, routes and views after environment changes. Test homepage/about/contact/services, all eight service URLs and Patient Information, robots, sitemap, nonexistent URL 404, map/address agreement, phone link and mobile menu. Check Schema.org Validator and Google's applicable structured-data tools. Perform one explicitly authorised live delivery test and verify reception receipt. No such test was performed here.
 10. Analytics setup: after provider/consent approval, connect a reviewed listener to `site:analytics`. Consume only `event.detail.event`; never enrich it with form state, URLs, referrers, query strings or clinical selections. `SITE_ANALYTICS_ENABLED=true` enables local event dispatch only; it does not install GA/GTM or make network requests. Disable automatic form capture/enhanced measurement where it could collect data. Test one accepted enquiry event and contact clicks with the provider's debugger.
 
 ## Rollback

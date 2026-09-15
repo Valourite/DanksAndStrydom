@@ -59,7 +59,7 @@
                     <dd class="mt-1.5 text-[0.7rem] leading-snug text-ink-500">Physiotherapists</dd>
                 </div>
                 <div class="pl-5">
-                    <dt class="font-display text-2xl font-medium text-ink-900 sm:text-3xl">3</dt>
+                    <dt class="font-display text-2xl font-medium text-ink-900 sm:text-3xl">{{ count(\App\Support\Site::services()) }}</dt>
                     <dd class="mt-1.5 text-[0.7rem] leading-snug text-ink-500">Physiotherapy services</dd>
                 </div>
             </dl>

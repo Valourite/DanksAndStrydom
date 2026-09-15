@@ -25,7 +25,7 @@ it('keeps drafts and unknown paths unavailable even with preview query strings',
     $this->get($path.'?preview=true')->assertNotFound();
 })->with(['/services/back-neck-pain', '/services/sports-injury-rehabilitation', '/services/post-operative-rehabilitation', '/patient-information', '/services/mckenzie-assessment', '/serengeti', '/missing']);
 
-it('publishes only approved canonical pages in the production sitemap', function () {
+it('publishes only enabled canonical pages in the production sitemap', function () {
     app()->detectEnvironment(fn () => 'production');
     config(['site.indexable' => true, 'app.url' => 'https://danksandstrydom.co.za']);
     config(['site.pages.back-neck-pain.published' => false, 'site.pages.patient-information.published' => false]);
@@ -64,7 +64,7 @@ it('does not send staging or development to production or trust arbitrary hosts'
         ->assertSee('<link rel="canonical" href="https://danksandstrydom.co.za/contact">', false);
 });
 
-it('publishes a service link and sitemap entry only after explicit approval', function () {
+it('publishes an enabled service link and sitemap entry', function () {
     config(['site.pages.back-neck-pain.published' => true, 'site.indexable' => true]);
     app()->detectEnvironment(fn () => 'production');
     $this->get('/services/back-neck-pain')->assertSuccessful()->assertSee('Back and neck pain');
@@ -73,7 +73,7 @@ it('publishes a service link and sitemap entry only after explicit approval', fu
 });
 
 it('provides a direct enquiry without an empty service grid or explore self-link', function () {
-    foreach (['back-neck-pain', 'sports-injury-rehabilitation', 'post-operative-rehabilitation'] as $name) {
+    foreach (array_keys(Site::services()) as $name) {
         config(["site.pages.$name.published" => false]);
     }
     foreach (['/', '/services'] as $path) {
@@ -92,7 +92,7 @@ it('automatically shows only published services without an explore self-link', f
         ->assertDontSee('data-service-enquiry', false)->assertDontSee('Explore physiotherapy enquiries');
 });
 
-it('renders complete review copy when its pages are explicitly approved', function () {
+it('renders confirmed copy on published pages', function () {
     app()->detectEnvironment(fn () => 'production');
     config(['site.indexable' => true]);
     config(['site.pages.about.published' => true]);

@@ -1,48 +1,27 @@
-# Restore the original visual design with local SEO and reviewed content safeguards
+# Local SEO, eight public services and preserved blue website design
 
+Adds an eight-service patient journey with consistent metadata, canonical URLs, clinic structured data, sitemap/indexing controls and protected synchronous enquiry delivery. Preserves the restored original layouts, typography, image compositions and current blue palette.
 
-## Blue colour theme
+## Public content and optional information
 
-Applies the requested blue palette through central Tailwind theme tokens: deep-blue buttons, navy sections/overlays, soft-white and pale-blue surfaces, readable blue-grey text, darker teal-blue links and decorative cyan. Preserves the existing wordmark, imagery, typography, layout, content, navigation, publication flags and all application/SEO behaviour. Updates shadow colours, gradients, selection, placeholders, hover and keyboard focus; semantic red errors and green success remain separate.
+- All eight service pages, About and Patient Information are published in configuration; Contact’s booking information is now normal public content. Home and the hub expose eight ordered crawlable cards, and indexable production discovery contains all 13 URLs.
+- The user waived Cheryl’s content approval step. Missing optional facts do not prevent publication. No live site changes occur until a separately authorised merge/deployment.
+- Existing names, titles, physiotherapy-degree statements and short biographies remain public. Exact qualifications, universities, languages, longer biographies and approved portraits have empty/null fields with supply instructions in `config/site.php`.
+- Additional optional fee/payment/medical-aid/missed-appointment facts are similarly stored without invented policies. `CONTENT-TODO.md` lists every key, what to supply, its eventual location, confirmed facts and external release tasks.
+- Public pages hide incomplete optional fields and portraits cleanly. Clearly labelled missing-information notes appear only in authenticated staging and never enter metadata or structured data.
 
-Validation: **87 PHP tests / 483 assertions**, **2 JavaScript tests**, Pint, PHPStan, production asset build, shell syntax and diff checks passed. Built with the bundled supported Node runtime (the system Node 18 is too old for Vite 8). Desktop homepage geometry/fonts matched the pre-theme capture. Browser checks at **390px and 1440px** covered all eight service pages, About, patient information and Contact, with no overflow or broken loaded images. Screenshots inspected homepage, service grid/hover, internal page, dark sections/footer, mobile navigation and form validation/focus. Public service gating remains intact. Success was checked using synthetic input and local log-only mail; no live enquiries.
+## Preserved safeguards
 
-Contrast ratios: white primary-button text **9.34:1** (hover **11.44:1**), light-background links **5.37:1**, secondary text **5.60:1**, light cyan on navy **8.96:1**, and muted footer text **6.13:1**. Keyboard focus has a dark outline on light surfaces and a white edge for navy surfaces. Existing content approval and release requirements remain unchanged. No merge or deployment.
+HTTPS Basic-auth staging preview remains private/no-store and noindex, including its empty sitemap. Production ignores preview flags and credentials. Publication gating remains available if a page is disabled later. The verified location gate, canonical configuration, synchronous mail, replay protection, generic analytics deduplication and production deployment preflight remain intact.
 
-Adds linked pages, consistent metadata/MedicalClinic identity, safe indexing controls and a safer synchronous enquiry journey while preserving Laravel/Livewire and the design. Existing deployment preflight and mail/cache fixes remain intact.
-
-## Eight-service hub and five new drafts
-
-Adds `/services/joint-muscle-pain`, `/services/mobility-movement-assessment`, `/services/chronic-pain-management`, `/services/injury-prevention` and `/services/rehabilitation-exercise-programmes` with distinct patient-friendly assessment, guidance, follow-up and enquiry copy for Cheryl’s review. Existing URLs and publication statuses remain unchanged.
-
-Matches the supplied eight-card screenshot order and icons in the restored four-column desktop grid. All eight preview cards link to accessible draft pages; public links and sitemap entries include published pages only. Each new page has distinct metadata and at most two relevant, gated related services. Main navigation and shared booking/policy content remain concise.
-
-Latest validation: **87 PHP tests / 483 assertions**, **2 JS tests**, Pint, PHPStan, production build, shell syntax and diff checks pass. At 390px and 1440px, all eight card destinations and five new pages passed checks for headings, layout overflow, loaded images and relevant links. Assets rebuilt. All five new pages remain unpublished pending approval; no deployment.
-
-## Original layout restoration
-
-Preserves the SEO branch and creates `backup/seo-before-layout-restoration-2026-09-14` at `739e4da`. Inspected pre-SEO commit `42880b2` and restored its hero/floating cards, arched About composition, dark numbered section, staggered cards, split map panel and contact layout. Original colours and typography are retained; no blue rebranding.
-
-Confirmed facts replace unsupported counters and testimonials. The mixed human/equine gallery remains withheld; an existing illustration strip preserves its visual role. Internal pages now use matching arches, split introductions and numbered content layouts. Repetitive unrelated link lists are removed. Routes, metadata, canonical/schema/discovery logic, authentication, enquiry protections and deployment checks remain intact.
-
-Original screenshot attachments were unavailable; visual comparison used local renders of the Git reference. Browser checks at 390px/1440px covered the homepage and seven internal pages, including gated service cards, one H1, no overflow/broken loaded images, mobile menu and public services fallback. Existing 80 PHP tests / 378 assertions and 2 JS tests pass; formatting, static analysis, production build, shell syntax and diff checks pass. Rebuilt assets included.
-
-## Latest content and review changes
-
-- Applies the user's final Suite 102 / Surgiklin Studios / Glen Eagle Office Park address consistently, with supplied entrance, parking/access and hours. Retains the confirmed phone and email. Inspects the supplied Google Maps pin and uses its actual Share → Embed a map source; directions use the approved short link. No guessed pin or Monument Road map.
-- Completes three service descriptions, patient preparation, booking/confirmation, follow-up, referral, payment, interim medical-aid and conditional cancellation wording. No treatment/outcome guarantees or invented claim handling.
-- Replaces practitioner placeholders with finished text-only profiles and the supplied biographies. Uses Physiotherapist and only the confirmed generic degree information; no stock portraits or fabricated qualifications.
-- Holds About, service detail and patient-information pages unpublished pending Cheryl Myburgh's final approval. Contact booking policies render only in review. Production drafts return 404 and are excluded from navigation/sitemaps; services retain the useful empty state.
-- Adds HTTPS-only, password-protected staging review with hashed credentials, failed-attempt throttling, no-store/noindex responses and a request-scoped draft gate. Production cannot enable draft access through preview flags, credentials or query strings. No hosted staging deployment occurred.
+The original design was restored from Git reference `42880b2`; backup branch `backup/seo-before-layout-restoration-2026-09-14` preserves the earlier SEO work. The central blue theme retains accessible text and focus states. Unsupported testimonials, credentials and unconfirmed promotional claims were not restored.
 
 ## Validation
 
-80 PHP tests / 378 assertions and 2 JavaScript tests passed. Pint, PHPStan (512 MB), production build, shell syntax and diff checks passed; committed assets rebuilt. Authenticated loopback staging browser checks at 390px and 1440px cover About, services, all three details, patient information and Contact: correct headings/cards, no placeholders or horizontal overflow. About visually inspected on desktop/mobile. Mail tests fake/mocked only.
+91 PHP tests / 657 assertions and 2 JavaScript tests pass. Pint, PHPStan (serial debug mode), production asset build, shell syntax and diff checks pass. Tests cover default unauthenticated production access, all service-card destinations, sitemap/metadata, optional fields and incomplete photos, escaping, placeholder exclusion from public HTML/head/schema, and preserved staging authentication/noindex. Rebuilt production assets included. Mail tests use fakes/mocks only.
 
-## Remaining approval and operations
+## Remaining release work
 
-Only unresolved content/access items: Cheryl’s final clinical/biography/policy approval; exact qualifications; medical-aid claim handling; photos when available; Google ownership/account access. The current website origin is confirmed as https://danksandstrydom.co.za. Valourite handles hosting/configuration and coordinates Google work once access is established. Google currently shows older address formatting and closing time; reconcile through the authorised account owner.
+Optional content is tracked in `CONTENT-TODO.md`; it is not a release blocker. Valourite still needs to verify server environment overrides, effective cached production indexing/canonical settings, recipients and contact/location values, and obtain Google-account access for external listing/Search Console work. Existing preflight checks an in-place deployment; it does not provide an atomic release or automatic rollback. Cache-based deduplication does not guarantee exactly-once email delivery. Existing dependency-audit follow-up remains open.
 
-SEO-REVIEW.md records the supplied facts, private preview configuration, publication steps and release checklist. Existing server environment overrides must be reviewed; this code never overwrites production configuration. Preflight remains an in-place-deployment safeguard, not atomic deployment or automatic rollback. Cache-based deduplication does not guarantee exactly-once mail delivery. The existing dependency-audit follow-up remains open.
-
-Existing draft PR only. No merge, deployment, live enquiry or Google-account changes.
+Browser checks at 390px and 1440px covered the full public inventory: one H1, no horizontal overflow, eight linked cards on home/services, and no public placeholder labels. Public About profiles were visually checked without portraits; staging rejected unauthenticated browser access. Authenticated placeholder rendering is covered by the feature tests. No merge, deployment, live enquiry, production-setting change or Google-account modification.

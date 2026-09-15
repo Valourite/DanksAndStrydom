@@ -5,7 +5,13 @@
         '/services/sports-injury-rehabilitation', '/services/post-operative-rehabilitation' => 'knee_strapping.webp',
         default => 'valf_physio.webp',
     };
-    $sections = $page['sections'] + (\App\Support\Site::reviewing() ? ($page['review_sections'] ?? []) : []);
+    $sections = $page['sections'];
+    foreach ($page['optional_sections'] ?? [] as $optionalSection) {
+        if (filled($optionalSection['body'])) {
+            $sections[$optionalSection['heading']] = $optionalSection['body'];
+        }
+    }
+    $practitionerFields = ['qualifications' => 'Exact qualifications', 'universities' => 'Universities', 'expanded_biography' => 'Longer biography', 'languages' => 'Consultation languages'];
 @endphp
 <x-layouts.app :title="$page['title']" :description="$page['description']" :canonical="\App\Support\Site::url($page['path'])">
     <section class="relative isolate overflow-hidden pb-20 pt-32 sm:pt-40 lg:pb-28 lg:pt-48">
@@ -44,6 +50,25 @@
                             <h2 class="font-display text-3xl font-medium sm:text-4xl">{{ $practitioner['name'] }}</h2>
                             <p class="mt-4 text-sm font-semibold text-accent-300">{{ $practitioner['title'] }}</p>
                             <p class="mt-6 max-w-md text-base leading-relaxed text-ink-200">{{ $practitioner['biography'] }}</p>
+                            @foreach ($practitionerFields as $field => $label)
+                                @php
+                                    $value = $practitioner[$field] ?? null;
+                                    $value = is_array($value) ? array_filter($value, fn ($item) => filled($item)) : $value;
+                                @endphp
+                                @if (filled($value))
+                                    <p class="mt-4 max-w-md text-base leading-relaxed text-ink-200" data-practitioner-field="{{ $field }}">
+                                        @if ($field !== 'expanded_biography') <span class="font-semibold">{{ $label }}:</span> @endif
+                                        {{ is_array($value) ? implode(', ', $value) : $value }}
+                                    </p>
+                                @elseif (\App\Support\Site::reviewing())
+                                    <p data-content-placeholder class="mt-4 text-sm text-accent-300">Missing optional information: {{ $label }}.</p>
+                                @endif
+                            @endforeach
+                            @if (filled($practitioner['photo']['path'] ?? null) && filled($practitioner['photo']['alt'] ?? null))
+                                <img data-practitioner-photo src="{{ asset($practitioner['photo']['path']) }}" alt="{{ $practitioner['photo']['alt'] }}" loading="lazy" class="mt-6 w-full max-w-sm rounded-3xl">
+                            @elseif (\App\Support\Site::reviewing())
+                                <p data-content-placeholder class="mt-4 text-sm text-accent-300">Missing optional information: Approved photograph and alt text.</p>
+                            @endif
                         </section>
                     @endforeach
                 </div>
@@ -72,6 +97,13 @@
                 </div>
             </div>
         </section>
+    @endif
+    @if (\App\Support\Site::reviewing())
+        @foreach ($page['optional_sections'] ?? [] as $optionalSection)
+            @if (blank($optionalSection['body']))
+                <p data-content-placeholder class="mx-auto max-w-6xl px-5 pb-6 text-sm text-link sm:px-8">Missing optional information: {{ $optionalSection['heading'] }}.</p>
+            @endif
+        @endforeach
     @endif
     @php($relatedServices = array_intersect_key(\App\Support\Site::services(), array_flip($page['related_services'] ?? [])))
     @if ($relatedServices !== [])

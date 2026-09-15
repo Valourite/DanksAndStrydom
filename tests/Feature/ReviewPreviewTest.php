@@ -12,7 +12,7 @@ it('requires authentication for all staging review pages and does not retain acc
     app()->detectEnvironment(fn () => 'staging');
     $this->get('https://staging.example.test/about')->assertUnauthorized()->assertHeader('X-Robots-Tag', 'noindex, nofollow');
     $this->withBasicAuth('reviewer', 'test-review-only')->get('https://staging.example.test/about')->assertOk()
-        ->assertSee('extensive experience in human and equine physiotherapy')->assertDontSee('Placeholder')->assertDontSee('photo coming soon')
+        ->assertSee('extensive experience in human and equine physiotherapy')->assertSee('Missing optional information: Exact qualifications.')->assertSee('Missing optional information: Approved photograph and alt text.')
         ->assertHeader('Cache-Control', 'no-store, private');
     $this->withBasicAuth('wrong', 'wrong')->get('https://staging.example.test/about')->assertUnauthorized();
     $this->get('https://staging.example.test/')->assertUnauthorized();
@@ -22,20 +22,21 @@ it('never exposes drafts or draft links in production even with review credentia
     app()->detectEnvironment(fn () => 'production');
     config(['site.indexable' => true, 'app.url' => 'https://danksandstrydom.co.za']);
     foreach (['about', 'back-neck-pain', 'sports-injury-rehabilitation', 'post-operative-rehabilitation', 'patient-information'] as $name) {
+        config(["site.pages.$name.published" => false]);
         $this->withBasicAuth('reviewer', 'test-review-only')->get('https://danksandstrydom.co.za'.config("site.pages.$name.path").'?preview=true')->assertNotFound();
         $this->get('https://danksandstrydom.co.za/')->assertDontSee('href="'.route($name).'"', false);
         $this->get('https://danksandstrydom.co.za/sitemap.xml')->assertDontSee('<loc>'.Site::url(config("site.pages.$name.path")).'</loc>', false);
     }
-    $this->get('https://danksandstrydom.co.za/contact')->assertOk()->assertDontSee('Walk-ins can be accommodated');
+    $this->get('https://danksandstrydom.co.za/contact')->assertOk()->assertSee('Walk-ins can be accommodated');
 });
 
-it('renders complete draft policies and services only in authenticated staging', function () {
+it('keeps published policies and services protected in authenticated staging', function () {
     app()->detectEnvironment(fn () => 'staging');
     $this->withBasicAuth('reviewer', 'test-review-only');
     $this->get('https://staging.example.test/patient-information')->assertOk()
         ->assertSee('Appointments are one hour')->assertSee('without a doctor’s referral')
         ->assertSee('you may be liable for the full appointment fee')->assertSee('confirm medical-aid claim arrangements')
-        ->assertDontSee('Placeholder')->assertDontSee('claims are declined');
+        ->assertSee('Missing optional information: Submitting medical-aid claims.')->assertDontSee('claims are declined');
     foreach (['back-neck-pain', 'sports-injury-rehabilitation', 'post-operative-rehabilitation'] as $name) {
         $this->get('https://staging.example.test'.config("site.pages.$name.path"))->assertOk()
             ->assertSee('patient-information form')->assertSee('Patients are not expected to bring anything')->assertDontSee('Placeholder');
@@ -52,7 +53,7 @@ it('fails closed for absent credentials, invalid hashes and insecure staging', f
     config(['site.review_password_hash' => 'invalid']);
     $this->get('https://staging.example.test/about')->assertUnauthorized();
     config(['site.review_preview' => false]);
-    $this->get('https://staging.example.test/about')->assertNotFound();
+    $this->get('https://staging.example.test/about')->assertOk()->assertDontSee('Missing optional information:')->assertHeader('X-Robots-Tag', 'noindex, nofollow');
 });
 
 it('throttles failed review authentication attempts', function () {
