@@ -1,11 +1,10 @@
 <?php
 
 use App\Support\Site;
-use Illuminate\Support\Facades\RateLimiter;
 
 it('publishes the complete inventory to unauthenticated production visitors and the indexable sitemap', function () {
     app()->detectEnvironment(fn () => 'production');
-    config(['site.indexable' => true, 'site.review_preview' => true, 'app.url' => 'https://danksandstrydom.co.za']);
+    config(['site.indexable' => true, 'app.url' => 'https://danksandstrydom.co.za']);
     $xml = $this->get('/sitemap.xml')->assertSuccessful()->getContent();
     expect(simplexml_load_string($xml)->url)->toHaveCount(13);
     foreach (config('site.pages') as $name => $page) {
@@ -32,7 +31,7 @@ it('publishes the complete inventory to unauthenticated production visitors and 
 
 it('hides unknown optional fields and incomplete photos without hiding confirmed practitioner information', function () {
     app()->detectEnvironment(fn () => 'production');
-    config(['site.review_preview' => true, 'site.pages.about.practitioners.0.photo.path' => 'images/back_strapping.webp', 'site.pages.about.practitioners.0.languages' => ['', '   ']]);
+    config(['site.pages.about.practitioners.0.photo.path' => 'images/back_strapping.webp', 'site.pages.about.practitioners.0.languages' => ['', '   ']]);
     $this->get('/about?preview=true')->assertSuccessful()
         ->assertSee('Cheryl Myburgh')->assertSee('Elize Strydom')->assertSee('both hold degrees in physiotherapy')
         ->assertSee('extensive experience in human and equine physiotherapy')
@@ -59,21 +58,4 @@ it('renders supplied optional facts as escaped body content without adding them 
     $head = explode('</head>', $html)[0];
     expect($head)->not->toContain('Test qualification', 'Test university', 'Test expanded biography', 'Test language', 'Synthetic test portrait');
     $this->get('/patient-information')->assertSee('When payment is due')->assertSee('Test payment timing.');
-});
-
-it('shows missing-content labels only in authenticated staging body content while keeping staging out of search', function () {
-    app()->detectEnvironment(fn () => 'staging');
-    RateLimiter::clear('site-review:'.hash('sha256', '127.0.0.1'));
-    config(['site.indexable' => true, 'site.review_preview' => true, 'site.review_username' => 'reviewer', 'site.review_password_hash' => password_hash('test-review-only', PASSWORD_BCRYPT)]);
-    foreach (config('site.pages') as $page) {
-        RateLimiter::clear('site-review:'.hash('sha256', '127.0.0.1'));
-        $this->get('https://staging.example.test'.$page['path'])->assertUnauthorized()->assertDontSee('Missing optional information:');
-    }
-    $this->withBasicAuth('reviewer', 'test-review-only');
-    foreach (['about', 'patient-information'] as $name) {
-        $html = $this->get('https://staging.example.test/'.$name)->assertSuccessful()
-            ->assertHeader('X-Robots-Tag', 'noindex, nofollow')->assertSee('Missing optional information:')->getContent();
-        expect(explode('</head>', $html)[0])->not->toContain('Missing optional information:', 'data-content-placeholder');
-    }
-    $this->get('https://staging.example.test/sitemap.xml')->assertDontSee('<loc>', false);
 });

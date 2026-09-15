@@ -60,14 +60,10 @@
                                         @if ($field !== 'expanded_biography') <span class="font-semibold">{{ $label }}:</span> @endif
                                         {{ is_array($value) ? implode(', ', $value) : $value }}
                                     </p>
-                                @elseif (\App\Support\Site::reviewing())
-                                    <p data-content-placeholder class="mt-4 text-sm text-accent-300">Missing optional information: {{ $label }}.</p>
                                 @endif
                             @endforeach
                             @if (filled($practitioner['photo']['path'] ?? null) && filled($practitioner['photo']['alt'] ?? null))
                                 <img data-practitioner-photo src="{{ asset($practitioner['photo']['path']) }}" alt="{{ $practitioner['photo']['alt'] }}" loading="lazy" class="mt-6 w-full max-w-sm rounded-3xl">
-                            @elseif (\App\Support\Site::reviewing())
-                                <p data-content-placeholder class="mt-4 text-sm text-accent-300">Missing optional information: Approved photograph and alt text.</p>
                             @endif
                         </section>
                     @endforeach
@@ -97,13 +93,6 @@
                 </div>
             </div>
         </section>
-    @endif
-    @if (\App\Support\Site::reviewing())
-        @foreach ($page['optional_sections'] ?? [] as $optionalSection)
-            @if (blank($optionalSection['body']))
-                <p data-content-placeholder class="mx-auto max-w-6xl px-5 pb-6 text-sm text-link sm:px-8">Missing optional information: {{ $optionalSection['heading'] }}.</p>
-            @endif
-        @endforeach
     @endif
     @php($relatedServices = array_intersect_key(\App\Support\Site::services(), array_flip($page['related_services'] ?? [])))
     @if ($relatedServices !== [])

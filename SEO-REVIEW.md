@@ -1,15 +1,13 @@
 # Local SEO and enquiry implementation review
 
 
-## Current publication status — 15 September 2026
+## Current website access and content — 15 September 2026
 
-The user authorised all eight service pages, About and Patient Information for public release and waived Cheryl’s approval step. Contact’s former preview sections are normal public content. The unchanged indexable production sitemap now lists 13 URLs (home plus the 12-page inventory), with eight crawlable service cards on home and the hub. The homepage service count follows the published inventory.
+All eight service pages, About, Patient Information and Contact are public in every environment. The website Basic Auth middleware, request-attribute bypass and review credentials/configuration have been removed. Deployment-token authentication is unchanged. Local/staging responses remain noindex/nofollow, robots disallows crawling and the sitemap is empty even when indexing flags are accidentally enabled. Staging is accessible to anyone with its URL: noindex is not access protection.
 
-`CONTENT-TODO.md` records exact file/configuration keys, inputs and display destinations for optional practitioner and policy details. Confirmed short biographies remain public. Unknown qualifications, universities, languages, expanded biographies, portraits and policy additions use null/empty values, with explanatory configuration comments. Public views omit incomplete optional content and photos; missing-information labels appear only in authenticated staging body content and never in metadata or structured data. There is no additional content approval gate.
+The 13-URL production sitemap, publication flags, metadata/canonicals, structured data, blue design and enquiry/deployment safeguards are preserved. Disabled pages remain 404 in every environment, including preview queries. Missing-information notices are removed everywhere. About uses editable draft biographies based only on supplied facts; Cheryl's equine experience remains biographical. Unknown optional fields and incomplete photos are omitted. `CONTENT-TODO.md` documents exact editing keys and outstanding optional information. No content approval workflow is required.
 
-Validation: **91 PHP tests / 657 assertions**, **2 JavaScript tests**, Pint, PHPStan (serial debug mode because the restricted runner could not start its normal worker), production asset build, shell syntax and diff checks passed. Tests verify the default public inventory and ordered card destinations without authentication, production sitemap inclusion and metadata, later unpublication gating, optional-content escaping/omission, incomplete portrait omission, preview-only labels, staging authentication and staging noindex/empty sitemap. Browser checks at 390px and 1440px covered the full public inventory: one H1, no horizontal overflow, eight linked cards on home/services, and no public placeholder labels. Public About profiles were visually checked without portraits; staging rejected unauthenticated browser access. Authenticated placeholder rendering is covered by the feature tests. No merge, deployment, live enquiry or Google-account change.
-
-
+95 PHP tests / 950 assertions and 2 JavaScript tests pass. Pint, PHPStan (serial debug mode), production asset build, shell syntax and diff checks pass. Tests cover anonymous HTTP/HTTPS local/staging access across every page, noindex/robots/empty sitemap even with indexing enabled, production metadata/sitemap/card destinations, unpublished-page gating, optional-content omission/escaping and deployment-token rejection. Existing synchronous-mail failure, successful-send/cache-failure, replay and preflight tests pass using fake/mocked mail. Browser verification opened staging anonymously and inspected About profiles at 390px and 1440px, plus mobile Patient Information: no overflow or missing-information notices. Design and colours are unchanged; production assets rebuilt. No merge or deployment.
 
 ## Blue colour theme
 
@@ -31,13 +29,13 @@ Five requested offerings were added as distinct pages:
 - `/services/injury-prevention` — movement/activity demands and reducing risk, without guaranteed prevention.
 - `/services/rehabilitation-exercise-programmes` — individual exercise guidance, progression and review.
 
-All eight service pages are now `published=true` following the user’s publication instruction. Public and authenticated preview hubs show eight linked cards. The empty-services fallback remains available if all services are later unpublished. Sitemap entries continue to follow publication flags; staging remains noindex with an empty sitemap.
+All eight service pages are now `published=true` following the user’s publication instruction. Public hubs show eight linked cards. The empty-services fallback remains available if all services are later unpublished. Sitemap entries continue to follow publication flags; staging remains noindex with an empty sitemap.
 
 The supplied screenshot defines the card order/icons: sports/pulse, back-neck/spine, post-operative/recovery, joint/joint, mobility/mobility, chronic/chronic, prevention/shield, exercise/program. The restored card styles use four columns on desktop, two on tablet and one on mobile. Labels/icons live in the inventory; clinical wording was not copied blindly from screenshot captions. Existing typography, colour and image treatments are preserved.
 
-Each new page has distinct metadata/H1, assessment-first wording, one-hour first appointment and patient-information form, individual guidance, follow-up and an enquiry action. Shared fees/payment/cancellation policies stay on patient information. Each new page has only two relevant related services, filtered through the same publication/preview gate. Main navigation is unchanged.
+Each new page has distinct metadata/H1, assessment-first wording, one-hour first appointment and patient-information form, individual guidance, follow-up and an enquiry action. Shared fees/payment/cancellation policies stay on patient information. Each new page has only two relevant related services, filtered through the same publication gate. Main navigation is unchanged.
 
-Validation: **87 PHP tests / 483 assertions**, **2 JavaScript tests**, Pint, PHPStan (512 MB), production build, shell syntax and diff checks passed. Tests cover every new route, public 404/preview exclusion, later publication and sitemap inclusion, canonical/meta output, unique eight-page titles/descriptions, ordered card destinations/icons and filtered related links. Browser checks at **390px and 1440px** followed all eight card destinations, verified the five new layouts, one H1 each, no overflow or broken loaded images, two related links per new page, and one/four hub columns respectively. The desktop card design was compared with the supplied screenshot. A temporary loopback QA transport mismatch was corrected before destination checks; application HTTPS authentication is unchanged. Frontend assets rebuilt. No merge, deployment or live enquiries.
+Validation: **87 PHP tests / 483 assertions**, **2 JavaScript tests**, Pint, PHPStan (512 MB), production build, shell syntax and diff checks passed. Tests cover every new route, public 404/preview exclusion, later publication and sitemap inclusion, canonical/meta output, unique eight-page titles/descriptions, ordered card destinations/icons and filtered related links. Browser checks at **390px and 1440px** followed all eight card destinations, verified the five new layouts, one H1 each, no overflow or broken loaded images, two related links per new page, and one/four hub columns respectively. The desktop card design was compared with the supplied screenshot. A temporary loopback QA transport mismatch was corrected before destination checks; the then-current HTTPS review authentication was unchanged (that gate has since been removed). Frontend assets rebuilt. No merge, deployment or live enquiries.
 
 ## Original visual design restoration
 
@@ -48,7 +46,7 @@ Visual reference: pre-SEO commit `42880b2`. Its section diffs were inspected and
 - Restored the original hero architecture: Fraunces/Instrument Sans typography, original pine/sea/sand/bone colours, image crop, arch/backdrop, floating cards, chips and three-column fact strip. Confirmed appointment length/practitioner/service counts replace unsupported statistics.
 - Restored the arched About illustration, offset sand card, split copy, dark numbered section and photo composition. All replacement copy uses confirmed facts, with no old experience, technique, outcome or quality guarantees.
 - Reinstated the original seven-part homepage flow: hero → services → About → dark visit details → staggered practical cards → location → contact. The staggered composition replaces testimonials with practical facts; no reviews, stars or patient quotations are restored.
-- Services retain the original card styling and gradient section. Approved/review-visible services become cards automatically; public empty services keep a direct enquiry action. A desktop illustration strip replaces the withheld mixed human/equine gallery using existing treatment illustrations, not claimed practitioner portraits.
+- Services retain the original card styling and gradient section. Published services become cards automatically; public empty services keep a direct enquiry action. A desktop illustration strip replaces the withheld mixed human/equine gallery using existing treatment illustrations, not claimed practitioner portraits.
 - Restored the split dark-details/map location panel and the original contact-section washes, spacing and numbered introduction. Current configured address, verified directions/map gate, hours and enquiry component remain in use.
 - Internal pages extend the original arch imagery, split introductions, dark surfaces and numbered content layouts. Removed the unrelated repeated link list; kept only a relevant service-to-patient-information link and a concise gated footer navigation.
 - No colour rebranding was applied. Source colour/font definitions, JavaScript, routes, metadata/layout schema, canonical/discovery controls, authentication, enquiry mail/cache protections and deployment preflight were not replaced.
@@ -75,15 +73,13 @@ The approved directions link https://maps.app.goo.gl/WoxWSjSzNbtEkTr66 was resol
 
 The location verification gate remains available and now defaults true for the supplied address and inspected map. Existing environment overrides still win. Google’s listing currently uses an older address format and showed a 17:00 closing time; the website uses the user’s confirmed address and 17:30 weekday closing time. Valourite should reconcile the listing once account access is established. No Google-account edits were made.
 
-### Publication and private preview
+### Publication and staging access
 
-- `/`, `/services`, `/contact`, `/about`, all eight service pages and `/patient-information` are enabled for public production visitors. The indexable production sitemap contains all 13 URLs.
-- Contact’s booking-policy information is now in normal `sections`. Unknown optional practitioner and policy fields show missing-information labels only in authenticated staging; neither the labels nor optional profile fields enter metadata/schema.
-- Staging review requires `APP_ENV=staging`, `SITE_REVIEW_PREVIEW=true`, a nonempty `SITE_REVIEW_USERNAME` and `SITE_REVIEW_PASSWORD_HASH` (PHP `password_hash` output), and HTTPS. Configure credentials privately; quote the hash in dotenv to preserve its dollar signs. Do not place credentials in query strings or share URLs.
-- Every Laravel request in enabled staging review requires Basic authentication, including Livewire updates. Missing settings or insecure transport fail closed; invalid credentials are rejected and rate-limited. Responses are private/no-store and noindex. Production ignores preview credentials/flags and cannot reveal drafts through them.
-- `Site::pages()` requires both staging configuration and a middleware-authenticated request attribute before including drafts. There is no query-string bypass. Keep staging indexing/canonical flags false and mail on a safe local/log transport.
-- Valourite must provision the actual HTTPS staging host and pass Authorization headers through correctly. Protect static files/server paths too, exclude caches/CDNs from review responses, and never serve repository/configuration files. Only loopback staging-mode QA was run here; no hosted preview was deployed. Its temporary router simulated TLS solely for loopback layout QA; production code still requires HTTPS.
-- Cheryl’s approval step is waived by the user. Missing optional content does not block publication; see `CONTENT-TODO.md` for exact keys and public destinations.
+- Home and all 12 inventory pages are available without website authentication. Only published pages enter navigation and the indexable production sitemap.
+- Local and staging remain noindex with crawling disallowed and an empty sitemap. Keep their indexing/canonical flags false and mail on a safe local/log transport.
+- There are no review credentials to configure. Existing unused review variables may be removed by the server operator during a separately authorised release; this change does not edit server environments automatically. Rebuild configuration cache during release.
+- Staging is public to anyone with its URL. Noindex does not protect confidential information. Deployment and other administrative authentication remain separate.
+- Optional missing facts are hidden everywhere; `CONTENT-TODO.md` lists editing keys. No Cheryl approval step is required.
 
 ### Genuinely unresolved items
 
@@ -95,7 +91,7 @@ The location verification gate remains available and now defaults true for the s
 
 The non-www HTTPS origin is confirmed as `https://danksandstrydom.co.za`. Valourite owns hosting and production configuration; these are remaining operational steps, not unanswered business-fact questions. Existing `.env` values (including blanks/stale contact fields) override new defaults; `.env.example` never changes production automatically.
 
-### Actual validation
+### Historical validation (superseded by current results above)
 
 - **80 PHP tests / 378 assertions passed**, including prior deployment/email/replay checks and new authenticated staging, invalid credentials/hash, HTTPS requirement, rate limiting, production 404/navigation/sitemap gating, and draft wording checks.
 - **2 JavaScript tests passed**; Pint, PHPStan (512 MB), production Vite build, shell syntax and diff checks passed. Rebuilt production assets are committed.
@@ -133,13 +129,13 @@ Laravel 13.15.0, Livewire 4.3.1, Tailwind 4.3.0 and Vite 8.0.16 remain in place.
 
 ## Page inventory and release checklist
 
-`config/site.php` contains complete page text and publication flags; `config/contact.php` contains centrally managed contact/location defaults. Draft routes/templates have no public preview query bypass. The current publication status and private preview procedure above supersede earlier versions of this PR that displayed placeholders publicly.
+`config/site.php` contains complete page text and publication flags; `config/contact.php` contains centrally managed contact/location defaults. Draft routes/templates have no public preview query bypass. The current publication status and staging access rules above supersede earlier versions of this PR that displayed placeholders publicly.
 
 Before release, Valourite should:
 
 - Confirm the intended published inventory and complete operational release checks. Optional content and Cheryl approval do not block publication.
 - Review effective display/split address, verified map/entrance, phone/email and explicit enquiry recipient configuration against the supplied facts.
-- Verify the existing server environment/cache has `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL=https://danksandstrydom.co.za`, `SITE_INDEXABLE=true`, `SITE_CANONICAL_REDIRECTS=true`, and review preview disabled. Safe staging/local indexing defaults stay false.
+- Verify the existing server environment/cache has `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL=https://danksandstrydom.co.za`, `SITE_INDEXABLE=true`, `SITE_CANONICAL_REDIRECTS=true`, with staging/local indexing disabled. Safe staging/local indexing defaults stay false.
 - Use the candidate preflight and cached postflight, backups and host checks described below. No deployment is authorised by this PR update.
 - Coordinate Google listing/Search Console setup through Valourite after ownership and access are established. Do not invent reviews, extra locations, treatment credentials or recovery promises.
 
@@ -161,7 +157,7 @@ See the accompanying test results, browser-check JSON and screenshots. Tests use
 
 1. The user has authorised the current published inventory and waived Cheryl’s approval. Obtain separate merge/deployment authorisation; the preferred non-www HTTPS hostname is confirmed.
 2. Back up the current code revision, `public_html` (including `.htaccess`, index.php and discovery files), `.env`, database and any uploaded media. Record the old SHA and keep a restoration copy off the public document root. This branch has no database migrations.
-3. Review on a private staging origin with `APP_ENV=staging`, `APP_URL` set to that staging origin, `SITE_INDEXABLE=false`, `SITE_CANONICAL_REDIRECTS=false`, analytics disabled and safe mail. Use server authentication/network controls: robots/noindex are not confidentiality controls.
+3. Review on a public staging origin with `APP_ENV=staging`, `APP_URL` set to that staging origin, `SITE_INDEXABLE=false`, `SITE_CANONICAL_REDIRECTS=false`, analytics disabled and safe mail. Staging pages open without a login; robots/noindex are not access protection.
 4. Use the locked dependencies with PHP compatible with this Laravel 13 lockfile and Node supported by Vite 8 (local build used bundled Node). Run `composer install`, `npm ci`, `npm run build`, `vendor/bin/pint --dirty --format agent`, `vendor/bin/phpstan analyse --memory-limit=512M`, `php artisan test --compact`, `node --test tests/analytics.test.js` and `bash -n deploy.sh`. Confirm tracked `public/build` matches source.
 5. Populate the approved `CONTACT_*` values in the environment. Supply full display address AND split fields from the same approved fact sheet. Review the supplied verified map/address and preserve the verification gate; set the effective flag to true for the approved configuration. Map values must be URLs, never pasted iframe HTML. Confirm SMTP configuration/timeout, actual recipients, writable shared cache and sessions. Synchronous mail is intentionally retained because the host has no queue worker. Monitor generic mail failures and practice reception outcomes; acceptance does not prove inbox receipt.
 6. For approved production, set `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL=https://danksandstrydom.co.za`, `SITE_INDEXABLE=true` and `SITE_CANONICAL_REDIRECTS=true`. **These indexing flags default to false: omitting this step will keep production noindex.** Leave analytics false until its provider and privacy handling are settled.

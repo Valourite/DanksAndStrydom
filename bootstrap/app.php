@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Middleware\CanonicalSite;
-use App\Http\Middleware\ReviewPreview;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -15,7 +14,6 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->append(CanonicalSite::class);
-        $middleware->append(ReviewPreview::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

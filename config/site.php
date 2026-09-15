@@ -5,9 +5,6 @@ return [
     'canonical_redirects' => env('SITE_CANONICAL_REDIRECTS', false),
     'alternate_hosts' => ['danksandstrydom.co.za', 'www.danksandstrydom.co.za'],
     'analytics_enabled' => env('SITE_ANALYTICS_ENABLED', false),
-    'review_preview' => env('SITE_REVIEW_PREVIEW', false),
-    'review_username' => env('SITE_REVIEW_USERNAME', ''),
-    'review_password_hash' => env('SITE_REVIEW_PASSWORD_HASH', ''),
     'pages' => [
         'about' => [
             'path' => '/about',
@@ -23,9 +20,10 @@ return [
                 [
                     'name' => 'Cheryl Myburgh',
                     'title' => 'Physiotherapist',
-                    'biography' => 'Cheryl Myburgh has extensive experience in human and equine physiotherapy. At Danks & Strydom, she provides physiotherapy care for patients attending the practice.',
+                    // Editable draft using supplied facts only; equine experience is biographical, not a practice service.
+                    'biography' => 'Cheryl Myburgh is a physiotherapist with a degree in physiotherapy and extensive experience in human and equine physiotherapy.',
                     // Supply exact degree/qualification titles and awarding universities as lists.
-                    // Both physiotherapy degrees and the short biography above are already confirmed.
+                    // Physiotherapy degrees and the facts used in the draft above are already confirmed.
                     'qualifications' => [],
                     'universities' => [],
                     // Optional longer factual biography; do not replace confirmed wording with filler.
@@ -38,9 +36,10 @@ return [
                 [
                     'name' => 'Elize Strydom',
                     'title' => 'Physiotherapist',
-                    'biography' => 'Elize Strydom practises human physiotherapy at Danks & Strydom, assessing patients and providing treatment based on their individual needs.',
+                    // Editable draft using supplied facts only.
+                    'biography' => 'Elize Strydom is a physiotherapist with a degree in physiotherapy and experience in human physiotherapy.',
                     // Supply exact degree/qualification titles and awarding universities as lists.
-                    // Both physiotherapy degrees and the short biography above are already confirmed.
+                    // Physiotherapy degrees and the facts used in the draft above are already confirmed.
                     'qualifications' => [],
                     'universities' => [],
                     // Optional longer factual biography; do not replace confirmed wording with filler.
@@ -236,7 +235,7 @@ return [
             'description' => 'Prepare for your visit to Danks & Strydom Physiotherapy in Glen Marais, Kempton Park. Contact the practice for appointment and payment details.',
             'heading' => 'Before your first appointment',
             'intro' => 'Practical information to help you arrange your appointment and prepare for your visit.',
-            // Optional additions: null bodies stay hidden publicly; preview labels identify missing facts.
+            // Optional additions: null bodies are omitted in every environment. Track missing facts in CONTENT-TODO.md.
             'optional_sections' => [
                 // Supply current consultation fees and currency, only if amounts should be displayed.
                 'consultation_fees' => ['heading' => 'Current consultation fees', 'body' => null],

@@ -2,11 +2,18 @@
 
 All eight service pages, About and Patient Information are enabled for public release. Contact's booking information is public content. The user waived Cheryl's approval step; none of the optional items below blocks publication. This branch has not been merged or deployed.
 
-Unknown values are `null` or empty arrays in `config/site.php`. Keep them empty until real information is supplied. Public pages omit incomplete fields; only authenticated staging preview displays “Missing optional information” labels. These fields and labels are not used in metadata or structured data. Photographs require both an approved asset path (relative to `public/`) and descriptive alt text. Do not use stock people as practitioner portraits.
+Unknown values are `null` or empty arrays in `config/site.php`. Keep them empty until real information is supplied. Every environment omits incomplete fields without website notices. Optional profile fields are not used in metadata or structured data. Photographs require both an approved asset path (relative to `public/`) and descriptive alt text. Do not use stock people as practitioner portraits.
 
 ## Practitioner information
 
 All keys below are in **`config/site.php`**. `site.pages.about.practitioners.0` is **Cheryl Myburgh**; `site.pages.about.practitioners.1` is **Elize Strydom**. Keep this order when editing the numeric entries.
+
+Edit the visible draft biographies directly in this file:
+
+- **Cheryl:** `site.pages.about.practitioners.0.biography` — About, below her name/title. Uses only her physiotherapy degree and extensive human/equine experience. Equine experience is biographical, not an offering at this practice.
+- **Elize:** `site.pages.about.practitioners.1.biography` — About, below her name/title. Uses only her physiotherapy degree and human physiotherapy experience.
+
+These are editable drafts based on confirmed facts, not missing biography notices. Additional detail is optional. Keep unknown values empty; no registration numbers, years, employment history or specialist credentials have been supplied. After editing configuration on a deployed site, the operator must rebuild Laravel's configuration cache through the normal release process.
 
 | Done | Person / missing item | Configuration key | What to supply / where it appears |
 |---|---|---|---|

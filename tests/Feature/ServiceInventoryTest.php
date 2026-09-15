@@ -1,7 +1,6 @@
 <?php
 
 use App\Support\Site;
-use Illuminate\Support\Facades\RateLimiter;
 
 dataset('new service pages', [
     'joint-muscle-pain', 'mobility-movement-assessment', 'chronic-pain-management',
@@ -10,7 +9,7 @@ dataset('new service pages', [
 
 it('can unpublish a service without exposing it through preview queries or the sitemap', function (string $name) {
     app()->detectEnvironment(fn () => 'production');
-    config(['site.indexable' => true, 'app.url' => 'https://danksandstrydom.co.za', 'site.review_preview' => true]);
+    config(['site.indexable' => true, 'app.url' => 'https://danksandstrydom.co.za']);
     $path = '/services/'.$name;
     config(["site.pages.$name.published" => false]);
     $this->get($path.'?preview=true')->assertNotFound();
@@ -25,11 +24,8 @@ it('can unpublish a service without exposing it through preview queries or the s
     $this->get('/sitemap.xml')->assertSee('<loc>'.Site::url($path).'</loc>', false);
 })->with('new service pages');
 
-it('offers eight ordered crawlable preview cards with matching icons and unique page metadata', function () {
+it('offers eight ordered crawlable staging cards with matching icons and unique page metadata', function () {
     app()->detectEnvironment(fn () => 'staging');
-    RateLimiter::clear('site-review:'.hash('sha256', '127.0.0.1'));
-    config(['site.review_preview' => true, 'site.review_username' => 'reviewer', 'site.review_password_hash' => password_hash('test-review-only', PASSWORD_BCRYPT)]);
-    $this->withBasicAuth('reviewer', 'test-review-only');
     $expected = [
         'sports-injury-rehabilitation' => 'pulse', 'back-neck-pain' => 'spine', 'post-operative-rehabilitation' => 'recovery',
         'joint-muscle-pain' => 'joint', 'mobility-movement-assessment' => 'mobility', 'chronic-pain-management' => 'chronic',
