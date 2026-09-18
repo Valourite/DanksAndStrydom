@@ -13,7 +13,9 @@
     $canonicalUrl = $canonical ?: \App\Support\Site::url(request()->path() === '/' ? '/' : '/'.request()->path());
     $rootUrl = \App\Support\Site::url();
     $robots = \App\Support\Site::indexable() ? $robots : 'noindex, nofollow';
-    $socialImage = $image ?: \App\Support\Site::url('/images/back_strapping.webp');
+    $photo = config('imagery.images.'.($image ?: 'consultation'));
+    $socialImage = \App\Support\Site::url('/'.$photo['path']);
+    $heroSrcset = collect($photo['variants'])->map(fn ($path, $width) => asset($path).' '.$width.'w')->implode(', ');
 
     $structuredData = [
         '@context' => 'https://schema.org',
@@ -31,7 +33,6 @@
                 'name' => $siteName,
                 'url' => $rootUrl,
                 'description' => 'Danks & Strydom Physiotherapy in Glen Marais, Kempton Park.',
-                'image' => $socialImage,
                 'telephone' => $practice['phone'],
                 'email' => $practice['email'],
                 'medicalSpecialty' => 'https://schema.org/Physiotherapy',
@@ -70,7 +71,7 @@
     <link rel="canonical" href="{{ $canonicalUrl }}">
     <link rel="sitemap" type="application/xml" href="{{ \App\Support\Site::url('/sitemap.xml') }}">
     @if (request()->routeIs('home'))
-    <link rel="preload" as="image" href="{{ $socialImage }}" fetchpriority="high">
+    <link rel="preload" as="image" href="{{ asset($photo['path']) }}" imagesrcset="{{ $heroSrcset }}" imagesizes="(min-width: 1024px) 480px, (min-width: 640px) 448px, 100vw" fetchpriority="high">
     @endif
 
     <meta property="og:type" content="website">
@@ -79,14 +80,15 @@
     <meta property="og:description" content="{{ $description }}">
     <meta property="og:url" content="{{ $canonicalUrl }}">
     <meta property="og:image" content="{{ $socialImage }}">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="900">
-    <meta property="og:image:alt" content="Physiotherapy treatment at {{ $siteName }}">
+    <meta property="og:image:width" content="{{ $photo['width'] }}">
+    <meta property="og:image:height" content="{{ $photo['height'] }}">
+    <meta property="og:image:alt" content="{{ $photo['alt'] }}">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{ $pageTitle }}">
     <meta name="twitter:description" content="{{ $description }}">
     <meta name="twitter:image" content="{{ $socialImage }}">
+    <meta name="twitter:image:alt" content="{{ $photo['alt'] }}">
 
     <script type="application/ld+json">
         {!! json_encode($structuredData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) !!}

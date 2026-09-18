@@ -2,13 +2,21 @@
 
 Adds an eight-service patient journey with consistent metadata, canonical URLs, clinic structured data, sitemap/indexing controls and protected synchronous enquiry delivery. Preserves the restored original layouts, typography, image compositions and current blue palette.
 
+## Physiotherapy imagery
+
+Seven coordinated generated illustrations replace the three repeatedly used treatment photos, with distinct homepage scenes and relevant per-page selections. Existing blue styling, arched/rounded containers and animations are preserved. Captions/alt text identify illustrations; generated people and rooms are not used as practitioner portraits or clinic identity images.
+
+Responsive WebP variants (480/768/1200px), intrinsic dimensions, lazy below-fold loading, a matched responsive hero preload and per-page social metadata are configuration-driven. All seven 480px files total 111 KB; all 21 variants total 728 KB. Existing recursive image deployment is covered by an expanded preflight/copy test. IMAGE-ASSETS.md documents the audit, prompts, regeneration decisions and usage map.
+
+Current validation: **111 PHP tests / 1365 assertions**, **4 JavaScript tests**, Pint, PHPStan, production build, shell syntax and diff checks pass. All 13 public pages checked at desktop/mobile widths; final source anatomy and rendered crops inspected, homepage lazy loading/reveals verified, no broken visible images or horizontal overflow observed. Production assets rebuilt with identical CSS/JS output. Motion-preference behaviour is automated-test covered; actual OS preference/high-DPR hardware emulation was unavailable. No merge or deployment.
+
 ## Testimonials
 
 Adds “What our patients say” after the treatment images and before About: three desktop cards, stacked mobile cards, existing blue/serif/rounded styling and gentle scroll-reveal stagger. The user subsequently confirmed the screenshot quotations are genuine and permitted for publication. The three top-row quotes from Sarah M., Priya N. and Lerato K. now populate the cards verbatim; no star ratings are displayed.
 
 The supplied quotes now replace samples in every environment. Three labelled neutral samples remain only as a local/staging fallback when there are no approved entries. Production renders only complete, explicitly approved genuine entries and omits the entire section when empty. Samples live in a separate configuration list and cannot be published by toggling their approval flag. Optional source links require a valid supplied HTTP(S) URL. No Review/aggregate-rating schema or external widget. CONTENT-TODO.md documents where to enter quotes, permitted display names, source URLs and approval.
 
-Latest validation: **109 PHP tests / 1049 assertions**, **4 JavaScript tests**, Pint, PHPStan, production build, shell syntax and diff checks pass. Desktop/mobile browser verified three/one columns, spacing, no overflow and scroll-triggered 0/90/180ms entrances. Production sample exclusion, confirmed quote rendering/order, escaping and source-link checks are automated. No source URLs were supplied; no links are invented. Existing reduced-motion tests/CSS apply; actual browser motion-preference emulation remains unavailable. Assets rebuilt. No merge or deployment.
+Testimonial-specific validation before the imagery update: **109 PHP tests / 1049 assertions**, **4 JavaScript tests**, Pint, PHPStan, production build, shell syntax and diff checks pass. Desktop/mobile browser verified three/one columns, spacing, no overflow and scroll-triggered 0/90/180ms entrances. Production sample exclusion, confirmed quote rendering/order, escaping and source-link checks are automated. No source URLs were supplied; no links are invented. Existing reduced-motion tests/CSS apply; actual browser motion-preference emulation remains unavailable. Assets rebuilt. No merge or deployment.
 
 ## Animation and content refinement
 

@@ -26,9 +26,9 @@
         @endif
         @if (request()->routeIs('home'))
             <div data-practice-images class="mt-20 hidden gap-5 md:grid md:grid-cols-3" aria-label="Physiotherapy illustrations">
-                @foreach (['back_strapping.webp' => 'Physiotherapy illustration: taping of a shoulder and upper back', 'valf_physio.webp' => 'Physiotherapy illustration: treatment of the lower leg', 'knee_strapping.webp' => 'Physiotherapy illustration: taping around a knee'] as $image => $alt)
+                @foreach (['sports', 'knee', 'mobility'] as $image)
                     <figure class="reveal overflow-hidden rounded-3xl bg-ink-100 shadow-sm shadow-navy/10">
-                        <img src="{{ asset('images/'.$image) }}" alt="{{ $alt }}" width="1200" height="900" loading="lazy" class="aspect-4/3 w-full object-cover">
+                        <x-site.image :name="$image" sizes="(min-width: 1152px) 350px, (min-width: 768px) 30vw, 100vw" class="aspect-4/3 w-full object-cover" />
                     </figure>
                 @endforeach
             </div>

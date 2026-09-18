@@ -74,18 +74,11 @@
             {{-- Main arch card --}}
             <div data-parallax="0.04" class="grain relative overflow-hidden rounded-t-full rounded-b-[2.5rem] bg-navy shadow-[0_40px_80px_-40px_rgba(var(--shadow-ink),0.7)] will-change-transform lg:mr-8">
                 <div class="relative h-72 overflow-hidden sm:h-80 lg:h-88">
-                    <img
-                        src="{{ asset('images/back_strapping.webp') }}"
-                        alt="Kinesiology tape being applied across a patient's shoulder and upper back"
-                        width="1200"
-                        height="900"
-                        fetchpriority="high"
-                        class="h-full w-full object-cover object-center"
-                    >
+                    <x-site.image name="consultation" :priority="true" class="h-full w-full object-cover object-center" />
                     <div class="absolute inset-0 bg-linear-to-t from-navy via-navy/15 to-transparent"></div>
                     <div class="absolute inset-x-0 bottom-5 flex justify-center">
                         <span class="rounded-full border border-surface-50/20 bg-navy/55 px-4 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-white backdrop-blur-md">
-                            Glen Marais, Kempton Park
+                            Illustrative consultation
                         </span>
                     </div>
                 </div>

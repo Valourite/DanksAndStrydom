@@ -1,5 +1,18 @@
 # Local SEO and enquiry implementation review
 
+## Physiotherapy imagery — 18 September 2026
+
+Replaced the three repeatedly displayed treatment photos with seven coordinated, explicitly illustrative AI-generated scenes. The homepage uses all seven without repetition; internal pages use subject-specific images, with limited reuse for related services. Original assets and optional real practitioner portrait fields remain untouched. The current blue palette, containers, typography, spacing and animation code are preserved. Image captions/footer distinguish fictional people and rooms from the actual practice.
+
+`config/imagery.php` contains the inventory, responsive variants, alt text, dimensions and URL-to-image mapping; the shared Blade image component handles native responsive loading. Each scene has 480×360, 768×576 and 1200×900 WebP files. Homepage preload matches the responsive hero, and only each page's main hero has high priority. Other images load lazily. Per-page social images have accurate dimensions and illustrative alt text; generated imagery is deliberately omitted from the clinic identity's image property. All existing clinic/contact/address structured data, URLs, canonicals, indexing, sitemap and enquiry protections remain.
+
+All 21 variants total 727,736 bytes. The seven small variants total 111,106 bytes, versus 224,826 bytes for the previous three originals; density-dependent variants change the actual download size. `IMAGE-ASSETS.md` records the original repetition audit, selected files, placements, prompts and crop revisions. Six originals were regenerated with safer framing after arch inspection; each final source was checked for anatomy, hands, clothing and equipment.
+
+Validation: **111 PHP tests / 1365 assertions**, **4 JavaScript tests**, Pint, PHPStan, production build, shell syntax and diff checks pass. The rebuild produced identical committed CSS/JS assets. New tests cover every public page's image/social metadata, intrinsic dimensions, width descriptors, file budgets, hero/preload agreement and below-fold loading. The deployment fixture now verifies nested images survive a rejected preflight and are copied after a passed preflight; no deployment was performed.
+
+Browser: checked all 13 public pages at 1440px desktop and 390px mobile, including final revised crops. Scrolled the homepage to inspect the arch, three-image strip, About, dark first-visit panel and questions card. Visible images loaded, no horizontal overflow or console errors were observed, and reveals completed. The mobile-hidden strip remains hidden. Staging remained noindex. Reduced-motion/failed-observer behaviour is covered by unchanged JS tests; no actual OS motion-preference or high-DPR-device emulation was available. Native responsive sources selected 480px files in this browser. No live messages, merge or deployment.
+
+
 
 ## Confirmed testimonial publication — 18 September 2026
 

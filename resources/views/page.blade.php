@@ -1,10 +1,6 @@
 @php
     $isService = str_starts_with($page['path'], '/services/');
-    $pageImage = match ($page['path']) {
-        '/services/back-neck-pain' => 'back_strapping.webp',
-        '/services/sports-injury-rehabilitation', '/services/post-operative-rehabilitation' => 'knee_strapping.webp',
-        default => 'valf_physio.webp',
-    };
+    $pageImage = config('imagery.pages')[$page['path']];
     $sections = $page['sections'];
     foreach ($page['optional_sections'] ?? [] as $optionalSection) {
         if (filled($optionalSection['body'])) {
@@ -13,7 +9,7 @@
     }
     $practitionerFields = ['qualifications' => 'Exact qualifications', 'universities' => 'Universities', 'expanded_biography' => 'Longer biography', 'languages' => 'Consultation languages'];
 @endphp
-<x-layouts.app :title="$page['title']" :description="$page['description']" :canonical="\App\Support\Site::url($page['path'])">
+<x-layouts.app :title="$page['title']" :description="$page['description']" :canonical="\App\Support\Site::url($page['path'])" :image="$pageImage">
     <section class="relative isolate overflow-hidden pb-20 pt-32 sm:pt-40 lg:pb-28 lg:pt-48">
         <div class="absolute inset-0 -z-20 bg-linear-to-b from-surface-100 via-surface-50 to-surface-50"></div>
         <div class="pointer-events-none absolute -right-40 -top-24 -z-10 h-136 w-136 rounded-full bg-accent-100/70 blur-3xl"></div>
@@ -31,10 +27,10 @@
                 <div class="absolute -right-6 top-10 hidden h-72 w-52 rounded-t-full bg-surface-200/80 sm:block" aria-hidden="true"></div>
                 <figure class="grain relative overflow-hidden rounded-t-full rounded-b-[2.5rem] bg-navy shadow-[0_40px_80px_-40px_rgba(var(--shadow-ink),0.7)]">
                     <div class="relative h-72 overflow-hidden sm:h-80 lg:h-88">
-                        <img src="{{ asset('images/'.$pageImage) }}" alt="Physiotherapy treatment illustration" width="1200" height="900" class="h-full w-full object-cover">
+                        <x-site.image :name="$pageImage" :priority="true" class="h-full w-full object-cover" />
                         <div class="absolute inset-0 bg-linear-to-t from-navy via-navy/5 to-transparent"></div>
                     </div>
-                    <figcaption class="relative -mt-6 px-8 pb-9 font-display text-2xl leading-snug text-white">Danks &amp; Strydom<br><em class="text-accent-300">Glen Marais, Kempton Park.</em></figcaption>
+                    <figcaption class="relative -mt-6 px-8 pb-9 font-display text-2xl leading-snug text-white">Movement and care<br><em class="text-accent-300">An illustrative scene.</em></figcaption>
                 </figure>
             </div>
         </div>

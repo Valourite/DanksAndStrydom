@@ -5,7 +5,7 @@ use Symfony\Component\Process\Process;
 
 it('guards active code and public assets until candidate validation passes', function (int $status, int $postflightStatus) {
     $root = sys_get_temp_dir().'/danks-deploy-test-'.bin2hex(random_bytes(8));
-    foreach (['app/storage/logs', 'app/bootstrap/cache', 'app/public/build', 'public/build', 'candidate/public/build', 'bin'] as $directory) {
+    foreach (['app/storage/logs', 'app/bootstrap/cache', 'app/public/build', 'public/build', 'candidate/public/build', 'app/public/images/illustrations', 'public/images/illustrations', 'bin'] as $directory) {
         mkdir($root.'/'.$directory, 0700, true);
     }
     file_put_contents($root.'/app/.env', 'SENTINEL=private-value');
@@ -14,6 +14,8 @@ it('guards active code and public assets until candidate validation passes', fun
     file_put_contents($root.'/candidate/public/build/manifest.json', '{}');
     file_put_contents($root.'/app/public/build/new.txt', 'new');
     file_put_contents($root.'/public/build/old.txt', 'old');
+    file_put_contents($root.'/app/public/images/illustrations/new.webp', 'new image');
+    file_put_contents($root.'/public/images/illustrations/old.webp', 'old image');
     file_put_contents($root.'/public/robots.txt', 'old robots');
     file_put_contents($root.'/public/sitemap.xml', 'old sitemap');
     file_put_contents($root.'/bin/git', <<<'SH'
@@ -65,6 +67,7 @@ SH);
         if ($status !== 0) {
             expect($trace)->not->toContain('reset:', 'artisan:', 'composer:'.$root.'/app')
                 ->and(file_get_contents($root.'/public/build/old.txt'))->toBe('old')
+                ->and(file_get_contents($root.'/public/images/illustrations/old.webp'))->toBe('old image')
                 ->and(file_get_contents($root.'/public/robots.txt'))->toBe('old robots')
                 ->and(file_get_contents($root.'/public/sitemap.xml'))->toBe('old sitemap');
         } else {
@@ -72,7 +75,9 @@ SH);
                 ->and(strpos($trace, 'artisan:down'))->toBeLessThan(strpos($trace, 'reset:'))
                 ->and($trace)->toContain('reset:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'artisan:optimize')
                 ->and(is_file($root.'/public/robots.txt'))->toBeFalse()
-                ->and(file_get_contents($root.'/public/build/new.txt'))->toBe('new');
+                ->and(file_get_contents($root.'/public/build/new.txt'))->toBe('new')
+                ->and(file_get_contents($root.'/public/images/illustrations/new.webp'))->toBe('new image')
+                ->and(is_file($root.'/public/images/illustrations/old.webp'))->toBeFalse();
             if ($postflightStatus === 0) {
                 expect($trace)->toContain('artisan:up');
             } else {

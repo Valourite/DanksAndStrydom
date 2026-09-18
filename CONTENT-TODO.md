@@ -79,3 +79,7 @@ Do not treat these as missing or replace them with placeholders:
 - Valourite must verify existing production environment overrides, mail delivery configuration, recipients, location fields and effective cached configuration. Production preflight must pass before deployment; safe indexing defaults remain false.
 - Merge and deployment still require separate authorisation. Publishing configuration here does not change the live site.
 - Establish Google Business Profile/Search Console ownership and access through Valourite, reconcile listing details and submit the indexable sitemap after release. No Google-account changes have been made.
+
+## Image editing
+
+Illustrative image inventory, alt text and responsive paths: `config/imagery.php`, `imagery.images.<scene>`. Internal-page selection: `imagery.pages` keyed by URL. Homepage selections: `resources/views/sections/{hero,services,about,benefits,visit}.blade.php`. See `IMAGE-ASSETS.md` for the full generated-asset map and prompt record. These files must not be used for Cheryl/Elize portrait fields; approved real practitioner photographs remain outstanding as listed above.

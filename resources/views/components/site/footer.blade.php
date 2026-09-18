@@ -52,6 +52,8 @@
             </div>
         </div>
 
+        <p class="mb-6 text-xs leading-relaxed text-ink-400">Images are AI-generated illustrations, not photographs of our practitioners, patients or premises.</p>
+
         {{-- Giant wordmark --}}
         <p aria-hidden="true" class="select-none border-t border-surface-50/10 pt-10 text-center font-display text-[11.5vw] font-medium leading-none tracking-tight text-white/6 lg:text-[7.5rem]">
             Danks &amp; Strydom

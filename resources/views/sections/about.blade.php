@@ -9,20 +9,13 @@
             {{-- Arch panel --}}
             <div class="grain relative overflow-hidden rounded-t-full rounded-b-[2.5rem] bg-navy shadow-[0_35px_70px_-42px_rgba(var(--shadow-ink),0.65)]">
                 <div class="relative h-72 overflow-hidden sm:h-80">
-                    <img
-                        src="{{ asset('images/valf_physio.webp') }}"
-                        alt="A physiotherapist providing focused hands-on treatment"
-                        width="1200"
-                        height="900"
-                        loading="lazy"
-                        class="h-full w-full object-cover object-center"
-                    >
+                    <x-site.image name="shoulder" class="h-full w-full object-cover object-center" />
                     <div class="absolute inset-0 bg-linear-to-t from-navy via-navy/5 to-transparent"></div>
                 </div>
 
                 <div class="relative -mt-7 px-8 pb-9 sm:px-9">
                     <p class="text-center font-display text-[1.6rem] font-medium leading-snug text-white">
-                        Physiotherapy in<br><em class="text-accent-300">Glen Marais.</em>
+                        Movement assessment<br><em class="text-accent-300">Illustrative image.</em>
                     </p>
 
                     <div class="mt-8 grid grid-cols-2 gap-3">

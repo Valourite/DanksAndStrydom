@@ -16,7 +16,7 @@
                 <x-site.visit-card class="flex-1" eyebrow="Practical details" title="Before you arrive">Find appointment preparation, fees, medical aid and cancellation information in one place.</x-site.visit-card>
                 <div class="reveal grain relative flex flex-col overflow-hidden rounded-3xl bg-navy text-white sm:flex-1 lg:flex-none">
                     <div class="relative h-44 overflow-hidden sm:h-48 lg:h-40">
-                        <img src="{{ asset('images/valf_physio.webp') }}" alt="Physiotherapy illustration: treatment of the lower leg" width="1200" height="900" loading="lazy" class="h-full w-full object-cover">
+                        <x-site.image name="exercise" class="h-full w-full object-cover" />
                         <div class="absolute inset-0 bg-linear-to-t from-navy via-navy/15 to-transparent"></div>
                     </div>
                     <div class="relative -mt-4 p-8 pt-6">

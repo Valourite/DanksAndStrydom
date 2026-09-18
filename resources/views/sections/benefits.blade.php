@@ -29,14 +29,7 @@
 
             <figure class="mt-10 overflow-hidden rounded-3xl border border-surface-50/10 bg-surface-50/5 shadow-[0_30px_60px_-40px_rgba(var(--shadow-ink),0.8)]">
                 <div class="relative aspect-4/3 overflow-hidden sm:aspect-16/10 lg:aspect-4/3">
-                    <img
-                        src="{{ asset('images/knee_strapping.webp') }}"
-                        alt="A physiotherapist assessing kinesiology tape applied around a patient's knee"
-                        width="1200"
-                        height="900"
-                        loading="lazy"
-                        class="h-full w-full object-cover object-[center_48%]"
-                    >
+                    <x-site.image name="neck" class="h-full w-full object-cover object-[center_48%]" />
                     <div class="absolute inset-0 bg-linear-to-t from-navy/65 via-transparent to-transparent"></div>
                     <figcaption class="absolute inset-x-0 bottom-0 p-5 text-sm font-medium text-white">
                         Preparing for your appointment
