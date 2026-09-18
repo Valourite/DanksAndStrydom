@@ -1,6 +1,16 @@
 # Local SEO and enquiry implementation review
 
 
+## Confirmed testimonial publication — 18 September 2026
+
+The user explicitly confirmed that the supplied screenshot testimonials are genuine and that the practice has permission to publish the quotations and display names. Activated the three top-row cards: Sarah M., Priya N., Lerato K., in that order, using the screenshot wording verbatim. This is user-confirmed provenance/permission, not independent verification. No source URLs were supplied, so they remain null. No star ratings, clinical category labels or Review/aggregate-rating schema were added.
+
+Approved entries now render in local, staging and production mode; sample labels disappear. Existing three-card layout, typography, colours, reveal effects and approval filtering are unchanged. The empty/unapproved fallback remains tested with isolated fixtures. CONTENT-TODO.md now records the supplied information rather than listing quotes/approval as outstanding.
+
+Validation: 109 PHP tests / 1049 assertions, Pint, PHPStan and production build pass; rebuilt production assets are included. Desktop (1440px) and mobile (390px) show the supplied quotations, correct names/order and no sample labels or horizontal overflow. No JavaScript or styling changes. No merge, deployment or live enquiries.
+
+### Initial sample implementation (superseded by confirmation above)
+
 ## Testimonials — 18 September 2026
 
 Added “What our patients say” immediately after the services section's three treatment illustrations and before About. Three rounded white cards share the blue palette, serif text, decorative quotation mark and existing 0/90/180ms reveal animation. Desktop uses three equal columns; mobile stacks cards. Section spacing uses the existing services/About spacing. No carousel, widget, library, rating or review schema.
@@ -9,7 +19,7 @@ Repository templates/history contained five older quotes with names and default 
 
 Validation: 106 PHP tests / 1016 assertions, 4 JavaScript tests, Pint, PHPStan, production build, shell syntax and diff checks pass. New tests cover local/staging-only samples, unsupported environments, production HTML/head/schema exclusion including an accidentally approved sample, section order/empty state, genuine-entry filtering, escaping and optional/invalid links. Existing SEO, mail/replay and deployment tests pass. Production assets rebuilt.
 
-Browser: 1440px desktop showed three equal cards with surrounding image/practitioner spacing; 390px mobile showed one column with no horizontal overflow. Scrolling triggered all three card entrances with computed 0/90/180ms delays. Reused reduced-motion bypass is covered by the existing JavaScript tests and CSS; actual OS/browser reduced-motion emulation remains unavailable in this browser tool, as documented previously. No live form submissions, merge or deployment. Genuine approved quotations and permitted display names are the only content still needed for production testimonials.
+Browser: 1440px desktop showed three equal cards with surrounding image/practitioner spacing; 390px mobile showed one column with no horizontal overflow. Scrolling triggered all three card entrances with computed 0/90/180ms delays. Reused reduced-motion bypass is covered by the existing JavaScript tests and CSS; actual OS/browser reduced-motion emulation remains unavailable in this browser tool, as documented previously. No live form submissions, merge or deployment. At that point, genuine approved quotations and permitted display names were still needed; the confirmation above resolves this.
 
 ## Animation and content refinement — 15 September 2026
 

@@ -2,6 +2,7 @@
 
 it('shows three labelled design samples only on local and staging in the requested order', function (string $environment) {
     app()->detectEnvironment(fn () => $environment);
+    config(['site.testimonials.entries' => []]);
     $html = $this->get('/')->assertSuccessful()->assertHeader('X-Robots-Tag', 'noindex, nofollow')
         ->assertSeeInOrder(['data-practice-images', 'What our patients say', 'Meet the people behind your care'])
         ->assertDontSee('Read original testimonial')->getContent();
@@ -11,7 +12,7 @@ it('shows three labelled design samples only on local and staging in the request
 
 it('omits the entire section outside local and staging when there are no approved entries', function (string $environment) {
     app()->detectEnvironment(fn () => $environment);
-    config(['site.testimonials.samples.0.approved' => true]);
+    config(['site.testimonials.entries' => [], 'site.testimonials.samples.0.approved' => true]);
     $html = $this->get('/?preview=true')->assertSuccessful()->assertDontSee('id="testimonials"', false)
         ->assertDontSee('What our patients say')->assertDontSee('Sample testimonial')->getContent();
     foreach (config('site.testimonials.samples') as $sample) {
@@ -49,3 +50,15 @@ it('uses approved entries instead of filling staging with sample cards', functio
     config(['site.testimonials.entries' => [['quote' => 'Synthetic approved quote', 'display_name' => 'Synthetic name', 'approved' => true]]]);
     $this->get('/')->assertSee('Synthetic approved quote')->assertDontSee('Sample testimonial');
 });
+
+it('publishes the three user-confirmed testimonials without samples ratings or invented source links', function (string $environment) {
+    app()->detectEnvironment(fn () => $environment);
+    $html = $this->get('/')->assertSuccessful()->assertSeeInOrder(['Sarah M.', 'Priya N.', 'Lerato K.'])
+        ->assertSee('After months of lower back pain, I finally feel like myself again.')
+        ->assertSee('The guidance after my surgery was clear and reassuring at every step.')
+        ->assertSee('What stood out was how much they listened.')
+        ->assertDontSee('Sample testimonial')->assertDontSee('Reviewer display name')
+        ->assertDontSee('Read original testimonial')->assertDontSee('out of 5 stars')->getContent();
+    expect(config('site.testimonials.entries'))->toHaveCount(3);
+    expect(explode('</head>', $html)[0])->not->toContain('Sarah M.', 'Priya N.', 'Lerato K.', 'aggregateRating', '"@type":"Review"');
+})->with(['local', 'staging', 'production']);

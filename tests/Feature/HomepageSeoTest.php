@@ -31,6 +31,6 @@ it('uses a stable clinic identity and only confirmed structured location data', 
 it('omits unconfirmed map and unsupported promotional claims', function () {
     config(['contact.practice.location_verified' => false, 'contact.practice.map_embed_url' => 'https://maps.example/196']);
     $this->get('/')->assertDontSee('maps.example')->assertDontSee('streetAddress')
-        ->assertDontSee('Years combined experience')->assertDontSee('Sarah M.')
+        ->assertDontSee('Years combined experience')->assertSee('Sarah M.')
         ->assertDontSee('one business day')->assertDontSee('No referral needed');
 });

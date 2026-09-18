@@ -9,7 +9,28 @@ return [
         // Add genuine quotes only after confirming provenance and permission for website reuse.
         // Each entry: quote, display_name (as permitted), source_url (null if none), approved (boolean).
         // Approval applies to the exact quote and display name; keep consent evidence privately, not in Git.
-        'entries' => [],
+        // User confirmed these screenshot quotations are genuine and permitted for website use.
+        // Source: supplied screenshot, top row; no public source URLs were supplied.
+        'entries' => [
+            [
+                'quote' => 'After months of lower back pain, I finally feel like myself again. They took real time to understand my situation, and the exercises actually made a difference.',
+                'display_name' => 'Sarah M.',
+                'source_url' => null,
+                'approved' => true,
+            ],
+            [
+                'quote' => 'The guidance after my surgery was clear and reassuring at every step. I always knew what to do next and felt fully supported throughout.',
+                'display_name' => 'Priya N.',
+                'source_url' => null,
+                'approved' => true,
+            ],
+            [
+                'quote' => 'What stood out was how much they listened. The calm, friendly approach made a real difference — I finally have practical tools to manage my pain.',
+                'display_name' => 'Lerato K.',
+                'source_url' => null,
+                'approved' => true,
+            ],
+        ],
         // Design samples are isolated from publication entries and can NEVER render in production.
         'samples' => [
             ['quote' => 'This space shows how a short approved quotation will sit within the card.', 'display_name' => 'Reviewer display name', 'source_url' => null, 'approved' => false],
