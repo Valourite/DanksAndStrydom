@@ -3,10 +3,8 @@
 it('renders the treatment imagery across the homepage', function () {
     $this->get('/')
         ->assertSuccessful()
-        ->assertSee('images/back_strapping.webp')
-        ->assertSee('images/knee_strapping.webp')
-        ->assertSee('images/electrotherapy.webp')
-        ->assertSee('images/valf_physio.webp');
+        ->assertSee('images/illustrations/consultation-1200.webp')
+        ->assertDontSee('images/cheryl-horse-1.webp');
 });
 
 it('uses treatment images with the required dimensions', function (string $image) {
