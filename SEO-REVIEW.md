@@ -1,6 +1,16 @@
 # Local SEO and enquiry implementation review
 
 
+## Testimonials — 18 September 2026
+
+Added “What our patients say” immediately after the services section's three treatment illustrations and before About. Three rounded white cards share the blue palette, serif text, decorative quotation mark and existing 0/90/180ms reveal animation. Desktop uses three equal columns; mobile stacks cards. Section spacing uses the existing services/About spacing. No carousel, widget, library, rating or review schema.
+
+Repository templates/history contained five older quotes with names and default five-star ratings, but no sources or website-reuse permission; earlier review notes explicitly withheld them. Replaced that dormant content with config-driven rendering. `site.testimonials.entries` is empty until genuine content is supplied; only complete entries with boolean `approved=true` render. `site.testimonials.samples` is a separate, explicitly local/staging-only fallback, even if a sample's approval flag is changed. Samples use neutral design instructions and “Reviewer display name”, never fabricated experiences. Every sample carries “Sample testimonial — replace before publishing”. Production with no approved entries emits no section wrapper or spacing. Invalid/non-HTTP(S) source URLs are omitted; quote/name/source output is escaped. CONTENT-TODO.md documents each editing key and permission requirement.
+
+Validation: 106 PHP tests / 1016 assertions, 4 JavaScript tests, Pint, PHPStan, production build, shell syntax and diff checks pass. New tests cover local/staging-only samples, unsupported environments, production HTML/head/schema exclusion including an accidentally approved sample, section order/empty state, genuine-entry filtering, escaping and optional/invalid links. Existing SEO, mail/replay and deployment tests pass. Production assets rebuilt.
+
+Browser: 1440px desktop showed three equal cards with surrounding image/practitioner spacing; 390px mobile showed one column with no horizontal overflow. Scrolling triggered all three card entrances with computed 0/90/180ms delays. Reused reduced-motion bypass is covered by the existing JavaScript tests and CSS; actual OS/browser reduced-motion emulation remains unavailable in this browser tool, as documented previously. No live form submissions, merge or deployment. Genuine approved quotations and permitted display names are the only content still needed for production testimonials.
+
 ## Animation and content refinement — 15 September 2026
 
 Verified `42880b2` exists as a commit before comparing its JavaScript, CSS and Blade together. The approved blue palette, fonts, page compositions, image assets and seven-section homepage order remain intact.

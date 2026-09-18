@@ -4,6 +4,29 @@ All eight service pages, About and Patient Information are enabled for public re
 
 Unknown values are `null` or empty arrays in `config/site.php`. Keep them empty until real information is supplied. Every environment omits incomplete fields without website notices. Optional profile fields are not used in metadata or structured data. Photographs require both an approved asset path (relative to `public/`) and descriptive alt text. Do not use stock people as practitioner portraits.
 
+## Testimonials — optional, not yet approved
+
+No genuine quotation with documented provenance and website-use permission was found in the repository. Older hardcoded quotes and default five-star ratings have been removed from the dormant templates, not treated as real reviews.
+
+Edit **`config/site.php`**, under **`site.testimonials.entries`**, to add genuine testimonials. The separate **`site.testimonials.samples`** list contains three neutral design examples and is restricted to local/staging; changing a sample's approval flag cannot publish it. When no approved entries exist, production omits the whole section, while local/staging show labelled samples. Once approved entries exist, those replace the sample set.
+
+| Done | Field | What to supply / where it appears |
+|---|---|---|
+| [ ] | `site.testimonials.entries.<index>.quote` | Exact genuine quotation with permission for website use; homepage card below the treatment images. |
+| [ ] | `site.testimonials.entries.<index>.display_name` | The reviewer's permitted public display name; card attribution. Do not infer an identity. |
+| [ ] | `site.testimonials.entries.<index>.source_url` | Optional original review's HTTP(S) URL; use `null` when unavailable. Only valid supplied links are displayed. A link does not establish permission by itself. |
+| [ ] | `site.testimonials.entries.<index>.approved` | Set the boolean `true` only after verifying provenance and permission for that exact quote and display name. Unapproved or incomplete entries never display. |
+
+Entry structure (fill the empty values with genuine content first):
+
+```php
+'entries' => [
+    ['quote' => null, 'display_name' => null, 'source_url' => null, 'approved' => false],
+],
+```
+
+Keep permission evidence privately with the practice; do not commit consent documents or private patient details. Do not copy neutral sample text into the production entries. No ratings, Review schema or aggregate ratings are supported. These publication controls are specific to testimonials; they do not reinstate page approval or password access. Rebuild the Laravel configuration cache through the normal release process after content changes.
+
 ## Practitioner information
 
 All keys below are in **`config/site.php`**. `site.pages.about.practitioners.0` is **Cheryl Myburgh**; `site.pages.about.practitioners.1` is **Elize Strydom**. Keep this order when editing the numeric entries.

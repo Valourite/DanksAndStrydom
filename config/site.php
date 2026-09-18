@@ -5,6 +5,18 @@ return [
     'canonical_redirects' => env('SITE_CANONICAL_REDIRECTS', false),
     'alternate_hosts' => ['danksandstrydom.co.za', 'www.danksandstrydom.co.za'],
     'analytics_enabled' => env('SITE_ANALYTICS_ENABLED', false),
+    'testimonials' => [
+        // Add genuine quotes only after confirming provenance and permission for website reuse.
+        // Each entry: quote, display_name (as permitted), source_url (null if none), approved (boolean).
+        // Approval applies to the exact quote and display name; keep consent evidence privately, not in Git.
+        'entries' => [],
+        // Design samples are isolated from publication entries and can NEVER render in production.
+        'samples' => [
+            ['quote' => 'This space shows how a short approved quotation will sit within the card.', 'display_name' => 'Reviewer display name', 'source_url' => null, 'approved' => false],
+            ['quote' => 'Replace this sample copy with an exact quotation you have permission to publish. This longer example helps preview the spacing and line wrapping.', 'display_name' => 'Reviewer display name', 'source_url' => null, 'approved' => false],
+            ['quote' => 'An approved quotation and the permitted display name will appear here.', 'display_name' => 'Reviewer display name', 'source_url' => null, 'approved' => false],
+        ],
+    ],
     'pages' => [
         'about' => [
             'path' => '/about',

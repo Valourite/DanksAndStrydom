@@ -19,6 +19,26 @@ class Site
         return app()->isProduction() && (bool) config('site.indexable');
     }
 
+    /** @return list<array<string, mixed>> */
+    public static function testimonials(): array
+    {
+        $entries = array_values(array_filter(config('site.testimonials.entries', []), fn (array $entry): bool => ($entry['approved'] ?? false) === true && filled($entry['quote'] ?? null) && filled($entry['display_name'] ?? null)
+        ));
+        $samples = $entries === [] && app()->environment('local', 'staging');
+        if ($samples) {
+            $entries = config('site.testimonials.samples', []);
+        }
+
+        return array_values(array_map(function (array $entry) use ($samples): array {
+            $source = $entry['source_url'] ?? null;
+            $entry['source_url'] = is_string($source) && filter_var($source, FILTER_VALIDATE_URL)
+                && in_array(parse_url($source, PHP_URL_SCHEME), ['https', 'http'], true) ? $source : null;
+            $entry['sample'] = $samples;
+
+            return $entry;
+        }, $entries));
+    }
+
     /** @return array<string, array<string, mixed>> */
     public static function services(): array
     {

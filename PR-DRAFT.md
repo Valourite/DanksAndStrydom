@@ -2,6 +2,14 @@
 
 Adds an eight-service patient journey with consistent metadata, canonical URLs, clinic structured data, sitemap/indexing controls and protected synchronous enquiry delivery. Preserves the restored original layouts, typography, image compositions and current blue palette.
 
+## Testimonials
+
+Adds “What our patients say” after the treatment images and before About: three desktop cards, stacked mobile cards, existing blue/serif/rounded styling and gentle scroll-reveal stagger. Older quotes had no confirmed provenance or permission and were not reused; default star ratings removed.
+
+Three clearly labelled neutral samples display only on local/staging when there are no approved entries. Production renders only complete, explicitly approved genuine entries and omits the entire section when empty. Samples live in a separate configuration list and cannot be published by toggling their approval flag. Optional source links require a valid supplied HTTP(S) URL. No Review/aggregate-rating schema or external widget. CONTENT-TODO.md documents where to enter quotes, permitted display names, source URLs and approval.
+
+Latest validation: **106 PHP tests / 1016 assertions**, **4 JavaScript tests**, Pint, PHPStan, production build, shell syntax and diff checks pass. Desktop/mobile browser verified three/one columns, spacing, no overflow and scroll-triggered 0/90/180ms entrances. Production exclusion, escaping and source-link checks are automated. Existing reduced-motion tests/CSS apply; actual browser motion-preference emulation remains unavailable. Assets rebuilt. No merge or deployment.
+
 ## Animation and content refinement
 
 Verified reference `42880b2` and compared its JS/CSS/Blade. Restored disconnected 30px/850ms scroll entrances and 0/90/180/270ms service-card staggers; applied consistent entrances to internal content. Content stays visible before observation or if JavaScript fails. Existing hover, drift, header and mobile-navigation interactions remain; parallax now responds to reduced-motion and mobile changes. The approved static illustration strip remains unchanged instead of restoring the removed carousel.
